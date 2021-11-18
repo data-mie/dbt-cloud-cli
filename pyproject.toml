@@ -1,0 +1,4 @@
+[tool.black]
+skip-string-normalization = false
+include = '\.pyi?$'
+exclude = 'venv/'
