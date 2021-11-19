@@ -14,4 +14,8 @@ From PyPI (not yet available):
 
 ## Commands
 
-* `dbt-cloud job run`: For more information, run `dbt-cloud job run --help`.
+Add a `--help` flag at the end of any of the listed commands for full command documentation (e.g., `dbt-cloud job run --help`).
+
+| Command | Description | Usage | dbt Cloud API endpoint
+| --- | --- | --- | --- |
+| `dbt-cloud job run` | Kick off a run for a job | `dbt-cloud job run --job-id 12345 --account-id 12345 --cause "Triggered via API" --git-sha foobar123` | https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun |
