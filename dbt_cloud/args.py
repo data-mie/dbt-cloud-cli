@@ -22,3 +22,13 @@ class ArgsBaseModel(BaseModel):
             return field.default_factory()
         else:
             return value
+
+    def get_payload(self) -> dict:
+        payload = self.dict()
+        exclude_keys = ["api_token", "account_id", "job_id"]
+        payload = {
+            key: value
+            for key, value in payload.items()
+            if value is not None and key not in exclude_keys
+        }
+        return payload

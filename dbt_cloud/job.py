@@ -61,12 +61,6 @@ class DbtCloudJobRunArgs(ArgsBaseModel):
         description="Override the list of steps for this job"
     )
 
-    def get_payload(self) -> dict:
-        payload = {"cause": self.cause}
-        if self.git_sha:
-            payload["git_sha"] = self.git_sha
-        return payload
-
 
 class DbtCloudJob(DbtCloudAccount):
     job_id: int
