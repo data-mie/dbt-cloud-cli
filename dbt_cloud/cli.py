@@ -1,7 +1,7 @@
 import os
 import time
 import click
-from dbt_cloud.job import DbtCloudJob, DbtCloudJobRunStatus
+from dbt_cloud.job import DbtCloudJob, DbtCloudJobRunStatus, DbtCloudJobRunArgs
 
 
 @click.group()
@@ -15,42 +15,14 @@ def job():
 
 
 @job.command()
-@click.option(
-    "--cause",
-    type=str,
-    default="Triggered via API",
-    help="A text description of the reason for running the job",
-)
-@click.option(
-    "--git-sha",
-    type=str,
-    required=False,
-    help="The git sha to check out before running the job",
-)
-@click.option(
-    "--account-id",
-    type=int,
-    default=lambda: os.environ["DBT_CLOUD_ACCOUNT_ID"],
-    help="dbt Cloud account ID",
-)
-@click.option(
-    "--job-id",
-    type=int,
-    default=lambda: os.environ["DBT_CLOUD_JOB_ID"],
-    help="dbt Cloud job ID",
-)
-@click.option(
-    "--api-token",
-    type=str,
-    default=lambda: os.environ["DBT_CLOUD_API_TOKEN"],
-    help="dbt Cloud API token",
-)
-def run(cause: str, git_sha: str, account_id: int, job_id: int, api_token: str):
-    job = DbtCloudJob(account_id=account_id, job_id=job_id, api_token=api_token)
+@DbtCloudJobRunArgs.click_options
+def run(**kwargs):
+    args = DbtCloudJobRunArgs(**kwargs)
+    job = DbtCloudJob(**args.dict())
     click.echo(f"Trigger dbt Cloud job {job.job_id}")
-    job_run = job.run(cause=cause, git_sha=git_sha)
+    job_run = job.run(args=args)
     click.echo(f"   - Job run ID: {job_run.job_run_id}")
-    click.echo(f"   - Job run payload: {job_run.payload}")
+    click.echo(f"   - Job run payload: {args.get_payload()}")
     while True:
         time.sleep(5)
         status = job_run.get_status()
