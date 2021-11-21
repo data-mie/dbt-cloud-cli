@@ -20,9 +20,9 @@ def run(**kwargs):
     args = DbtCloudJobRunArgs(**kwargs)
     job = DbtCloudJob(**args.dict())
     click.echo(f"Trigger dbt Cloud job {job.job_id}")
-    job_run = job.run(cause=args.cause, git_sha=args.git_sha)
+    job_run = job.run(args=args)
     click.echo(f"   - Job run ID: {job_run.job_run_id}")
-    click.echo(f"   - Job run payload: {job_run.payload}")
+    click.echo(f"   - Job run payload: {args.get_payload()}")
     while True:
         time.sleep(5)
         status = job_run.get_status()

@@ -16,37 +16,6 @@ class DbtCloudJobRunStatus(IntEnum):
     CANCELLED = 30
 
 
-class DbtCloudJob(DbtCloudAccount):
-    job_id: int
-
-    def get_api_url(self) -> str:
-        return f"{super().get_api_url()}/jobs/{self.job_id}"
-
-    def run(self, cause: str, git_sha: str) -> "DbtCloudJobRun":
-        """
-        :returns: Job run ID
-        """
-        payload = {"cause": cause}
-        if git_sha:
-            payload["git_sha"] = git_sha
-
-        response = requests.post(
-            url=f"{self.get_api_url()}/run/",
-            headers={"Authorization": f"Token {self.api_token}"},
-            json=payload,
-        )
-        response.raise_for_status()
-
-        response_payload = response.json()
-        job_run_id = response_payload["data"]["id"]
-        return DbtCloudJobRun(
-            job_run_id=job_run_id,
-            payload=payload,
-            account_id=self.account_id,
-            api_token=self.api_token,
-        )
-
-
 class DbtCloudJobRunArgs(ArgsBaseModel):
     api_token: str = Field(
         default_factory=lambda: os.environ["DBT_CLOUD_API_TOKEN"],
@@ -92,10 +61,43 @@ class DbtCloudJobRunArgs(ArgsBaseModel):
         description="Override the list of steps for this job"
     )
 
+    def get_payload(self) -> dict:
+        payload = {"cause": self.cause}
+        if self.git_sha:
+            payload["git_sha"] = self.git_sha
+        return payload
+
+
+class DbtCloudJob(DbtCloudAccount):
+    job_id: int
+
+    def get_api_url(self) -> str:
+        return f"{super().get_api_url()}/jobs/{self.job_id}"
+
+    def run(self, args: DbtCloudJobRunArgs) -> "DbtCloudJobRun":
+        """
+        :returns: Job run ID
+        """
+        response = requests.post(
+            url=f"{self.get_api_url()}/run/",
+            headers={"Authorization": f"Token {self.api_token}"},
+            json=args.get_payload(),
+        )
+        response.raise_for_status()
+
+        response_payload = response.json()
+        job_run_id = response_payload["data"]["id"]
+        return DbtCloudJobRun(
+            job_run_id=job_run_id,
+            args=args,
+            account_id=self.account_id,
+            api_token=self.api_token,
+        )
+
 
 class DbtCloudJobRun(DbtCloudAccount):
     job_run_id: int
-    payload: Optional[dict]
+    args: DbtCloudJobRunArgs
 
     def get_api_url(self) -> str:
         return f"{super().get_api_url()}/runs/{self.job_run_id}"
