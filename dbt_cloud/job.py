@@ -1,7 +1,7 @@
 import requests
 import os
 from enum import IntEnum
-from typing import Optional, List
+from typing import Optional, List, Tuple, Dict, Any
 from pydantic import Field
 from dbt_cloud.account import DbtCloudAccount
 from dbt_cloud.args import ArgsBaseModel
@@ -19,15 +19,15 @@ class DbtCloudJobRunStatus(IntEnum):
 class DbtCloudJobRunArgs(ArgsBaseModel):
     api_token: str = Field(
         default_factory=lambda: os.environ["DBT_CLOUD_API_TOKEN"],
-        description="API authentication key",
+        description="API authentication key (default: 'DBT_CLOUD_API_TOKEN' environment variable)",
     )
     account_id: int = Field(
         default_factory=lambda: os.environ["DBT_CLOUD_ACCOUNT_ID"],
-        description="Numeric ID of the Account that the job belongs to",
+        description="Numeric ID of the Account that the job belongs to (default: 'DBT_CLOUD_ACCOUNT_ID' environment variable)",
     )
     job_id: int = Field(
         default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
-        description="Numeric ID of the job to run",
+        description="Numeric ID of the job to run (default: 'DBT_CLOUD_JOB_ID' environment variable)",
     )
     cause: str = Field(
         default="Triggered via API",
@@ -68,7 +68,7 @@ class DbtCloudJob(DbtCloudAccount):
     def get_api_url(self) -> str:
         return f"{super().get_api_url()}/jobs/{self.job_id}"
 
-    def run(self, args: DbtCloudJobRunArgs) -> "DbtCloudJobRun":
+    def run(self, args: DbtCloudJobRunArgs) -> Tuple[requests.Response, "DbtCloudJobRun"]:
         """
         :returns: Job run ID
         """
@@ -78,10 +78,8 @@ class DbtCloudJob(DbtCloudAccount):
             json=args.get_payload(),
         )
         response.raise_for_status()
-
-        response_payload = response.json()
-        job_run_id = response_payload["data"]["id"]
-        return DbtCloudJobRun(
+        job_run_id = response.json()["data"]["id"]
+        return response, DbtCloudJobRun(
             job_run_id=job_run_id,
             args=args,
             account_id=self.account_id,
@@ -96,11 +94,10 @@ class DbtCloudJobRun(DbtCloudAccount):
     def get_api_url(self) -> str:
         return f"{super().get_api_url()}/runs/{self.job_run_id}"
 
-    def get_status(self) -> DbtCloudJobRunStatus:
+    def get_status(self) -> Tuple[requests.Response, DbtCloudJobRunStatus]:
         response = requests.get(
             url=f"{self.get_api_url()}/",
             headers={"Authorization": f"Token {self.api_token}"},
         )
         response.raise_for_status()
-        response_payload = response.json()
-        return DbtCloudJobRunStatus(response_payload["data"]["status"])
+        return response, DbtCloudJobRunStatus(response.json()["data"]["status"])

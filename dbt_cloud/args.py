@@ -5,7 +5,7 @@ from pydantic import BaseModel, validator
 class ArgsBaseModel(BaseModel):
     @classmethod
     def click_options(cls, function):
-        for key, field in cls.__fields__.items():
+        for key, field in reversed(cls.__fields__.items()):
             function = click.option(
                 f"--{key.replace('_', '-')}",
                 type=field.type_,
