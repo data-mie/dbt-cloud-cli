@@ -24,11 +24,9 @@ The following environment variables are used as argument defaults:
 
 # Commands
 
-* [dbt-cloud job run](#job-run)
+* [dbt-cloud job run](#dbt-cloud-job-run)
 
-**Add a `--help` flag at the end of any of the listed commands for full command documentation (e.g., `dbt-cloud job run --help`).**
-## [dbt-cloud job run](#job-run)
-
+## dbt-cloud job run
 This command triggers a dbt Cloud job run and returns a status JSON response.
 
 ### Arguments
