@@ -22,7 +22,7 @@ setup(
     python_requires=">=3.6",
     packages=["dbt_cloud"],
     install_requires=["requests", "click", "pydantic"],
-    extras_require={"test": ["pytest"], "lint": ["black"]},
+    extras_require={"test": ["pytest", "pytest-cov"], "lint": ["black"]},
     scripts=[],
     entry_points={"console_scripts": ["dbt-cloud = dbt_cloud.cli:dbt_cloud"]},
 )
