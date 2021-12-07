@@ -1,8 +1,8 @@
-import sys
 import json
 import time
 import click
 from dbt_cloud.job import DbtCloudJob, DbtCloudJobRunStatus, DbtCloudJobRunArgs
+from dbt_cloud.exc import DbtCloudException
 
 
 @click.group()
@@ -20,7 +20,7 @@ def job():
 @click.option(
     f"--wait/--no-wait",
     default=False,
-    help="Wait for the process to finish before returning from the API call."
+    help="Wait for the process to finish before returning from the API call.",
 )
 def run(wait, **kwargs):
     args = DbtCloudJobRunArgs(**kwargs)
@@ -33,6 +33,9 @@ def run(wait, **kwargs):
             if status == DbtCloudJobRunStatus.SUCCESS:
                 break
             elif status in (DbtCloudJobRunStatus.ERROR, DbtCloudJobRunStatus.CANCELLED):
-                raise Exception("Failure!")
+                href = response.json()["data"]["href"]
+                raise DbtCloudException(
+                    f"Job run failed with {status.name} status. For more information, see {href}."
+                )
             time.sleep(5)
     click.echo(json.dumps(response.json(), indent=2))

@@ -68,7 +68,9 @@ class DbtCloudJob(DbtCloudAccount):
     def get_api_url(self) -> str:
         return f"{super().get_api_url()}/jobs/{self.job_id}"
 
-    def run(self, args: DbtCloudJobRunArgs) -> Tuple[requests.Response, "DbtCloudJobRun"]:
+    def run(
+        self, args: DbtCloudJobRunArgs
+    ) -> Tuple[requests.Response, "DbtCloudJobRun"]:
         """
         :returns: Job run ID
         """
