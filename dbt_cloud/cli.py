@@ -1,7 +1,12 @@
 import json
 import time
 import click
-from dbt_cloud.job import DbtCloudJob, DbtCloudJobRunStatus, DbtCloudJobRunArgs
+from dbt_cloud.job import (
+    DbtCloudJob,
+    DbtCloudRunStatus,
+    DbtCloudRunArgs,
+    DbtCloudRunGetArgs,
+)
 from dbt_cloud.exc import DbtCloudException
 
 
@@ -15,27 +20,41 @@ def job():
     pass
 
 
+@dbt_cloud.group(name="run")
+def job_run():
+    pass
+
+
 @job.command()
-@DbtCloudJobRunArgs.click_options
+@DbtCloudRunArgs.click_options
 @click.option(
     f"--wait/--no-wait",
     default=False,
     help="Wait for the process to finish before returning from the API call.",
 )
 def run(wait, **kwargs):
-    args = DbtCloudJobRunArgs(**kwargs)
+    args = DbtCloudRunArgs(**kwargs)
     job = DbtCloudJob(**args.dict())
-    response, job_run = job.run(args=args)
+    response, run = job.run(args=args)
     if wait:
         while True:
-            response, status = job_run.get_status()
-            click.echo(f"Job {job.job_id} run {job_run.job_run_id}: {status.name} ...")
-            if status == DbtCloudJobRunStatus.SUCCESS:
+            response, status = run.get_status()
+            click.echo(f"Job {job.job_id} run {run.run_id}: {status.name} ...")
+            if status == DbtCloudRunStatus.SUCCESS:
                 break
-            elif status in (DbtCloudJobRunStatus.ERROR, DbtCloudJobRunStatus.CANCELLED):
+            elif status in (DbtCloudRunStatus.ERROR, DbtCloudRunStatus.CANCELLED):
                 href = response.json()["data"]["href"]
                 raise DbtCloudException(
                     f"Job run failed with {status.name} status. For more information, see {href}."
                 )
             time.sleep(5)
+    click.echo(json.dumps(response.json(), indent=2))
+
+
+@job_run.command()
+@DbtCloudRunGetArgs.click_options
+def get(**kwargs):
+    args = DbtCloudRunGetArgs(**kwargs)
+    run = args.get_run()
+    response, _ = run.get_status()
     click.echo(json.dumps(response.json(), indent=2))
