@@ -1,6 +1,6 @@
 # dbt-cloud-cli
 
-This is a work a in progress for a dbt Cloud command line interface!
+`dbt-cloud-cli` is a command line interface for [dbt Cloud API v2.0](https://docs.getdbt.com/dbt-cloud/api-v2). It abstracts the REST API calls in an easy-to-use interface that can be incorporated into automated and manual (ad-hoc) workloads. For example, [dbt-cloud job run](#dbt-cloud-job-run) can be used in a CI/CD workflow (e.g., Github Actions) to trigger a dbt Cloud job that runs and tests the changes in a commit branch.
 
 ## Installation
 
