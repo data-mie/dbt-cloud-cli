@@ -28,15 +28,7 @@ The following environment variables are used as argument defaults:
 * [dbt-cloud run get](#dbt-cloud-run-get)
 
 ## dbt-cloud job run
-This command triggers a dbt Cloud job run and returns a status JSON response.
-
-### Arguments
-
-Run `dbt-cloud job run --help` to get a list of the arguments. Also, see [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun).
-
-### Response
-
-See [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun).
+This command triggers a dbt Cloud job run and returns a status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud job run --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun).
 
 ### Usage
 
@@ -110,15 +102,7 @@ Job 43167 run 34929305: SUCCESS ...
 ```
 
 ## dbt-cloud run get
-This command prints a dbt Cloud run status JSON response.
-
-### Arguments
-
-Run `dbt-cloud run get --help` to get a list of the arguments. Also, see [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById).
-
-### Response
-
-See [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById).
+This command prints a dbt Cloud run status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud run get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById).
 
 ### Usage
 
