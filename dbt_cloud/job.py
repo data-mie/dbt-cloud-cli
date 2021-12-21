@@ -100,7 +100,7 @@ class DbtCloudJob(DbtCloudAccount):
         response = requests.get(
             url=f"{self.get_api_url()}/",
             headers={"Authorization": f"Token {self.api_token}"},
-            json={"order_by": order_by},
+            params={"order_by": order_by},
         )
         response.raise_for_status()
         return response
