@@ -32,6 +32,7 @@ The following environment variables are used as argument defaults:
 # Commands
 
 * [dbt-cloud job run](#dbt-cloud-job-run)
+* [dbt-cloud job get](#dbt-cloud-job-get)
 * [dbt-cloud run get](#dbt-cloud-run-get)
 
 ## dbt-cloud job run
@@ -104,6 +105,70 @@ Job 43167 run 34929305: SUCCESS ...
     "created_at_humanized": "1 minute ago",
     "finished_at_humanized": "9 seconds ago",
     "job_id": 43167
+  }
+}
+```
+
+## dbt-cloud job get
+This command returns the details of a dbt Cloud job. For more information on the API endpoint arguments and response, run `dbt-cloud job get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getJobById).
+
+### Usage
+
+```bash
+>> dbt-cloud job get --job-id 43167
+{
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": {
+    "execution": {
+      "timeout_seconds": 0
+    },
+    "generate_docs": false,
+    "run_generate_sources": false,
+    "id": 43167,
+    "account_id": REDACTED,
+    "project_id": REDACTED,
+    "environment_id": 49819,
+    "name": "Do nothing!",
+    "dbt_version": null,
+    "created_at": "2021-11-18T15:19:03.185668+00:00",
+    "updated_at": "2021-11-18T15:19:03.185687+00:00",
+    "execute_steps": [
+      "dbt run -s not_a_model"
+    ],
+    "state": 1,
+    "deferring_job_definition_id": null,
+    "lifecycle_webhooks": false,
+    "lifecycle_webhooks_url": null,
+    "triggers": {
+      "github_webhook": false,
+      "git_provider_webhook": false,
+      "custom_branch_only": true,
+      "schedule": false
+    },
+    "settings": {
+      "threads": 4,
+      "target_name": "default"
+    },
+    "schedule": {
+      "cron": "0 * * * *",
+      "date": {
+        "type": "every_day"
+      },
+      "time": {
+        "type": "every_hour",
+        "interval": 1
+      }
+    },
+    "is_deferrable": false,
+    "generate_sources": false,
+    "cron_humanized": "Every hour",
+    "next_run": null,
+    "next_run_humanized": null
   }
 }
 ```

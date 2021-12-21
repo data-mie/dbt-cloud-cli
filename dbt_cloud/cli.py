@@ -5,6 +5,7 @@ from dbt_cloud.job import (
     DbtCloudJob,
     DbtCloudRunStatus,
     DbtCloudRunArgs,
+    DbtCloudJobGetArgs,
     DbtCloudRunGetArgs,
 )
 from dbt_cloud.exc import DbtCloudException
@@ -48,6 +49,15 @@ def run(wait, **kwargs):
                     f"Job run failed with {status.name} status. For more information, see {href}."
                 )
             time.sleep(5)
+    click.echo(json.dumps(response.json(), indent=2))
+
+
+@job.command()
+@DbtCloudJobGetArgs.click_options
+def get(**kwargs):
+    args = DbtCloudJobGetArgs(**kwargs)
+    job = DbtCloudJob(**args.dict())
+    response = job.get(order_by=args.order_by)
     click.echo(json.dumps(response.json(), indent=2))
 
 

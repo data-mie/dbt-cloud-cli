@@ -65,6 +65,16 @@ class DbtCloudRunArgs(DbtCloudArgsBaseModel):
     )
 
 
+class DbtCloudJobGetArgs(DbtCloudArgsBaseModel):
+    job_id: int = Field(
+        default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
+        description="Numeric ID of the job to run (default: 'DBT_CLOUD_JOB_ID' environment variable)",
+    )
+    order_by: Optional[str] = Field(
+        description="Field to order the result by. Use '-' to indicate reverse order."
+    )
+
+
 class DbtCloudRunGetArgs(DbtCloudArgsBaseModel):
     run_id: int = Field(
         ...,
@@ -85,6 +95,15 @@ class DbtCloudJob(DbtCloudAccount):
 
     def get_api_url(self) -> str:
         return f"{super().get_api_url()}/jobs/{self.job_id}"
+
+    def get(self, order_by: str) -> requests.Response:
+        response = requests.get(
+            url=f"{self.get_api_url()}/",
+            headers={"Authorization": f"Token {self.api_token}"},
+            json={"order_by": order_by},
+        )
+        response.raise_for_status()
+        return response
 
     def run(self, args: DbtCloudRunArgs) -> Tuple[requests.Response, "DbtCloudRun"]:
         """
