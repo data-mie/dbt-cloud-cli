@@ -5,6 +5,7 @@ from typing import Optional, List, Tuple
 from pydantic import Field
 from dbt_cloud.account import DbtCloudAccount
 from dbt_cloud.args import ArgsBaseModel, DbtCloudArgsBaseModel
+from dbt_cloud.run import DbtCloudRun
 
 
 class DateTypeEnum(Enum):
@@ -150,10 +151,7 @@ class DbtCloudJob(DbtCloudAccount):
         )
         return response
 
-    def run(self, args: DbtCloudJobRunArgs) -> Tuple[requests.Response, "DbtCloudRun"]:
-        """
-        :returns: Job run ID
-        """
+    def run(self, args: DbtCloudJobRunArgs) -> Tuple[requests.Response, DbtCloudRun]:
         response = requests.post(
             url=f"{self.get_api_url()}/run/",
             headers={"Authorization": f"Token {self.api_token}"},
