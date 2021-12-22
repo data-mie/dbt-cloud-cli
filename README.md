@@ -3,11 +3,7 @@
 `dbt-cloud-cli` is a command line interface for [dbt Cloud API v2.0](https://docs.getdbt.com/dbt-cloud/api-v2). It abstracts the REST API calls in an easy-to-use interface that can be incorporated into automated and manual (ad-hoc) workloads. Here are some example use cases for `dbt-cloud-cli`:
 
 1. Triggering dbt Cloud jobs in CI/CD: You can use [dbt-cloud job run](#dbt-cloud-job-run) in a CI/CD workflow (e.g., Github Actions) to trigger a dbt Cloud job that runs and tests the changes in a commit branch
-2. Setting up dbt Cloud jobs: You can use [dbt-cloud job create](#dbt-cloud-job-create) to create standardized jobs between dbt Cloud projects. Example:
-
-```bash
-dbt-cloud job create --name "Run and test all models" --execute_steps '["dbt run", "dbt test"]' --triggers '{"schedule": true}' --schedule '{"cron": "0 0 * * *"}' --settings '{"threads": 4}' --generate-docs 
-```
+2. Setting up dbt Cloud jobs: You can use [dbt-cloud job create](#dbt-cloud-job-create) to create standardized jobs between dbt Cloud projects.
 
 ## Installation
 
