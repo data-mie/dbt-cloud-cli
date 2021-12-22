@@ -33,6 +33,7 @@ The following environment variables are used as argument defaults:
 
 * [dbt-cloud job run](#dbt-cloud-job-run)
 * [dbt-cloud job get](#dbt-cloud-job-get)
+* [dbt-cloud job create](#dbt-cloud-job-create)
 * [dbt-cloud run get](#dbt-cloud-run-get)
 
 ## dbt-cloud job run
@@ -175,7 +176,68 @@ This command returns the details of a dbt Cloud job. For more information on the
 
 ## dbt-cloud job create
 
-To be implemented!
+This command creates a job in a dbt Cloud project. For more information on the API endpoint arguments and response, run `dbt-cloud job create --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/createJob).
+
+### Usage
+```bash
+dbt-cloud job create --project-id REFACTED --environment-id 49819 --name "Create job" --execute-steps "dbt seed" --execute-steps "dbt run"
+{
+  "status": {
+    "code": 201,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": {
+    "execution": {
+      "timeout_seconds": 0
+    },
+    "generate_docs": false,
+    "run_generate_sources": false,
+    "id": 48180,
+    "account_id": REDACTED,
+    "project_id": REDACTED,
+    "environment_id": 49819,
+    "name": "Create job",
+    "dbt_version": null,
+    "created_at": "2021-12-22T11:23:26.968076+00:00",
+    "updated_at": "2021-12-22T11:23:26.968094+00:00",
+    "execute_steps": [
+      "dbt seed",
+      "dbt run"
+    ],
+    "state": 1,
+    "deferring_job_definition_id": null,
+    "lifecycle_webhooks": false,
+    "lifecycle_webhooks_url": null,
+    "triggers": {
+      "github_webhook": false,
+      "git_provider_webhook": null,
+      "custom_branch_only": false,
+      "schedule": false
+    },
+    "settings": {
+      "threads": 1,
+      "target_name": "default"
+    },
+    "schedule": {
+      "cron": "0 * * * *",
+      "date": {
+        "type": "every_day"
+      },
+      "time": {
+        "type": "every_hour",
+        "interval": 1
+      }
+    },
+    "is_deferrable": false,
+    "generate_sources": false,
+    "cron_humanized": "Every hour",
+    "next_run": null,
+    "next_run_humanized": null
+  }
+}
+```
 
 ## dbt-cloud run get
 This command prints a dbt Cloud run status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud run get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById).
