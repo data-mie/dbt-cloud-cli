@@ -1,13 +1,12 @@
 from pydantic import BaseModel
 
 
-class DbtCloudAPIv2(BaseModel):
+class DbtCloudAPI(BaseModel):
     api_token: str
-    api_base_url: str = "https://cloud.getdbt.com/api/v2"
 
 
-class DbtCloudAccount(DbtCloudAPIv2):
+class DbtCloudAccount(DbtCloudAPI):
     account_id: int
 
-    def get_api_url(self) -> str:
-        return f"{self.api_base_url}/accounts/{self.account_id}"
+    def get_api_url(self, api_version: str = "v2") -> str:
+        return f"https://cloud.getdbt.com/api/{api_version}/accounts/{self.account_id}"

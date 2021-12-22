@@ -1,7 +1,7 @@
 import requests
 import os
-from enum import IntEnum
-from typing import Optional, List, Tuple, Dict, Any
+from enum import IntEnum, Enum
+from typing import Optional, List, Tuple, Dict, Any, Literal
 from pydantic import Field
 from dbt_cloud.account import DbtCloudAccount
 from dbt_cloud.args import ArgsBaseModel
@@ -65,6 +65,86 @@ class DbtCloudRunArgs(DbtCloudArgsBaseModel):
     )
 
 
+class DbtCloudJobGetArgs(DbtCloudArgsBaseModel):
+    job_id: int = Field(
+        default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
+        description="Numeric ID of the job to run (default: 'DBT_CLOUD_JOB_ID' environment variable)",
+    )
+    order_by: Optional[str] = Field(
+        description="Field to order the result by. Use '-' to indicate reverse order."
+    )
+
+
+class DbtCloudJobTriggers(ArgsBaseModel):
+    github_webhook: bool = Field(default=False)
+    schedule: bool = Field(default=False)
+    custom_branch_only: bool = Field(default=False)
+
+
+class DbtCloudJobSettings(ArgsBaseModel):
+    threads: int = Field(
+        default=1,
+        description="The maximum number of models to run in parallel in a single dbt run.",
+    )
+    target_name: str = Field(
+        default="default",
+        description=r"Informational field that can be consumed in dbt project code with {{ target.name }}.",
+    )
+
+
+class DateTypeEnum(Enum):
+    EVERY_DAY = "every_day"
+    DAYS_OF_WEEK = "days_of_week"
+    CUSTOM_CRON = "custom_cron"
+
+
+class TimeTypeEnum(Enum):
+    EVERY_HOUR = "every_hour"
+    AT_EXACT_HOURS = "at_exact_hours"
+
+
+class DbtCloudJobScheduleDate(ArgsBaseModel):
+    type: DateTypeEnum = Field(default="every_day", description=None)
+
+
+class DbtCloudJobScheduleTime(ArgsBaseModel):
+    type: TimeTypeEnum = Field(default="every_hour", description=None)
+    interval: int = Field(default=1)
+
+
+class DbtCloudJobSchedule(ArgsBaseModel):
+    cron: str = Field(
+        default="0 * * * *", description="Cron-syntax schedule for the job."
+    )
+    date: DbtCloudJobScheduleDate = Field(default_factory=DbtCloudJobScheduleDate)
+    time: DbtCloudJobScheduleTime = Field(default_factory=DbtCloudJobScheduleTime)
+
+
+class DbtCloudJobCreateArgs(DbtCloudArgsBaseModel):
+    id: Optional[int] = Field(default=None, description="Must be empty.")
+    project_id: int = Field(..., description="Numeric ID of the dbt Cloud project.")
+    environment_id: int = Field(
+        ..., description="Numeric ID of the dbt Cloud environment."
+    )
+    name: str = Field(..., description="A name for the job.")
+    execute_steps: List[str] = Field(..., description="Job execution steps.")
+    dbt_version: Optional[str] = Field(
+        default=None,
+        description="Overrides the dbt_version specified on the attached Environment if provided.",
+    )
+    triggers: Optional[DbtCloudJobTriggers] = Field(default_factory=DbtCloudJobTriggers)
+    settings: Optional[DbtCloudJobSettings] = Field(default_factory=DbtCloudJobSettings)
+    state: Optional[int] = Field(default=1, description="1 = active, 2 = deleted")
+    generate_docs: Optional[bool] = Field(
+        default=False,
+        description="When true, run a dbt docs generate step at the end of runs triggered from this job.",
+    )
+    schedule: Optional[DbtCloudJobSchedule] = Field(default_factory=DbtCloudJobSchedule)
+
+    def get_payload(self):
+        return super().get_payload(exclude_keys=["api_token"])
+
+
 class DbtCloudRunGetArgs(DbtCloudArgsBaseModel):
     run_id: int = Field(
         ...,
@@ -81,10 +161,29 @@ class DbtCloudRunGetArgs(DbtCloudArgsBaseModel):
 
 
 class DbtCloudJob(DbtCloudAccount):
-    job_id: int
+    job_id: Optional[int]
 
     def get_api_url(self) -> str:
-        return f"{super().get_api_url()}/jobs/{self.job_id}"
+        if self.job_id is not None:
+            return f"{super().get_api_url()}/jobs/{self.job_id}"
+        return f"{super().get_api_url()}/jobs"
+
+    def get(self, order_by: str) -> requests.Response:
+        response = requests.get(
+            url=f"{self.get_api_url()}/",
+            headers={"Authorization": f"Token {self.api_token}"},
+            params={"order_by": order_by},
+        )
+        response.raise_for_status()
+        return response
+
+    def create(self, args: DbtCloudJobCreateArgs) -> requests.Response:
+        response = requests.post(
+            url=f"{self.get_api_url()}/",
+            headers={"Authorization": f"Token {self.api_token}"},
+            json=args.get_payload(),
+        )
+        return response
 
     def run(self, args: DbtCloudRunArgs) -> Tuple[requests.Response, "DbtCloudRun"]:
         """

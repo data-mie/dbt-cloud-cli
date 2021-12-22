@@ -12,6 +12,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      DBT_CLOUD_API_TOKEN: ${{ secrets.DBT_CLOUD_API_TOKEN }}
+      DBT_CLOUD_ACCOUNT_ID: ${{ secrets.DBT_CLOUD_ACCOUNT_ID }}
+      DBT_CLOUD_JOB_ID: 43167
 
     steps:
       - uses: actions/checkout@v2
@@ -24,11 +28,13 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -e .[test,lint]
+          sudo apt-get update -yqq
+          sudo apt-get install jq -yqq
 
       - name: Lint Python
         run: black --check .
 
-      - name: Run tests
+      - name: Run unit tests
         run: pytest --cov=dbt_cloud --cov-report html:cov_html
 
       - name: Archive code coverage results
@@ -37,3 +43,15 @@ jobs:
           name: code-coverage-report
           path: cov_html/
           retention-days: 90
+
+      - name: Test 'dbt-cloud job get'
+        run: dbt-cloud job get
+
+      - name: Test 'dbt-cloud job run'
+        id: job_run
+        run: |
+          dbt-cloud job run | tee run.json
+          echo ::set-output name=run_id::$(cat run.json | jq .data.id -r)
+
+      - name: Test 'dbt cloud run get'
+        run: dbt-cloud run get --run-id ${{ steps.job_run.outputs.run_id }}
