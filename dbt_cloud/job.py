@@ -1,7 +1,7 @@
 import requests
 import os
-from enum import IntEnum
-from typing import Optional, List, Tuple, Dict, Any
+from enum import IntEnum, Enum
+from typing import Optional, List, Tuple, Dict, Any, Literal
 from pydantic import Field
 from dbt_cloud.account import DbtCloudAccount
 from dbt_cloud.args import ArgsBaseModel
@@ -73,6 +73,69 @@ class DbtCloudJobGetArgs(DbtCloudArgsBaseModel):
     order_by: Optional[str] = Field(
         description="Field to order the result by. Use '-' to indicate reverse order."
     )
+
+
+class DbtCloudJobTrigger(ArgsBaseModel):
+    github_webhook: bool
+    schedule: bool
+    custom_branch_only: bool
+
+
+class DbtCloudJobSettings(ArgsBaseModel):
+    threads: int = Field(
+        ...,
+        description="The maximum number of models to run in parallel in a single dbt run.",
+    )
+    target_name: str = Field(
+        ...,
+        description=r"Informational field that can be consumed in dbt project code with {{ target.name }}.",
+    )
+
+
+class DateTypeEnum(Enum):
+    EVERY_DAY = "every_day"
+    DAYS_OF_WEEK = "days_of_week"
+    CUSTOM_CRON = "custom_cron"
+
+
+class TimeTypeEnum(Enum):
+    EVERY_HOUR = "every_hour"
+    AT_EXACT_HOURS = "at_exact_hours"
+
+
+class DbtCloudJobScheduleDate(ArgsBaseModel):
+    type: DateTypeEnum
+
+
+class DbtCloudJobScheduleTime(ArgsBaseModel):
+    type: TimeTypeEnum
+
+
+class DbtCloudJobSchedule(ArgsBaseModel):
+    cron: str = Field(..., description="Cron-syntax schedule for the job.")
+    date: DbtCloudJobScheduleDate
+    time: DbtCloudJobScheduleTime
+
+
+class DbtCloudJobCreateArgs(DbtCloudArgsBaseModel):
+    project_id: int = Field(..., description="Numeric ID of the dbt Cloud project.")
+    environment_id: int = Field(
+        ..., description="Numeric ID of the dbt Cloud environment."
+    )
+    name: str = Field(..., description="A name for the job.")
+    execute_steps: List[str] = Field(..., description="Job execution steps.")
+    dbt_version: Optional[str] = Field(
+        ...,
+        description="Overrides the dbt_version specified on the attached Environment if provided.",
+    )
+    triggers: DbtCloudJobTrigger
+    settings: DbtCloudJobSettings
+    state: int = Field(default=1, description="1 = active, 2 = deleted")
+    generate_docs: bool = Field(
+        ...,
+        description="When true, run a dbt docs generate step at the end of runs triggered from this job.",
+    )
+    schedule: DbtCloudJobSchedule
 
 
 class DbtCloudRunGetArgs(DbtCloudArgsBaseModel):
