@@ -12,7 +12,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: dbt-cloud
     env:
       DBT_CLOUD_API_TOKEN: ${{ secrets.DBT_CLOUD_API_TOKEN }}
 
