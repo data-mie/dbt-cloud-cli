@@ -12,6 +12,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: dbt-cloud
 
     steps:
       - uses: actions/checkout@v2
