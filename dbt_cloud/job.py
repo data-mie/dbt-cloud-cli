@@ -151,6 +151,7 @@ class DbtCloudJob(DbtCloudAccount):
         return response
 
     def run(self, args: DbtCloudJobRunArgs) -> Tuple[requests.Response, DbtCloudRun]:
+        assert str(args.job_id) == str(self.job_id), f"{args.job_id} != {self.job_id}"
         response = requests.post(
             url=f"{self.get_api_url()}/run/",
             headers={"Authorization": f"Token {self.api_token}"},
@@ -159,7 +160,6 @@ class DbtCloudJob(DbtCloudAccount):
         run_id = response.json()["data"]["id"]
         return response, DbtCloudRun(
             run_id=run_id,
-            args=args,
             account_id=self.account_id,
             api_token=self.api_token,
         )

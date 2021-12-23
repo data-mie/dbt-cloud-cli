@@ -20,6 +20,11 @@ def job_create_response(shared_datadir):
 
 
 @pytest.fixture
+def job_run_response(shared_datadir):
+    return load_response(shared_datadir, "job_run_response")
+
+
+@pytest.fixture
 def project_id():
     return 123457
 

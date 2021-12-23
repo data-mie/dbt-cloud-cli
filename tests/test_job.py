@@ -1,4 +1,4 @@
-from dbt_cloud.job import DbtCloudJob, DbtCloudJobCreateArgs
+from dbt_cloud.job import DbtCloudJob, DbtCloudJobCreateArgs, DbtCloudJobRunArgs
 
 
 def test_mock_job_get(requests_mock, job, job_get_response):
@@ -21,3 +21,12 @@ def test_mock_job_create(
     )
     response = job.create(args)
     assert response.json() == job_create_response
+
+
+def test_mock_job_run(requests_mock, job, job_run_response):
+    url = job.get_api_url() + "/run/"
+    requests_mock.post(url, json=job_run_response, status_code=200)
+    args = DbtCloudJobRunArgs()
+    response, job_run = job.run(args)
+    assert response.json() == job_run_response
+    assert job_run.run_id == job_run_response["data"]["id"]
