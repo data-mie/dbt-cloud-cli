@@ -242,12 +242,6 @@ This command prints a dbt Cloud run status JSON response. For more information o
 
 ```bash
 >> dbt-cloud run get --run-id 36053848
-Job 43167 run 34929305: QUEUED ...
-Job 43167 run 34929305: QUEUED ...
-Job 43167 run 34929305: QUEUED ...
-Job 43167 run 34929305: STARTING ...
-Job 43167 run 34929305: RUNNING ...
-Job 43167 run 34929305: SUCCESS ...
 {
   "status": {
     "code": 200,
@@ -302,8 +296,8 @@ Job 43167 run 34929305: SUCCESS ...
     "duration_humanized": "1 minute, 50 seconds",
     "queued_duration_humanized": "1 minute, 37 seconds",
     "run_duration_humanized": "12 seconds",
-    "created_at_humanized": "34 minutes, 20 seconds ago",
-    "finished_at_humanized": "32 minutes, 29 seconds ago",
+    "created_at_humanized": "2 weeks, 1 day ago",
+    "finished_at_humanized": "2 weeks, 1 day ago",
     "job_id": 43167
   }
 }

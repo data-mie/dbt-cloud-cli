@@ -50,6 +50,7 @@ def run(wait, **kwargs):
                 )
             time.sleep(5)
     click.echo(json.dumps(response.json(), indent=2))
+    response.raise_for_status()
 
 
 @job.command()
@@ -59,6 +60,7 @@ def get(**kwargs):
     job = DbtCloudJob(**args.dict())
     response = job.get(order_by=args.order_by)
     click.echo(json.dumps(response.json(), indent=2))
+    response.raise_for_status()
 
 
 @job.command()
@@ -68,7 +70,7 @@ def create(**kwargs):
     job = DbtCloudJob(job_id=None, **args.dict())
     response = job.create(args)
     click.echo(json.dumps(response.json(), indent=2))
-    response.raise_for_status()  # TODO: Align all commands with this control flow
+    response.raise_for_status()
 
 
 @job_run.command()
@@ -78,3 +80,4 @@ def get(**kwargs):
     run = args.get_run()
     response, _ = run.get_status()
     click.echo(json.dumps(response.json(), indent=2))
+    response.raise_for_status()

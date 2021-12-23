@@ -41,5 +41,4 @@ class DbtCloudRun(DbtCloudAccount):
             url=f"{self.get_api_url()}/",
             headers={"Authorization": f"Token {self.api_token}"},
         )
-        response.raise_for_status()
         return response, DbtCloudRunStatus(response.json()["data"]["status"])
