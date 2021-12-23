@@ -1,6 +1,6 @@
 import json
 import pytest
-from dbt_cloud import DbtCloudJob
+from dbt_cloud import DbtCloudJob, DbtCloudRun
 
 
 def load_response(shared_datadir, response_name):
@@ -25,6 +25,11 @@ def job_run_response(shared_datadir):
 
 
 @pytest.fixture
+def run_get_response(shared_datadir):
+    return load_response(shared_datadir, "run_get_response")
+
+
+@pytest.fixture
 def project_id():
     return 123457
 
@@ -37,3 +42,8 @@ def environment_id():
 @pytest.fixture
 def job():
     return DbtCloudJob(api_token="foo", account_id=123456, job_id=43167)
+
+
+@pytest.fixture
+def run(job):
+    return DbtCloudRun(run_id=36053848, **job.dict())
