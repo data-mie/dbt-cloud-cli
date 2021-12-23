@@ -47,3 +47,16 @@ def job():
 @pytest.fixture
 def run(job):
     return DbtCloudRun(run_id=36053848, **job.dict())
+
+
+@pytest.fixture
+def mock_job_api(
+    requests_mock, job, job_get_response, job_create_response, job_run_response
+):
+    requests_mock.get(job.get_api_url() + "/", json=job_get_response, status_code=200)
+    requests_mock.post(
+        job.get_api_url() + "/", json=job_create_response, status_code=201
+    )
+    requests_mock.post(
+        job.get_api_url() + "/run/", json=job_run_response, status_code=200
+    )

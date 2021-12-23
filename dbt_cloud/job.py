@@ -2,10 +2,12 @@ import requests
 import os
 from enum import Enum
 from typing import Optional, List, Tuple
+from pathlib import Path
 from pydantic import Field
 from dbt_cloud.account import DbtCloudAccount
 from dbt_cloud.args import ArgsBaseModel, DbtCloudArgsBaseModel
 from dbt_cloud.run import DbtCloudRun
+from dbt_cloud.serde import dict_to_json, json_to_dict
 
 
 class DateTypeEnum(Enum):
@@ -163,3 +165,14 @@ class DbtCloudJob(DbtCloudAccount):
             account_id=self.account_id,
             api_token=self.api_token,
         )
+
+    def to_json(self, file_path: Path):
+        response = self.get()
+        response_json = dict_to_json(response.json()["data"])
+        file_path.write_text(response_json)
+
+    @classmethod
+    def from_json(cls, file_path: Path, api_token: str):
+        job_json = file_path.read_text()
+        job_dict = json_to_dict(job_json)
+        return cls(api_token=api_token, **job_dict)

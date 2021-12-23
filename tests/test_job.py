@@ -1,18 +1,14 @@
 from dbt_cloud.job import DbtCloudJob, DbtCloudJobCreateArgs, DbtCloudJobRunArgs
 
 
-def test_mock_job_get(requests_mock, job, job_get_response):
-    url = job.get_api_url() + "/"
-    requests_mock.get(url, json=job_get_response, status_code=200)
+def test_mock_job_get(mock_job_api, job, job_get_response):
     response = job.get()
     assert response.json() == job_get_response
 
 
 def test_mock_job_create(
-    requests_mock, job, job_create_response, project_id, environment_id
+    mock_job_api, job, job_create_response, project_id, environment_id
 ):
-    url = job.get_api_url() + "/"
-    requests_mock.post(url, json=job_create_response, status_code=201)
     args = DbtCloudJobCreateArgs(
         project_id=project_id,
         environment_id=environment_id,
@@ -23,9 +19,7 @@ def test_mock_job_create(
     assert response.json() == job_create_response
 
 
-def test_mock_job_run(requests_mock, job, job_run_response):
-    url = job.get_api_url() + "/run/"
-    requests_mock.post(url, json=job_run_response, status_code=200)
+def test_mock_job_run(mock_job_api, job, job_run_response):
     args = DbtCloudJobRunArgs()
     response, job_run = job.run(args)
     assert response.json() == job_run_response
