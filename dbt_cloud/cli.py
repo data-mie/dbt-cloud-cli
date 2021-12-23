@@ -3,12 +3,11 @@ import time
 import click
 from dbt_cloud.job import (
     DbtCloudJob,
-    DbtCloudRunStatus,
-    DbtCloudRunArgs,
+    DbtCloudJobRunArgs,
     DbtCloudJobGetArgs,
     DbtCloudJobCreateArgs,
-    DbtCloudRunGetArgs,
 )
+from dbt_cloud.run import DbtCloudRunStatus, DbtCloudRunGetArgs
 from dbt_cloud.exc import DbtCloudException
 
 
@@ -28,14 +27,14 @@ def job_run():
 
 
 @job.command()
-@DbtCloudRunArgs.click_options
+@DbtCloudJobRunArgs.click_options
 @click.option(
     f"--wait/--no-wait",
     default=False,
     help="Wait for the process to finish before returning from the API call.",
 )
 def run(wait, **kwargs):
-    args = DbtCloudRunArgs(**kwargs)
+    args = DbtCloudJobRunArgs(**kwargs)
     job = DbtCloudJob(**args.dict())
     response, run = job.run(args=args)
     if wait:

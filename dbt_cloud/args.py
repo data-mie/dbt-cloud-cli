@@ -1,5 +1,6 @@
 import click
-from pydantic import BaseModel, validator
+import os
+from pydantic import BaseModel, validator, Field
 
 
 class ArgsBaseModel(BaseModel):
@@ -47,3 +48,14 @@ class ArgsBaseModel(BaseModel):
             key: value for key, value in payload.items() if key not in exclude_keys
         }
         return payload
+
+
+class DbtCloudArgsBaseModel(ArgsBaseModel):
+    api_token: str = Field(
+        default_factory=lambda: os.environ["DBT_CLOUD_API_TOKEN"],
+        description="API authentication key (default: 'DBT_CLOUD_API_TOKEN' environment variable)",
+    )
+    account_id: int = Field(
+        default_factory=lambda: os.environ["DBT_CLOUD_ACCOUNT_ID"],
+        description="Numeric ID of the Account that the job belongs to (default: 'DBT_CLOUD_ACCOUNT_ID' environment variable)",
+    )
