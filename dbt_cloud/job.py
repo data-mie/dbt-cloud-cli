@@ -21,11 +21,17 @@ class TimeTypeEnum(Enum):
     AT_EXACT_HOURS = "at_exact_hours"
 
 
-class DbtCloudJobRunArgs(DbtCloudArgsBaseModel):
+class DbtCloudJobArgs(DbtCloudArgsBaseModel):
     job_id: int = Field(
         default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
         description="Numeric ID of the job to run (default: 'DBT_CLOUD_JOB_ID' environment variable)",
     )
+
+    def get_job(self) -> "DbtCloudJob":
+        return DbtCloudJob(**self.dict())
+
+
+class DbtCloudJobRunArgs(DbtCloudJobArgs):
     cause: str = Field(
         default="Triggered via API",
         description="A text description of the reason for running this job",
@@ -59,11 +65,7 @@ class DbtCloudJobRunArgs(DbtCloudArgsBaseModel):
     )
 
 
-class DbtCloudJobGetArgs(DbtCloudArgsBaseModel):
-    job_id: int = Field(
-        default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
-        description="Numeric ID of the job to run (default: 'DBT_CLOUD_JOB_ID' environment variable)",
-    )
+class DbtCloudJobGetArgs(DbtCloudJobArgs):
     order_by: Optional[str] = Field(
         description="Field to order the result by. Use '-' to indicate reverse order."
     )

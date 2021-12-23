@@ -1,8 +1,10 @@
 import json
 import time
 import click
+from pathlib import Path
 from dbt_cloud.job import (
     DbtCloudJob,
+    DbtCloudJobArgs,
     DbtCloudJobRunArgs,
     DbtCloudJobGetArgs,
     DbtCloudJobCreateArgs,
@@ -35,7 +37,7 @@ def job_run():
 )
 def run(wait, **kwargs):
     args = DbtCloudJobRunArgs(**kwargs)
-    job = DbtCloudJob(**args.dict())
+    job = args.get_job()
     response, run = job.run(args=args)
     if wait:
         while True:
@@ -71,6 +73,22 @@ def create(**kwargs):
     response = job.create(args)
     click.echo(json.dumps(response.json(), indent=2))
     response.raise_for_status()
+
+
+@job.command(help="Export job to a JSON file.")
+@DbtCloudJobArgs.click_options
+@click.option(
+    "-f",
+    "--file",
+    required=True,
+    type=Path,
+    help="Export file path.",
+)
+def export(file, **kwargs):
+    args = DbtCloudJobArgs(**kwargs)
+    job = args.get_job()
+    job.to_json(file)
+    click.echo(f"Job {job.job_id} successfully exported to {file}")
 
 
 @job_run.command()
