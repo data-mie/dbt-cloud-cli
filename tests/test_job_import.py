@@ -2,11 +2,8 @@ import json
 from dbt_cloud.job import DbtCloudJobCreateArgs
 
 
-def test_job_args_import_from_json(shared_datadir):
-    response_file = shared_datadir / "job_get_response.json"
-    response_json = response_file.read_text()
-    response_dict = json.loads(response_json)
-    job_dict = response_dict["data"]
+def test_job_args_import_from_json(job_get_response):
+    job_dict = job_get_response["data"]
     args = DbtCloudJobCreateArgs(**job_dict)
     assert args.environment_id == 49819
     assert args.account_id == 123456

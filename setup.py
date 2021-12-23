@@ -23,7 +23,7 @@ setup(
     packages=["dbt_cloud"],
     install_requires=["requests", "click", "pydantic"],
     extras_require={
-        "test": ["pytest", "pytest-cov", "pytest-datadir"],
+        "test": ["pytest", "pytest-cov", "pytest-datadir", "requests-mock"],
         "lint": ["black"],
     },
     scripts=[],

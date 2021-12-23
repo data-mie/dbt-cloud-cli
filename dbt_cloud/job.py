@@ -134,13 +134,12 @@ class DbtCloudJob(DbtCloudAccount):
             return f"{super().get_api_url()}/jobs/{self.job_id}"
         return f"{super().get_api_url()}/jobs"
 
-    def get(self, order_by: str) -> requests.Response:
+    def get(self, order_by: str = None) -> requests.Response:
         response = requests.get(
             url=f"{self.get_api_url()}/",
             headers={"Authorization": f"Token {self.api_token}"},
             params={"order_by": order_by},
         )
-        response.raise_for_status()
         return response
 
     def create(self, args: DbtCloudJobCreateArgs) -> requests.Response:
@@ -157,7 +156,6 @@ class DbtCloudJob(DbtCloudAccount):
             headers={"Authorization": f"Token {self.api_token}"},
             json=args.get_payload(),
         )
-        response.raise_for_status()
         run_id = response.json()["data"]["id"]
         return response, DbtCloudRun(
             run_id=run_id,
