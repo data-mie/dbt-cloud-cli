@@ -30,6 +30,8 @@ The following environment variables are used as argument defaults:
 * [dbt-cloud job run](#dbt-cloud-job-run)
 * [dbt-cloud job get](#dbt-cloud-job-get)
 * [dbt-cloud job create](#dbt-cloud-job-create)
+* [dbt-cloud job export](#dbt-cloud-job-export)
+* [dbt-cloud job import](#dbt-cloud-job-import)
 * [dbt-cloud run get](#dbt-cloud-run-get)
 
 ## dbt-cloud job run
@@ -234,6 +236,18 @@ dbt-cloud job create --project-id REFACTED --environment-id 49819 --name "Create
   }
 }
 ```
+
+## dbt-cloud job export
+
+todo
+
+### Usage
+
+## dbt-cloud job import
+
+todo
+
+### Usage
 
 ## dbt-cloud run get
 This command prints a dbt Cloud run status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud run get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById).
