@@ -127,7 +127,7 @@ class DbtCloudJobCreateArgs(DbtCloudArgsBaseModel):
     schedule: Optional[DbtCloudJobSchedule] = Field(default_factory=DbtCloudJobSchedule)
 
     def get_payload(self):
-        return super().get_payload(exclude_keys=["api_token"])
+        return super().get_payload(exclude=["api_token"])
 
 
 class DbtCloudJob(DbtCloudAccount):
@@ -168,13 +168,25 @@ class DbtCloudJob(DbtCloudAccount):
             api_token=self.api_token,
         )
 
-    def to_json(self, file_path: Path):
+    def to_json(self, exclude=[]):
         response = self.get()
-        response_json = dict_to_json(response.json()["data"])
+        job_dict = {
+            key: value
+            for key, value in response.json()["data"].items()
+            if key not in exclude
+        }
+        return dict_to_json(job_dict)
+
+    def to_file(self, file_path: Path, exclude=[]):
+        response_json = self.to_json(exclude=exclude)
         file_path.write_text(response_json)
 
     @classmethod
-    def from_json(cls, file_path: Path, api_token: str):
-        job_json = file_path.read_text()
-        job_dict = json_to_dict(job_json)
+    def from_json(cls, value: str, api_token: str):
+        job_dict = json_to_dict(value)
         return cls(api_token=api_token, **job_dict)
+
+    @classmethod
+    def from_file(cls, file_path: Path, api_token: str):
+        job_json = file_path.read_text()
+        return cls.from_json(job_json, api_token)

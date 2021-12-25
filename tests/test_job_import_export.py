@@ -1,4 +1,5 @@
 import json
+from dbt_cloud.serde import json_to_dict
 from dbt_cloud.job import DbtCloudJob, DbtCloudJobCreateArgs
 
 
@@ -22,10 +23,21 @@ def test_job_args_import_from_json(job_get_response):
     assert args.schedule.time.type.value == "every_hour"
 
 
-def test_job_to_json_and_from_json(shared_datadir, mock_job_api, job):
+def test_job_to_file_and_from_file(shared_datadir, mock_job_api, job):
     path = shared_datadir / "job.json"
-    job.to_json(path)
-    job_imported = DbtCloudJob.from_json(file_path=path, api_token=job.api_token)
+    job.to_file(path)
+    job_imported = DbtCloudJob.from_file(file_path=path, api_token=job.api_token)
     assert job_imported.job_id is None
     job_imported.job_id = job.job_id
     assert job.dict() == job_imported.dict()
+
+
+def test_job_export_import(shared_datadir, mock_job_api, job):
+    path = shared_datadir / "job.json"
+    job.to_file(path, exclude=["id"])
+
+    job_create_kwargs = json_to_dict(path.read_text())
+    job_create_args = DbtCloudJobCreateArgs(**job_create_kwargs)
+    job_kwargs = {**job.dict(), "job_id": None}
+    job_new = DbtCloudJob(**job_kwargs)
+    job_new.create(job_create_args)

@@ -53,5 +53,11 @@ jobs:
           dbt-cloud job run | tee run.json
           echo ::set-output name=run_id::$(cat run.json | jq .data.id -r)
 
-      - name: Test 'dbt cloud run get'
+      - name: Test 'dbt-cloud run get'
         run: dbt-cloud run get --run-id ${{ steps.job_run.outputs.run_id }}
+
+      - name: Test 'dbt-cloud job export'
+        run: dbt-cloud job export > job.json
+
+      - name: Test 'dbt-cloud job import'
+        run: cat job.json | dbt-cloud job import

@@ -11,7 +11,7 @@ from dbt_cloud.job import (
     DbtCloudJobCreateArgs,
 )
 from dbt_cloud.run import DbtCloudRunStatus, DbtCloudRunGetArgs
-from dbt_cloud.serde import json_to_dict
+from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
 
 
@@ -53,7 +53,7 @@ def run(wait, **kwargs):
                     f"Job run failed with {status.name} status. For more information, see {href}."
                 )
             time.sleep(5)
-    click.echo(json.dumps(response.json(), indent=2))
+    click.echo(dict_to_json(response.json()))
     response.raise_for_status()
 
 
@@ -63,17 +63,17 @@ def get(**kwargs):
     args = DbtCloudJobGetArgs(**kwargs)
     job = DbtCloudJob(**args.dict())
     response = job.get(order_by=args.order_by)
-    click.echo(json.dumps(response.json(), indent=2))
+    click.echo(dict_to_json(response.json()))
     response.raise_for_status()
 
 
-@job.command(help="creates a job in a dbt Cloud project.")
+@job.command(help="Creates a job in a dbt Cloud project.")
 @DbtCloudJobCreateArgs.click_options
 def create(**kwargs):
     args = DbtCloudJobCreateArgs(**kwargs)
     job = DbtCloudJob(job_id=None, **args.dict())
     response = job.create(args)
-    click.echo(json.dumps(response.json(), indent=2))
+    click.echo(dict_to_json(response.json()))
     response.raise_for_status()
 
 
@@ -82,15 +82,15 @@ def create(**kwargs):
 @click.option(
     "-f",
     "--file",
-    required=True,
-    type=Path,
+    default="-",
+    type=click.File("w"),
     help="Export file path.",
 )
 def export(file, **kwargs):
     args = DbtCloudJobArgs(**kwargs)
     job = args.get_job()
-    job.to_json(file)
-    click.echo(f"Job {job.job_id} successfully exported to {file}")
+    exclude = ["id"]
+    file.write(job.to_json(exclude=exclude))
 
 
 @job.command(help="Import job from a JSON file to a dbt Cloud project.", name="import")
@@ -98,17 +98,18 @@ def export(file, **kwargs):
 @click.option(
     "-f",
     "--file",
-    required=True,
-    type=Path,
+    default="-",
+    type=click.File("r"),
     help="Import file path.",
 )
 def import_job(file, **kwargs):
     args = DbtCloudArgsBaseModel(**kwargs)
-    job_create_kwargs = json_to_dict(file.read_text())
+    job_create_kwargs = json_to_dict(file.read())
     job_create_args = DbtCloudJobCreateArgs(**job_create_kwargs)
-    job = DbtCloudJob(job_id=job_create_kwargs["id"], **args.dict())
-    # FIXME: Object of type DateTypeEnum is not JSON serializable
-    job.create(job_create_args)
+    job = DbtCloudJob(job_id=None, **args.dict())
+    response = job.create(job_create_args)
+    click.echo(dict_to_json(response.json()))
+    response.raise_for_status()
 
 
 @job_run.command()
@@ -117,5 +118,5 @@ def get(**kwargs):
     args = DbtCloudRunGetArgs(**kwargs)
     run = args.get_run()
     response, _ = run.get_status()
-    click.echo(json.dumps(response.json(), indent=2))
+    click.echo(dict_to_json(response.json()))
     response.raise_for_status()
