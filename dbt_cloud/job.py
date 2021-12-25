@@ -2,10 +2,12 @@ import requests
 import os
 from enum import Enum
 from typing import Optional, List, Tuple
+from pathlib import Path
 from pydantic import Field
 from dbt_cloud.account import DbtCloudAccount
 from dbt_cloud.args import ArgsBaseModel, DbtCloudArgsBaseModel
 from dbt_cloud.run import DbtCloudRun
+from dbt_cloud.serde import dict_to_json, json_to_dict
 
 
 class DateTypeEnum(Enum):
@@ -19,11 +21,17 @@ class TimeTypeEnum(Enum):
     AT_EXACT_HOURS = "at_exact_hours"
 
 
-class DbtCloudJobRunArgs(DbtCloudArgsBaseModel):
+class DbtCloudJobArgs(DbtCloudArgsBaseModel):
     job_id: int = Field(
         default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
         description="Numeric ID of the job to run (default: 'DBT_CLOUD_JOB_ID' environment variable)",
     )
+
+    def get_job(self) -> "DbtCloudJob":
+        return DbtCloudJob(**self.dict())
+
+
+class DbtCloudJobRunArgs(DbtCloudJobArgs):
     cause: str = Field(
         default="Triggered via API",
         description="A text description of the reason for running this job",
@@ -57,11 +65,7 @@ class DbtCloudJobRunArgs(DbtCloudArgsBaseModel):
     )
 
 
-class DbtCloudJobGetArgs(DbtCloudArgsBaseModel):
-    job_id: int = Field(
-        default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
-        description="Numeric ID of the job to run (default: 'DBT_CLOUD_JOB_ID' environment variable)",
-    )
+class DbtCloudJobGetArgs(DbtCloudJobArgs):
     order_by: Optional[str] = Field(
         description="Field to order the result by. Use '-' to indicate reverse order."
     )
@@ -123,16 +127,16 @@ class DbtCloudJobCreateArgs(DbtCloudArgsBaseModel):
     schedule: Optional[DbtCloudJobSchedule] = Field(default_factory=DbtCloudJobSchedule)
 
     def get_payload(self):
-        return super().get_payload(exclude_keys=["api_token"])
+        return super().get_payload(exclude=["api_token"])
 
 
 class DbtCloudJob(DbtCloudAccount):
     job_id: Optional[int]
 
-    def get_api_url(self) -> str:
+    def get_api_url(self, api_version: str = "v2") -> str:
         if self.job_id is not None:
-            return f"{super().get_api_url()}/jobs/{self.job_id}"
-        return f"{super().get_api_url()}/jobs"
+            return f"{super().get_api_url(api_version)}/jobs/{self.job_id}"
+        return f"{super().get_api_url(api_version)}/jobs"
 
     def get(self, order_by: str = None) -> requests.Response:
         response = requests.get(
@@ -150,6 +154,14 @@ class DbtCloudJob(DbtCloudAccount):
         )
         return response
 
+    def delete(self):
+        response = requests.delete(
+            url=f"{self.get_api_url()}/",
+            headers={"Authorization": f"Token {self.api_token}"},
+            json={},
+        )
+        return response
+
     def run(self, args: DbtCloudJobRunArgs) -> Tuple[requests.Response, DbtCloudRun]:
         assert str(args.job_id) == str(self.job_id), f"{args.job_id} != {self.job_id}"
         response = requests.post(
@@ -163,3 +175,26 @@ class DbtCloudJob(DbtCloudAccount):
             account_id=self.account_id,
             api_token=self.api_token,
         )
+
+    def to_json(self, exclude=[]):
+        response = self.get()
+        job_dict = {
+            key: value
+            for key, value in response.json()["data"].items()
+            if key not in exclude
+        }
+        return dict_to_json(job_dict)
+
+    def to_file(self, file_path: Path, exclude=[]):
+        response_json = self.to_json(exclude=exclude)
+        file_path.write_text(response_json)
+
+    @classmethod
+    def from_json(cls, value: str, api_token: str):
+        job_dict = json_to_dict(value)
+        return cls(api_token=api_token, **job_dict)
+
+    @classmethod
+    def from_file(cls, file_path: Path, api_token: str):
+        job_json = file_path.read_text()
+        return cls.from_json(job_json, api_token)

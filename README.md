@@ -1,6 +1,6 @@
 # dbt-cloud-cli
 
-`dbt-cloud-cli` is a command line interface for [dbt Cloud API v2.0](https://docs.getdbt.com/dbt-cloud/api-v2). It abstracts the REST API calls in an easy-to-use interface that can be incorporated into automated and manual (ad-hoc) workloads. Here are some example use cases for `dbt-cloud-cli`:
+`dbt-cloud-cli` is a command line interface for [dbt Cloud API](https://docs.getdbt.com/dbt-cloud/api-v2). It abstracts the REST API calls in an easy-to-use interface that can be incorporated into automated and manual (ad-hoc) workloads. Here are some example use cases for `dbt-cloud-cli`:
 
 1. Triggering dbt Cloud jobs in CI/CD: You can use [dbt-cloud job run](#dbt-cloud-job-run) in a CI/CD workflow (e.g., Github Actions) to trigger a dbt Cloud job that runs and tests the changes in a commit branch
 2. Setting up dbt Cloud jobs: You can use [dbt-cloud job create](#dbt-cloud-job-create) to create standardized jobs between dbt Cloud projects.
@@ -30,6 +30,9 @@ The following environment variables are used as argument defaults:
 * [dbt-cloud job run](#dbt-cloud-job-run)
 * [dbt-cloud job get](#dbt-cloud-job-get)
 * [dbt-cloud job create](#dbt-cloud-job-create)
+* [dbt-cloud job delete](#dbt-cloud-job-delete)
+* [dbt-cloud job export](#dbt-cloud-job-export)
+* [dbt-cloud job import](#dbt-cloud-job-import)
 * [dbt-cloud run get](#dbt-cloud-run-get)
 
 ## dbt-cloud job run
@@ -214,6 +217,192 @@ dbt-cloud job create --project-id REFACTED --environment-id 49819 --name "Create
     },
     "settings": {
       "threads": 1,
+      "target_name": "default"
+    },
+    "schedule": {
+      "cron": "0 * * * *",
+      "date": {
+        "type": "every_day"
+      },
+      "time": {
+        "type": "every_hour",
+        "interval": 1
+      }
+    },
+    "is_deferrable": false,
+    "generate_sources": false,
+    "cron_humanized": "Every hour",
+    "next_run": null,
+    "next_run_humanized": null
+  }
+}
+```
+
+## dbt-cloud job delete
+
+This command deletes a job in a dbt Cloud project. Note that this command uses an undocumented v3 API endpoint.
+
+### Usage
+
+```bash
+>> dbt-cloud job delete --job-id 48474
+{
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": {
+    "execution": {
+      "timeout_seconds": 0
+    },
+    "generate_docs": false,
+    "run_generate_sources": false,
+    "id": 48474,
+    "account_id": REDACTED,
+    "project_id": REDACTED,
+    "environment_id": 49819,
+    "name": "Do nothing!",
+    "dbt_version": null,
+    "created_at": "2021-12-25T10:12:29.114456+00:00",
+    "updated_at": "2021-12-25T10:12:29.814383+00:00",
+    "execute_steps": [
+      "dbt run -s not_a_model"
+    ],
+    "state": 2,
+    "deferring_job_definition_id": null,
+    "lifecycle_webhooks": false,
+    "lifecycle_webhooks_url": null,
+    "triggers": {
+      "github_webhook": false,
+      "git_provider_webhook": null,
+      "custom_branch_only": true,
+      "schedule": false
+    },
+    "settings": {
+      "threads": 4,
+      "target_name": "default"
+    },
+    "schedule": {
+      "cron": "0 * * * *",
+      "date": {
+        "type": "every_day"
+      },
+      "time": {
+        "type": "every_hour",
+        "interval": 1
+      }
+    },
+    "is_deferrable": false,
+    "generate_sources": false,
+    "cron_humanized": "Every hour",
+    "next_run": null,
+    "next_run_humanized": null
+  }
+}
+```
+
+## dbt-cloud job export
+
+This command exports a dbt Cloud job as JSON to a file and can be used in conjunction with [dbt-cloud job import](#dbt-cloud-job-import) to copy jobs between dbt Cloud projects.
+
+### Usage
+
+```bash
+>> dbt-cloud job export | tee job.json
+{
+  "execution": {
+    "timeout_seconds": 0
+  },
+  "generate_docs": false,
+  "run_generate_sources": false,
+  "account_id": REDACTED,
+  "project_id": REDACTED,
+  "environment_id": 49819,
+  "name": "Do nothing!",
+  "dbt_version": null,
+  "created_at": "2021-11-18T15:19:03.185668+00:00",
+  "updated_at": "2021-12-25T09:17:12.788186+00:00",
+  "execute_steps": [
+    "dbt run -s not_a_model"
+  ],
+  "state": 1,
+  "deferring_job_definition_id": null,
+  "lifecycle_webhooks": false,
+  "lifecycle_webhooks_url": null,
+  "triggers": {
+    "github_webhook": false,
+    "git_provider_webhook": null,
+    "custom_branch_only": true,
+    "schedule": false
+  },
+  "settings": {
+    "threads": 4,
+    "target_name": "default"
+  },
+  "schedule": {
+    "cron": "0 * * * *",
+    "date": {
+      "type": "every_day"
+    },
+    "time": {
+      "type": "every_hour",
+      "interval": 1
+    }
+  },
+  "is_deferrable": false,
+  "generate_sources": false,
+  "cron_humanized": "Every hour",
+  "next_run": null,
+  "next_run_humanized": null
+}
+```
+
+## dbt-cloud job import
+
+This command imports a dbt Cloud job from exported JSON. You can use JSON manipulation tools (e.g., [jq](https://stedolan.github.io/jq/)) to modify the job definition before importing it.
+
+### Usage
+
+```bash
+>> cat job.json | jq '.environment_id = 49819 | .name = "Imported job"' | dbt-cloud job import
+{
+  "status": {
+    "code": 201,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": {
+    "execution": {
+      "timeout_seconds": 0
+    },
+    "generate_docs": false,
+    "run_generate_sources": false,
+    "id": 48475,
+    "account_id": REDACTED,
+    "project_id": REDACTED,
+    "environment_id": 49819,
+    "name": "Imported job",
+    "dbt_version": null,
+    "created_at": "2021-12-25T10:40:13.193129+00:00",
+    "updated_at": "2021-12-25T10:40:13.193149+00:00",
+    "execute_steps": [
+      "dbt run -s not_a_model"
+    ],
+    "state": 1,
+    "deferring_job_definition_id": null,
+    "lifecycle_webhooks": false,
+    "lifecycle_webhooks_url": null,
+    "triggers": {
+      "github_webhook": false,
+      "git_provider_webhook": null,
+      "custom_branch_only": true,
+      "schedule": false
+    },
+    "settings": {
+      "threads": 4,
       "target_name": "default"
     },
     "schedule": {

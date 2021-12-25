@@ -1,6 +1,7 @@
 import click
 import os
 from pydantic import BaseModel, validator, Field
+from dbt_cloud.serde import json_to_dict
 
 
 class ArgsBaseModel(BaseModel):
@@ -42,12 +43,9 @@ class ArgsBaseModel(BaseModel):
         else:
             return value
 
-    def get_payload(self, exclude_keys=["api_token", "account_id", "job_id"]) -> dict:
-        payload = self.dict()
-        payload = {
-            key: value for key, value in payload.items() if key not in exclude_keys
-        }
-        return payload
+    def get_payload(self, exclude=["api_token", "account_id", "job_id"]) -> dict:
+        payload = self.json(exclude=set(exclude))
+        return json_to_dict(payload)
 
 
 class DbtCloudArgsBaseModel(ArgsBaseModel):
