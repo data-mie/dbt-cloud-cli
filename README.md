@@ -305,7 +305,7 @@ This command deletes a job in a dbt Cloud project. Note that this command uses a
 
 ## dbt-cloud job export
 
-This command exports a dbt Cloud job as JSON to a file and can be used in conjunction with ´dbt-cloud job import´ to copy jobs between dbt Cloud projects.
+This command exports a dbt Cloud job as JSON to a file and can be used in conjunction with [dbt-cloud job import](#dbt-cloud-job-import) to copy jobs between dbt Cloud projects.
 
 ### Usage
 
