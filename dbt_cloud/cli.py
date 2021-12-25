@@ -77,6 +77,16 @@ def create(**kwargs):
     response.raise_for_status()
 
 
+@job.command(help="Delete a job from a dbt Cloud project.")
+@DbtCloudJobArgs.click_options
+def delete(**kwargs):
+    args = DbtCloudJobArgs(**kwargs)
+    job = args.get_job()
+    response = job.delete()
+    click.echo(dict_to_json(response.json()))
+    response.raise_for_status()
+
+
 @job.command(help="Export job to a JSON file.")
 @DbtCloudJobArgs.click_options
 @click.option(

@@ -133,10 +133,10 @@ class DbtCloudJobCreateArgs(DbtCloudArgsBaseModel):
 class DbtCloudJob(DbtCloudAccount):
     job_id: Optional[int]
 
-    def get_api_url(self) -> str:
+    def get_api_url(self, api_version: str = "v2") -> str:
         if self.job_id is not None:
-            return f"{super().get_api_url()}/jobs/{self.job_id}"
-        return f"{super().get_api_url()}/jobs"
+            return f"{super().get_api_url(api_version)}/jobs/{self.job_id}"
+        return f"{super().get_api_url(api_version)}/jobs"
 
     def get(self, order_by: str = None) -> requests.Response:
         response = requests.get(
@@ -151,6 +151,14 @@ class DbtCloudJob(DbtCloudAccount):
             url=f"{self.get_api_url()}/",
             headers={"Authorization": f"Token {self.api_token}"},
             json=args.get_payload(),
+        )
+        return response
+
+    def delete(self):
+        response = requests.delete(
+            url=f"{self.get_api_url()}/",
+            headers={"Authorization": f"Token {self.api_token}"},
+            json={},
         )
         return response
 
