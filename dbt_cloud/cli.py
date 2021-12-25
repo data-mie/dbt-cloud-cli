@@ -77,7 +77,7 @@ def create(**kwargs):
     response.raise_for_status()
 
 
-@job.command(help="Delete a job from a dbt Cloud project.")
+@job.command(help="Deletes a job from a dbt Cloud project.")
 @DbtCloudJobArgs.click_options
 def delete(**kwargs):
     args = DbtCloudJobArgs(**kwargs)
@@ -87,7 +87,7 @@ def delete(**kwargs):
     response.raise_for_status()
 
 
-@job.command(help="Export job to a JSON file.")
+@job.command(help="Exports a dbt Cloud job as JSON to a file.")
 @DbtCloudJobArgs.click_options
 @click.option(
     "-f",
@@ -103,7 +103,7 @@ def export(file, **kwargs):
     file.write(job.to_json(exclude=exclude))
 
 
-@job.command(help="Import job from a JSON file to a dbt Cloud project.", name="import")
+@job.command(help="Imports a dbt Cloud job from exported JSON.", name="import")
 @DbtCloudArgsBaseModel.click_options
 @click.option(
     "-f",

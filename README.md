@@ -240,21 +240,189 @@ dbt-cloud job create --project-id REFACTED --environment-id 49819 --name "Create
 
 ## dbt-cloud job delete
 
-todo
+This command deletes a job in a dbt Cloud project. Note that this command uses an undocumented v3 API endpoint.
 
 ### Usage
+
+```bash
+>> dbt-cloud job delete --job-id 48474
+{
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": {
+    "execution": {
+      "timeout_seconds": 0
+    },
+    "generate_docs": false,
+    "run_generate_sources": false,
+    "id": 48474,
+    "account_id": REDACTED,
+    "project_id": REDACTED,
+    "environment_id": 49819,
+    "name": "Do nothing!",
+    "dbt_version": null,
+    "created_at": "2021-12-25T10:12:29.114456+00:00",
+    "updated_at": "2021-12-25T10:12:29.814383+00:00",
+    "execute_steps": [
+      "dbt run -s not_a_model"
+    ],
+    "state": 2,
+    "deferring_job_definition_id": null,
+    "lifecycle_webhooks": false,
+    "lifecycle_webhooks_url": null,
+    "triggers": {
+      "github_webhook": false,
+      "git_provider_webhook": null,
+      "custom_branch_only": true,
+      "schedule": false
+    },
+    "settings": {
+      "threads": 4,
+      "target_name": "default"
+    },
+    "schedule": {
+      "cron": "0 * * * *",
+      "date": {
+        "type": "every_day"
+      },
+      "time": {
+        "type": "every_hour",
+        "interval": 1
+      }
+    },
+    "is_deferrable": false,
+    "generate_sources": false,
+    "cron_humanized": "Every hour",
+    "next_run": null,
+    "next_run_humanized": null
+  }
+}
+```
 
 ## dbt-cloud job export
 
-todo
+This command exports a dbt Cloud job as JSON to a file and can be used in conjunction with ´dbt-cloud job import´ to copy jobs between dbt Cloud projects.
 
 ### Usage
+
+```bash
+>> dbt-cloud job export | tee job.json
+{
+  "execution": {
+    "timeout_seconds": 0
+  },
+  "generate_docs": false,
+  "run_generate_sources": false,
+  "account_id": REDACTED,
+  "project_id": REDACTED,
+  "environment_id": 49819,
+  "name": "Do nothing!",
+  "dbt_version": null,
+  "created_at": "2021-11-18T15:19:03.185668+00:00",
+  "updated_at": "2021-12-25T09:17:12.788186+00:00",
+  "execute_steps": [
+    "dbt run -s not_a_model"
+  ],
+  "state": 1,
+  "deferring_job_definition_id": null,
+  "lifecycle_webhooks": false,
+  "lifecycle_webhooks_url": null,
+  "triggers": {
+    "github_webhook": false,
+    "git_provider_webhook": null,
+    "custom_branch_only": true,
+    "schedule": false
+  },
+  "settings": {
+    "threads": 4,
+    "target_name": "default"
+  },
+  "schedule": {
+    "cron": "0 * * * *",
+    "date": {
+      "type": "every_day"
+    },
+    "time": {
+      "type": "every_hour",
+      "interval": 1
+    }
+  },
+  "is_deferrable": false,
+  "generate_sources": false,
+  "cron_humanized": "Every hour",
+  "next_run": null,
+  "next_run_humanized": null
+}
+```
 
 ## dbt-cloud job import
 
-todo
+This command imports a dbt Cloud job from exported JSON. You can use JSON manipulation tools (e.g., [jq](https://stedolan.github.io/jq/)) to modify the job definition before importing it.
 
 ### Usage
+
+```bash
+>> cat job.json | jq '.environment_id = 49819 | .name = "Imported job"' | dbt-cloud job import
+{
+  "status": {
+    "code": 201,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": {
+    "execution": {
+      "timeout_seconds": 0
+    },
+    "generate_docs": false,
+    "run_generate_sources": false,
+    "id": 48475,
+    "account_id": REDACTED,
+    "project_id": REDACTED,
+    "environment_id": 49819,
+    "name": "Imported job",
+    "dbt_version": null,
+    "created_at": "2021-12-25T10:40:13.193129+00:00",
+    "updated_at": "2021-12-25T10:40:13.193149+00:00",
+    "execute_steps": [
+      "dbt run -s not_a_model"
+    ],
+    "state": 1,
+    "deferring_job_definition_id": null,
+    "lifecycle_webhooks": false,
+    "lifecycle_webhooks_url": null,
+    "triggers": {
+      "github_webhook": false,
+      "git_provider_webhook": null,
+      "custom_branch_only": true,
+      "schedule": false
+    },
+    "settings": {
+      "threads": 4,
+      "target_name": "default"
+    },
+    "schedule": {
+      "cron": "0 * * * *",
+      "date": {
+        "type": "every_day"
+      },
+      "time": {
+        "type": "every_hour",
+        "interval": 1
+      }
+    },
+    "is_deferrable": false,
+    "generate_sources": false,
+    "cron_humanized": "Every hour",
+    "next_run": null,
+    "next_run_humanized": null
+  }
+}
+```
 
 ## dbt-cloud run get
 This command prints a dbt Cloud run status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud run get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById).
