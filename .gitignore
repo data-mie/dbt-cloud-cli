@@ -5,7 +5,8 @@
 **/*.egg-info/
 venv/
 *.pyc
-
+build/
+dist/
 
 # pytest-cov
 .coverage

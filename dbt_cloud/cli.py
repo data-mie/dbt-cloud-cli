@@ -122,7 +122,7 @@ def import_job(file, **kwargs):
     response.raise_for_status()
 
 
-@job_run.command()
+@job_run.command(help="Prints a dbt Cloud run status JSON response.")
 @DbtCloudRunGetArgs.click_options
 def get(**kwargs):
     args = DbtCloudRunGetArgs(**kwargs)
