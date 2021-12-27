@@ -21,7 +21,7 @@ setup(
     ],
     python_requires=">=3.6",
     packages=["dbt_cloud"],
-    install_requires=["requests", "click", "pydantic"],
+    install_requires=["requests", "click", "pydantic", "mergedeep"],
     extras_require={
         "test": ["pytest", "pytest-cov", "pytest-datadir", "requests-mock"],
         "lint": ["black"],
