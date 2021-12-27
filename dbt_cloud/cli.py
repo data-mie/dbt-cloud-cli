@@ -2,7 +2,7 @@ import json
 import time
 import click
 from pathlib import Path
-from dbt_cloud.args import DbtCloudArgsBaseModel
+from dbt_cloud.args import DbtCloudArgsBaseModel, translate_click_options
 from dbt_cloud.job import (
     DbtCloudJob,
     DbtCloudJobArgs,
@@ -38,7 +38,8 @@ def job_run():
     help="Wait for the process to finish before returning from the API call.",
 )
 def run(wait, **kwargs):
-    args = DbtCloudJobRunArgs(**kwargs)
+    kwargs_translated = translate_click_options(**kwargs)
+    args = DbtCloudJobRunArgs(**kwargs_translated)
     job = args.get_job()
     response, run = job.run(args=args)
     if wait:
@@ -60,7 +61,8 @@ def run(wait, **kwargs):
 @job.command(help="Returns the details of a dbt Cloud job.")
 @DbtCloudJobGetArgs.click_options
 def get(**kwargs):
-    args = DbtCloudJobGetArgs(**kwargs)
+    kwargs_translated = translate_click_options(**kwargs)
+    args = DbtCloudJobGetArgs(**kwargs_translated)
     job = DbtCloudJob(**args.dict())
     response = job.get(order_by=args.order_by)
     click.echo(dict_to_json(response.json()))
@@ -70,7 +72,8 @@ def get(**kwargs):
 @job.command(help="Creates a job in a dbt Cloud project.")
 @DbtCloudJobCreateArgs.click_options
 def create(**kwargs):
-    args = DbtCloudJobCreateArgs(**kwargs)
+    kwargs_translated = translate_click_options(**kwargs)
+    args = DbtCloudJobCreateArgs(**kwargs_translated)
     job = DbtCloudJob(job_id=None, **args.dict())
     response = job.create(args)
     click.echo(dict_to_json(response.json()))
@@ -80,7 +83,8 @@ def create(**kwargs):
 @job.command(help="Deletes a job from a dbt Cloud project.")
 @DbtCloudJobArgs.click_options
 def delete(**kwargs):
-    args = DbtCloudJobArgs(**kwargs)
+    kwargs_translated = translate_click_options(**kwargs)
+    args = DbtCloudJobArgs(**kwargs_translated)
     job = args.get_job()
     response = job.delete()
     click.echo(dict_to_json(response.json()))
@@ -97,7 +101,8 @@ def delete(**kwargs):
     help="Export file path.",
 )
 def export(file, **kwargs):
-    args = DbtCloudJobArgs(**kwargs)
+    kwargs_translated = translate_click_options(**kwargs)
+    args = DbtCloudJobArgs(**kwargs_translated)
     job = args.get_job()
     exclude = ["id"]
     file.write(job.to_json(exclude=exclude))
@@ -113,7 +118,8 @@ def export(file, **kwargs):
     help="Import file path.",
 )
 def import_job(file, **kwargs):
-    args = DbtCloudArgsBaseModel(**kwargs)
+    kwargs_translated = translate_click_options(**kwargs)
+    args = DbtCloudArgsBaseModel(**kwargs_translated)
     job_create_kwargs = json_to_dict(file.read())
     job_create_args = DbtCloudJobCreateArgs(**job_create_kwargs)
     job = DbtCloudJob(job_id=None, **args.dict())
@@ -125,7 +131,8 @@ def import_job(file, **kwargs):
 @job_run.command(help="Prints a dbt Cloud run status JSON response.")
 @DbtCloudRunGetArgs.click_options
 def get(**kwargs):
-    args = DbtCloudRunGetArgs(**kwargs)
+    kwargs_translated = translate_click_options(**kwargs)
+    args = DbtCloudRunGetArgs(**kwargs_translated)
     run = args.get_run()
     response, _ = run.get_status()
     click.echo(dict_to_json(response.json()))
