@@ -15,6 +15,8 @@ jobs:
     env:
       DBT_CLOUD_API_TOKEN: ${{ secrets.DBT_CLOUD_API_TOKEN }}
       DBT_CLOUD_ACCOUNT_ID: ${{ secrets.DBT_CLOUD_ACCOUNT_ID }}
+      DBT_CLOUD_PROJECT_ID: 26597
+      DBT_CLOUD_ENVIRONMENT_ID: 49819
       DBT_CLOUD_JOB_ID: 43167
 
     steps:
@@ -64,3 +66,9 @@ jobs:
 
       - name: Test 'dbt-cloud job delete'
         run: dbt-cloud job delete --job-id $(cat job_imported.json | jq .data.id)
+
+      - name: Test 'dbt-cloub job create'
+        run: |
+          dbt-cloud job create --project-id $DBT_CLOUD_PROJECT_ID --environment-id $DBT_CLOUD_ENVIRONMENT_ID --name "Test nested args" --settings-threads 4 --execute-steps "dbt seed" | tee job_created.json
+          dbt-cloud job delete --job-id $(cat job_created.json | jq .data.id)
+          [[ $(cat job_created.json | jq .data.settings.threads) = 4 ]] && exit 0 || exit 1
