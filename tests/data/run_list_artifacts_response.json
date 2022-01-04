@@ -1,0 +1,15 @@
+{
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": [
+    "manifest.json",
+    "run/jaffle_shop/data/raw_customers.csv",
+    "run/jaffle_shop/data/raw_orders.csv",
+    "run/jaffle_shop/data/raw_payments.csv",
+    "run_results.json"
+  ]
+}

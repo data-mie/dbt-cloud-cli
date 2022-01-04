@@ -141,7 +141,7 @@ class DbtCloudJob(DbtCloudAccount):
     def get(self, order_by: str = None) -> requests.Response:
         response = requests.get(
             url=f"{self.get_api_url()}/",
-            headers={"Authorization": f"Token {self.api_token}"},
+            headers=self.authorization_headers,
             params={"order_by": order_by},
         )
         return response
@@ -149,7 +149,7 @@ class DbtCloudJob(DbtCloudAccount):
     def create(self, args: DbtCloudJobCreateArgs) -> requests.Response:
         response = requests.post(
             url=f"{self.get_api_url()}/",
-            headers={"Authorization": f"Token {self.api_token}"},
+            headers=self.authorization_headers,
             json=args.get_payload(),
         )
         return response
@@ -157,7 +157,7 @@ class DbtCloudJob(DbtCloudAccount):
     def delete(self):
         response = requests.delete(
             url=f"{self.get_api_url()}/",
-            headers={"Authorization": f"Token {self.api_token}"},
+            headers=self.authorization_headers,
             json={},
         )
         return response
@@ -166,7 +166,7 @@ class DbtCloudJob(DbtCloudAccount):
         assert str(args.job_id) == str(self.job_id), f"{args.job_id} != {self.job_id}"
         response = requests.post(
             url=f"{self.get_api_url()}/run/",
-            headers={"Authorization": f"Token {self.api_token}"},
+            headers=self.authorization_headers,
             json=args.get_payload(),
         )
         run_id = response.json()["data"]["id"]

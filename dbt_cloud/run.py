@@ -15,19 +15,29 @@ class DbtCloudRunStatus(IntEnum):
     CANCELLED = 30
 
 
-class DbtCloudRunGetArgs(DbtCloudArgsBaseModel):
+class DbtCloudRunArgs(DbtCloudArgsBaseModel):
     run_id: int = Field(
         ...,
         description="Numeric ID of the run",
-    )
-    include_related: Optional[List[str]] = Field(
-        description="List of related fields to pull with the run. Valid values are 'trigger', 'job', and 'debug_logs'. If 'debug_logs' is not provided in a request, then the included debug logs will be truncated to the last 1,000 lines of the debug log output file.",
     )
 
     def get_run(self) -> "DbtCloudRun":
         return DbtCloudRun(
             run_id=self.run_id, api_token=self.api_token, account_id=self.account_id
         )
+
+
+class DbtCloudRunGetArgs(DbtCloudRunArgs):
+    include_related: Optional[List[str]] = Field(
+        description="List of related fields to pull with the run. Valid values are 'trigger', 'job', and 'debug_logs'. If 'debug_logs' is not provided in a request, then the included debug logs will be truncated to the last 1,000 lines of the debug log output file.",
+    )
+
+
+class DbtCloudRunListArtifactsArgs(DbtCloudRunArgs):
+    step: int = Field(
+        None,
+        description="The index of the Step in the Run to query for artifacts. The first step in the run has the index 1. If the step parameter is omitted, then this endpoint will return the artifacts compiled for the last step in the run.",
+    )
 
 
 class DbtCloudRun(DbtCloudAccount):
@@ -39,6 +49,14 @@ class DbtCloudRun(DbtCloudAccount):
     def get_status(self) -> Tuple[requests.Response, DbtCloudRunStatus]:
         response = requests.get(
             url=f"{self.get_api_url()}/",
-            headers={"Authorization": f"Token {self.api_token}"},
+            headers=self.authorization_headers,
         )
         return response, DbtCloudRunStatus(response.json()["data"]["status"])
+
+    def list_artifacts(self, step: int = None) -> requests.Response:
+        response = requests.get(
+            url=f"{self.get_api_url()}/artifacts/",
+            headers=self.authorization_headers,
+            params={"step": step},
+        )
+        return response
