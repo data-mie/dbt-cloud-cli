@@ -63,9 +63,8 @@ jobs:
         run: |
           set -o pipefail
           dbt-cloud job create --project-id $DBT_CLOUD_PROJECT_ID --environment-id $DBT_CLOUD_ENVIRONMENT_ID --name "Test nested args" --settings-threads 4 --execute-steps "dbt seed" | tee job_created.json ; echo $?
-          [[ $(cat job_created.json | jq .data.settings.threads) = 4 ]] && exit 0 || exit 1
-          echo $(cat job_created.json | jq .data.id -r)
           echo ::set-output name=job_id::$(cat job_created.json | jq .data.id -r)
+          [[ $(cat job_created.json | jq .data.settings.threads) = 4 ]] && exit 0 || exit 1
 
       - name: Test 'dbt-cloud job run'
         id: job_run
