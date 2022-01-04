@@ -49,10 +49,26 @@ jobs:
       - name: Test 'dbt-cloud job get'
         run: dbt-cloud job get
 
+      - name: Test 'dbt-cloud job export'
+        run: dbt-cloud job export | tee job.json
+
+      - name: Test 'dbt-cloud job import'
+        run: cat job.json | dbt-cloud job import | tee job_imported.json
+
+      - name: Test 'dbt-cloud job delete'
+        run: dbt-cloud job delete --job-id $(cat job_imported.json | jq .data.id)
+
+      - name: Test 'dbt-cloub job create'
+        id: job_create
+        run: |
+          dbt-cloud job create --project-id $DBT_CLOUD_PROJECT_ID --environment-id $DBT_CLOUD_ENVIRONMENT_ID --name "Test nested args" --settings-threads 4 --execute-steps "dbt seed" | tee job_created.json
+          [[ $(cat job_created.json | jq .data.settings.threads) = 4 ]] && exit 0 || exit 1
+          echo ::set-output name=job_id::$(cat job_created.json | jq .data.id -r)
+
       - name: Test 'dbt-cloud job run'
         id: job_run
         run: |
-          dbt-cloud job run | tee run.json
+          dbt-cloud job run --job-id ${{ steps.job_create.outputs.job_id }} | tee run.json
           echo ::set-output name=run_id::$(cat run.json | jq .data.id -r)
 
       - name: Test 'dbt-cloud run get'
@@ -64,17 +80,6 @@ jobs:
       - name: Test 'dbt-cloud run get-artifact'
         run: dbt-cloud run get-artifact --run-id ${{ steps.job_run.outputs.run_id }} --path manifest.json
 
-      - name: Test 'dbt-cloud job export'
-        run: dbt-cloud job export | tee job.json
+      - name: Cleanup
+        run: dbt-cloud job delete --job-id ${{ steps.job_create.outputs.job_id }}
 
-      - name: Test 'dbt-cloud job import'
-        run: cat job.json | dbt-cloud job import | tee job_imported.json
-
-      - name: Test 'dbt-cloud job delete'
-        run: dbt-cloud job delete --job-id $(cat job_imported.json | jq .data.id)
-
-      - name: Test 'dbt-cloub job create'
-        run: |
-          dbt-cloud job create --project-id $DBT_CLOUD_PROJECT_ID --environment-id $DBT_CLOUD_ENVIRONMENT_ID --name "Test nested args" --settings-threads 4 --execute-steps "dbt seed" | tee job_created.json
-          dbt-cloud job delete --job-id $(cat job_created.json | jq .data.id)
-          [[ $(cat job_created.json | jq .data.settings.threads) = 4 ]] && exit 0 || exit 1
