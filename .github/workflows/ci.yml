@@ -69,8 +69,7 @@ jobs:
       - name: Test 'dbt-cloud job run'
         id: job_run
         run: |
-          set -o pipefail
-          dbt-cloud job run --job-id ${{ steps.job_create.outputs.job_id }} | tee run.json ; echo $?
+          dbt-cloud job run --job-id ${{ steps.job_create.outputs.job_id }} --wait -f run.json
           echo ::set-output name=run_id::$(cat run.json | jq .data.id -r)
 
       - name: Test 'dbt-cloud run get'

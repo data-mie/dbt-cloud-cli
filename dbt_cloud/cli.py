@@ -42,7 +42,14 @@ def job_run():
     default=False,
     help="Wait for the process to finish before returning from the API call.",
 )
-def run(wait, **kwargs):
+@click.option(
+    "-f",
+    "--file",
+    default="-",
+    type=click.File("w"),
+    help="Response export file path.",
+)
+def run(wait, file, **kwargs):
     kwargs_translated = translate_click_options(**kwargs)
     args = DbtCloudJobRunArgs(**kwargs_translated)
     job = args.get_job()
@@ -59,7 +66,7 @@ def run(wait, **kwargs):
                     f"Job run failed with {status.name} status. For more information, see {href}."
                 )
             time.sleep(5)
-    click.echo(dict_to_json(response.json()))
+    file.write(dict_to_json(response.json()))
     response.raise_for_status()
 
 
