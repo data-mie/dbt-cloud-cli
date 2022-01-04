@@ -10,7 +10,11 @@ from dbt_cloud.job import (
     DbtCloudJobGetArgs,
     DbtCloudJobCreateArgs,
 )
-from dbt_cloud.run import DbtCloudRunStatus, DbtCloudRunGetArgs
+from dbt_cloud.run import (
+    DbtCloudRunStatus,
+    DbtCloudRunGetArgs,
+    DbtCloudRunListArtifactsArgs,
+)
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
 
@@ -135,5 +139,16 @@ def get(**kwargs):
     args = DbtCloudRunGetArgs(**kwargs_translated)
     run = args.get_run()
     response, _ = run.get_status()
+    click.echo(dict_to_json(response.json()))
+    response.raise_for_status()
+
+
+@job_run.command(help="Fetches a list of artifact files generated for a completed run.")
+@DbtCloudRunListArtifactsArgs.click_options
+def list_artifacts(**kwargs):
+    kwargs_translated = translate_click_options(**kwargs)
+    args = DbtCloudRunListArtifactsArgs(**kwargs_translated)
+    run = args.get_run()
+    response = run.list_artifacts(step=args.step)
     click.echo(dict_to_json(response.json()))
     response.raise_for_status()

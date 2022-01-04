@@ -30,6 +30,11 @@ def run_get_response(shared_datadir):
 
 
 @pytest.fixture
+def run_list_artifacts_response(shared_datadir):
+    return load_response(shared_datadir, "run_list_artifacts_response")
+
+
+@pytest.fixture
 def project_id():
     return 123457
 
