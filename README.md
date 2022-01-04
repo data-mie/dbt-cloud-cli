@@ -34,6 +34,7 @@ The following environment variables are used as argument defaults:
 * [dbt-cloud job export](#dbt-cloud-job-export)
 * [dbt-cloud job import](#dbt-cloud-job-import)
 * [dbt-cloud run get](#dbt-cloud-run-get)
+* [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts)
 
 ## dbt-cloud job run
 This command triggers a dbt Cloud job run and returns a status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud job run --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun).
@@ -489,5 +490,29 @@ This command prints a dbt Cloud run status JSON response. For more information o
     "finished_at_humanized": "2 weeks, 1 day ago",
     "job_id": 43167
   }
+}
+```
+
+## dbt-cloud run list-artifacts
+This command fetches a list of artifact files generated for a completed run. For more information on the API endpoint arguments and response, run `dbt-cloud run list-artifacts --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listArtifactsByRunId).
+
+### Usage
+
+```bash
+>> dbt-cloud run list-artifacts --run-id 36053848
+{
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": [
+    "manifest.json",
+    "run/jaffle_shop/data/raw_customers.csv",
+    "run/jaffle_shop/data/raw_orders.csv",
+    "run/jaffle_shop/data/raw_payments.csv",
+    "run_results.json"
+  ]
 }
 ```
