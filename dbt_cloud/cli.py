@@ -14,6 +14,7 @@ from dbt_cloud.run import (
     DbtCloudRunStatus,
     DbtCloudRunGetArgs,
     DbtCloudRunListArtifactsArgs,
+    DbtCloudRunGetArtifactArgs,
 )
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
@@ -151,4 +152,22 @@ def list_artifacts(**kwargs):
     run = args.get_run()
     response = run.list_artifacts(step=args.step)
     click.echo(dict_to_json(response.json()))
+    response.raise_for_status()
+
+
+@job_run.command(help="Fetches an artifact file from a completed run.")
+@DbtCloudRunGetArtifactArgs.click_options
+@click.option(
+    "-f",
+    "--file",
+    default="-",
+    type=click.File("wb"),
+    help="Export file path.",
+)
+def get_artifact(file, **kwargs):
+    kwargs_translated = translate_click_options(**kwargs)
+    args = DbtCloudRunGetArtifactArgs(**kwargs_translated)
+    run = args.get_run()
+    response = run.get_artifact(path=args.path, step=args.step)
+    file.write(response.content)
     response.raise_for_status()

@@ -35,6 +35,7 @@ The following environment variables are used as argument defaults:
 * [dbt-cloud job import](#dbt-cloud-job-import)
 * [dbt-cloud run get](#dbt-cloud-run-get)
 * [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts)
+* [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact)
 
 ## dbt-cloud job run
 This command triggers a dbt Cloud job run and returns a status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud job run --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun).
@@ -515,4 +516,13 @@ This command fetches a list of artifact files generated for a completed run. For
     "run_results.json"
   ]
 }
+```
+
+## dbt-cloud run get-artifact
+This command fetches an artifact file from a completed run. Once a run has completed, you can use this command to download the manifest.json, run_results.json or catalog.json files from dbt Cloud. These artifacts contain information about the models in your dbt project, timing information around their execution, and a status message indicating the result of the model build. For more information on the API endpoint arguments and response, run `dbt-cloud run get-artifact --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getArtifactsByRunId).
+
+### Usage
+
+```bash
+>> dbt-cloud run get-artifact --run-id 36053848 --path manifest.json > manifest.json
 ```

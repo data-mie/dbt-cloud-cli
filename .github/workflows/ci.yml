@@ -61,6 +61,9 @@ jobs:
       - name: Test 'dbt-cloud run list-artifacts'
         run: dbt-cloud run list-artifacts --run-id ${{ steps.job_run.outputs.run_id }}
 
+      - name: Test 'dbt-cloud run get-artifact'
+        run: dbt-cloud run get-artifact --run-id ${{ steps.job_run.outputs.run_id }} --path manifest.json | tee manifest.json
+
       - name: Test 'dbt-cloud job export'
         run: dbt-cloud job export | tee job.json
 

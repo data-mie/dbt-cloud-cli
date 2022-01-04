@@ -14,3 +14,10 @@ def test_mock_run_list_artifacts(requests_mock, run, run_list_artifacts_response
     requests_mock.get(url, json=run_list_artifacts_response, status_code=200)
     response = run.list_artifacts()
     assert response.json() == run_list_artifacts_response
+
+
+def test_mock_run_get_artifact(requests_mock, run, run_get_artifact_response):
+    url = run.get_api_url() + "/artifacts/run_results.json"
+    requests_mock.get(url, json=run_get_artifact_response, status_code=200)
+    response = run.get_artifact(path="run_results.json")
+    assert response.json() == run_get_artifact_response
