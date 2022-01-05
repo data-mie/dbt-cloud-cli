@@ -3,7 +3,7 @@ from enum import IntEnum
 from typing import Optional, List, Tuple
 from pydantic import Field
 from dbt_cloud.account import DbtCloudAccount
-from dbt_cloud.args import DbtCloudArgsBaseModel
+from dbt_cloud.args import DbtCloudAccount
 
 
 class DbtCloudMetadataAPI(DbtCloudAccount):

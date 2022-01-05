@@ -5,7 +5,7 @@ from typing import Optional, List, Tuple
 from pathlib import Path
 from pydantic import Field, validator
 from dbt_cloud.account import DbtCloudAccount
-from dbt_cloud.args import ArgsBaseModel, DbtCloudArgsBaseModel
+from dbt_cloud.args import ArgsBaseModel
 from dbt_cloud.run import DbtCloudRun
 from dbt_cloud.serde import dict_to_json, json_to_dict
 
@@ -21,7 +21,7 @@ class TimeTypeEnum(Enum):
     AT_EXACT_HOURS = "at_exact_hours"
 
 
-class DbtCloudJobArgs(DbtCloudArgsBaseModel):
+class DbtCloudJobArgs(DbtCloudAccount):
     job_id: int = Field(
         default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
         description="Numeric ID of the job to run (default: 'DBT_CLOUD_JOB_ID' environment variable)",
@@ -109,7 +109,7 @@ class DbtCloudJobSchedule(ArgsBaseModel):
     time: DbtCloudJobScheduleTime = Field(default_factory=DbtCloudJobScheduleTime)
 
 
-class DbtCloudJobCreateArgs(DbtCloudArgsBaseModel):
+class DbtCloudJobCreateArgs(DbtCloudAccount):
     id: Optional[int] = Field(default=None, description="Must be empty.")
     project_id: int = Field(..., description="Numeric ID of the dbt Cloud project.")
     environment_id: int = Field(
@@ -145,7 +145,7 @@ class DbtCloudJob(DbtCloudAccount):
     def get(self, order_by: str = None) -> requests.Response:
         response = requests.get(
             url=f"{self.get_api_url()}/",
-            headers=self.authorization_headers,
+            headers=self.request_headers,
             params={"order_by": order_by},
         )
         return response
@@ -153,7 +153,7 @@ class DbtCloudJob(DbtCloudAccount):
     def create(self, args: DbtCloudJobCreateArgs) -> requests.Response:
         response = requests.post(
             url=f"{self.get_api_url()}/",
-            headers=self.authorization_headers,
+            headers=self.request_headers,
             json=args.get_payload(),
         )
         return response
@@ -161,7 +161,7 @@ class DbtCloudJob(DbtCloudAccount):
     def delete(self):
         response = requests.delete(
             url=f"{self.get_api_url()}/",
-            headers=self.authorization_headers,
+            headers=self.request_headers,
             json={},
         )
         return response
@@ -170,7 +170,7 @@ class DbtCloudJob(DbtCloudAccount):
         assert str(args.job_id) == str(self.job_id), f"{args.job_id} != {self.job_id}"
         response = requests.post(
             url=f"{self.get_api_url()}/run/",
-            headers=self.authorization_headers,
+            headers=self.request_headers,
             json=args.get_payload(),
         )
         run_id = response.json()["data"]["id"]

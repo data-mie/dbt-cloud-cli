@@ -3,7 +3,6 @@ from enum import IntEnum
 from typing import Optional, List, Tuple
 from pydantic import Field
 from dbt_cloud.account import DbtCloudAccount
-from dbt_cloud.args import DbtCloudArgsBaseModel
 
 
 class DbtCloudRunStatus(IntEnum):
@@ -15,7 +14,7 @@ class DbtCloudRunStatus(IntEnum):
     CANCELLED = 30
 
 
-class DbtCloudRunArgs(DbtCloudArgsBaseModel):
+class DbtCloudRunArgs(DbtCloudAccount):
     run_id: int = Field(
         ...,
         description="Numeric ID of the run",
@@ -56,14 +55,14 @@ class DbtCloudRun(DbtCloudAccount):
     def get_status(self) -> Tuple[requests.Response, DbtCloudRunStatus]:
         response = requests.get(
             url=f"{self.get_api_url()}/",
-            headers=self.authorization_headers,
+            headers=self.request_headers,
         )
         return response, DbtCloudRunStatus(response.json()["data"]["status"])
 
     def list_artifacts(self, step: int = None) -> requests.Response:
         response = requests.get(
             url=f"{self.get_api_url()}/artifacts/",
-            headers=self.authorization_headers,
+            headers=self.request_headers,
             params={"step": step},
         )
         return response
@@ -71,7 +70,7 @@ class DbtCloudRun(DbtCloudAccount):
     def get_artifact(self, path: str, step: int = None) -> requests.Response:
         response = requests.get(
             url=f"{self.get_api_url()}/artifacts/{path}",
-            headers=self.authorization_headers,
+            headers=self.request_headers,
             params={"step": step},
         )
         return response

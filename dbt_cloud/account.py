@@ -20,5 +20,5 @@ class DbtCloudAccount(DbtCloudAPI):
         return f"https://cloud.getdbt.com/api/{api_version}/accounts/{self.account_id}"
 
     @property
-    def authorization_headers(self):
+    def request_headers(self):
         return {"Authorization": f"Token {self.api_token}"}

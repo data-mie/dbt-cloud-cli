@@ -2,7 +2,7 @@ import os
 import logging
 import time
 import click
-from dbt_cloud.args import DbtCloudArgsBaseModel, translate_click_options
+from dbt_cloud.args import DbtCloudAccount, translate_click_options
 from dbt_cloud.job import (
     DbtCloudJob,
     DbtCloudJobArgs,
@@ -135,7 +135,7 @@ def export(file, **kwargs):
 
 
 @job.command(help="Imports a dbt Cloud job from exported JSON.", name="import")
-@DbtCloudArgsBaseModel.click_options
+@DbtCloudAccount.click_options
 @click.option(
     "-f",
     "--file",
@@ -145,7 +145,7 @@ def export(file, **kwargs):
 )
 def import_job(file, **kwargs):
     kwargs_translated = translate_click_options(**kwargs)
-    args = DbtCloudArgsBaseModel(**kwargs_translated)
+    args = DbtCloudAccount(**kwargs_translated)
     job_create_kwargs = json_to_dict(file.read())
     job_create_args = DbtCloudJobCreateArgs(**job_create_kwargs)
     job = DbtCloudJob(job_id=None, **args.dict())

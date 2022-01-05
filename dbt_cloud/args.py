@@ -1,7 +1,6 @@
 import click
-import os
 from mergedeep import merge
-from pydantic import BaseModel, validator, Field
+from pydantic import BaseModel, validator
 from dbt_cloud.serde import json_to_dict
 
 
@@ -62,14 +61,3 @@ class ArgsBaseModel(BaseModel):
     def get_payload(self, exclude=["api_token", "account_id", "job_id"]) -> dict:
         payload = self.json(exclude=set(exclude))
         return json_to_dict(payload)
-
-
-class DbtCloudArgsBaseModel(ArgsBaseModel):
-    api_token: str = Field(
-        default_factory=lambda: os.environ["DBT_CLOUD_API_TOKEN"],
-        description="API authentication key (default: 'DBT_CLOUD_API_TOKEN' environment variable)",
-    )
-    account_id: int = Field(
-        default_factory=lambda: os.environ["DBT_CLOUD_ACCOUNT_ID"],
-        description="Numeric ID of the Account that the job belongs to (default: 'DBT_CLOUD_ACCOUNT_ID' environment variable)",
-    )
