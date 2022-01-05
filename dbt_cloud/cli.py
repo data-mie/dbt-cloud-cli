@@ -1,7 +1,7 @@
-import json
+import os
+import logging
 import time
 import click
-from pathlib import Path
 from dbt_cloud.args import DbtCloudArgsBaseModel, translate_click_options
 from dbt_cloud.job import (
     DbtCloudJob,
@@ -22,7 +22,15 @@ from dbt_cloud.exc import DbtCloudException
 
 @click.group()
 def dbt_cloud():
-    pass
+    import http.client as http_client
+
+    level = os.environ.get("LOG_LEVEL", "INFO").upper()
+    logging.basicConfig(level=level)
+    requests_logger = logging.getLogger("requests.packages.urllib3")
+    requests_logger.setLevel(level)
+    requests_logger.propagate = True
+    if level == "DEBUG":
+        http_client.HTTPConnection.debuglevel = 1
 
 
 @dbt_cloud.group()
