@@ -61,3 +61,8 @@ class ArgsBaseModel(BaseModel):
     def get_payload(self, exclude=["api_token", "account_id", "job_id"]) -> dict:
         payload = self.json(exclude=set(exclude))
         return json_to_dict(payload)
+
+    @classmethod
+    def from_click_options(cls, **kwargs):
+        kwargs_translated = translate_click_options(**kwargs)
+        return cls(**kwargs_translated)
