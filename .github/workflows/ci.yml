@@ -81,6 +81,9 @@ jobs:
       - name: Test 'dbt-cloud run get-artifact'
         run: dbt-cloud run get-artifact --run-id ${{ steps.job_run.outputs.run_id }} --path manifest.json
 
+      - name: Test 'dbt-cloud metadata query'
+        run: dbt-cloud metadata query -f tests/data/metadata_query.graphql
+
       - name: Cleanup
         run: dbt-cloud job delete --job-id ${{ steps.job_create.outputs.job_id }}
         if: always()
