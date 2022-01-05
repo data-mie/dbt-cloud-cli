@@ -1,7 +1,7 @@
-import json
+import os
+import logging
 import time
 import click
-from pathlib import Path
 from dbt_cloud.args import DbtCloudArgsBaseModel, translate_click_options
 from dbt_cloud.job import (
     DbtCloudJob,
@@ -14,6 +14,7 @@ from dbt_cloud.run import (
     DbtCloudRunStatus,
     DbtCloudRunGetArgs,
     DbtCloudRunListArtifactsArgs,
+    DbtCloudRunGetArtifactArgs,
 )
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
@@ -21,7 +22,15 @@ from dbt_cloud.exc import DbtCloudException
 
 @click.group()
 def dbt_cloud():
-    pass
+    import http.client as http_client
+
+    level = os.environ.get("LOG_LEVEL", "INFO").upper()
+    logging.basicConfig(level=level)
+    requests_logger = logging.getLogger("requests.packages.urllib3")
+    requests_logger.setLevel(level)
+    requests_logger.propagate = True
+    if level == "DEBUG":
+        http_client.HTTPConnection.debuglevel = 1
 
 
 @dbt_cloud.group()
@@ -41,7 +50,14 @@ def job_run():
     default=False,
     help="Wait for the process to finish before returning from the API call.",
 )
-def run(wait, **kwargs):
+@click.option(
+    "-f",
+    "--file",
+    default="-",
+    type=click.File("w"),
+    help="Response export file path.",
+)
+def run(wait, file, **kwargs):
     kwargs_translated = translate_click_options(**kwargs)
     args = DbtCloudJobRunArgs(**kwargs_translated)
     job = args.get_job()
@@ -58,7 +74,7 @@ def run(wait, **kwargs):
                     f"Job run failed with {status.name} status. For more information, see {href}."
                 )
             time.sleep(5)
-    click.echo(dict_to_json(response.json()))
+    file.write(dict_to_json(response.json()))
     response.raise_for_status()
 
 
@@ -151,4 +167,22 @@ def list_artifacts(**kwargs):
     run = args.get_run()
     response = run.list_artifacts(step=args.step)
     click.echo(dict_to_json(response.json()))
+    response.raise_for_status()
+
+
+@job_run.command(help="Fetches an artifact file from a completed run.")
+@DbtCloudRunGetArtifactArgs.click_options
+@click.option(
+    "-f",
+    "--file",
+    default="-",
+    type=click.File("wb"),
+    help="Export file path.",
+)
+def get_artifact(file, **kwargs):
+    kwargs_translated = translate_click_options(**kwargs)
+    args = DbtCloudRunGetArtifactArgs(**kwargs_translated)
+    run = args.get_run()
+    response = run.get_artifact(path=args.path, step=args.step)
+    file.write(response.content)
     response.raise_for_status()

@@ -40,6 +40,13 @@ class DbtCloudRunListArtifactsArgs(DbtCloudRunArgs):
     )
 
 
+class DbtCloudRunGetArtifactArgs(DbtCloudRunListArtifactsArgs):
+    path: str = Field(
+        ...,
+        description="Paths are rooted at the target/ directory. Use manifest.json, catalog.json, or run_results.json to download dbt-generated artifacts for the run.",
+    )
+
+
 class DbtCloudRun(DbtCloudAccount):
     run_id: int
 
@@ -56,6 +63,14 @@ class DbtCloudRun(DbtCloudAccount):
     def list_artifacts(self, step: int = None) -> requests.Response:
         response = requests.get(
             url=f"{self.get_api_url()}/artifacts/",
+            headers=self.authorization_headers,
+            params={"step": step},
+        )
+        return response
+
+    def get_artifact(self, path: str, step: int = None) -> requests.Response:
+        response = requests.get(
+            url=f"{self.get_api_url()}/artifacts/{path}",
             headers=self.authorization_headers,
             params={"step": step},
         )

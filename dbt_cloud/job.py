@@ -3,7 +3,7 @@ import os
 from enum import Enum
 from typing import Optional, List, Tuple
 from pathlib import Path
-from pydantic import Field
+from pydantic import Field, validator
 from dbt_cloud.account import DbtCloudAccount
 from dbt_cloud.args import ArgsBaseModel, DbtCloudArgsBaseModel
 from dbt_cloud.run import DbtCloudRun
@@ -63,6 +63,10 @@ class DbtCloudJobRunArgs(DbtCloudJobArgs):
     steps_override: Optional[List[str]] = Field(
         description="Override the list of steps for this job"
     )
+
+    @validator("steps_override")
+    def check_steps_override_is_none_if_empty(cls, value):
+        return value or None
 
 
 class DbtCloudJobGetArgs(DbtCloudJobArgs):
