@@ -24,3 +24,8 @@ def test_mock_job_run(mock_job_api, job, job_run_response):
     response, job_run = job.run(args)
     assert response.json() == job_run_response
     assert job_run.run_id == job_run_response["data"]["id"]
+
+
+def test_job_run_args_steps_override_is_none_if_empty():
+    args = DbtCloudJobRunArgs(steps_override=())
+    assert args.steps_override is None
