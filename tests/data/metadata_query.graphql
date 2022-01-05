@@ -1,0 +1,14 @@
+{
+  model(jobId: 49663, uniqueId: "model.jaffle_shop.customers") {
+    parentsModels {
+      runId
+      uniqueId
+      executionTime
+    }
+    parentsSources {
+      runId
+      uniqueId
+      state
+    }
+  }
+}

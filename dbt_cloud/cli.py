@@ -16,6 +16,7 @@ from dbt_cloud.run import (
     DbtCloudRunListArtifactsArgs,
     DbtCloudRunGetArtifactArgs,
 )
+from dbt_cloud.metadata import DbtCloudMetadataAPI
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
 
@@ -40,6 +41,11 @@ def job():
 
 @dbt_cloud.group(name="run")
 def job_run():
+    pass
+
+
+@dbt_cloud.group()
+def metadata():
     pass
 
 
@@ -185,4 +191,22 @@ def get_artifact(file, **kwargs):
     run = args.get_run()
     response = run.get_artifact(path=args.path, step=args.step)
     file.write(response.content)
+    response.raise_for_status()
+
+
+@metadata.command(help="Queries the dbt Cloud Metadata API using GraphQL.")
+@click.option(
+    "-f",
+    "--file",
+    default="-",
+    type=click.File("r"),
+    help="Read query from file.",
+)
+@DbtCloudMetadataAPI.click_options
+def query(file, **kwargs):
+    query = file.read()
+    kwargs_translated = translate_click_options(**kwargs)
+    metadata_api = DbtCloudMetadataAPI(**kwargs_translated)
+    response = metadata_api.query(query)
+    click.echo(dict_to_json(response.json()))
     response.raise_for_status()
