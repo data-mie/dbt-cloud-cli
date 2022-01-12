@@ -5,6 +5,7 @@ from dbt_cloud.command import (
     DbtCloudJobGetCommand,
     DbtCloudJobCreateCommand,
     DbtCloudJobDeleteCommand,
+    DbtCloudJobRunCommand,
 )
 
 
@@ -96,15 +97,16 @@ def job_create_command(api_token, account_id, project_id, environment_id):
 
 
 @pytest.fixture
-def job_delete_command(api_token, account_id, project_id, environment_id):
+def job_delete_command(api_token, account_id, job_id):
     command = DbtCloudJobDeleteCommand(
-        api_token=api_token,
-        account_id=account_id,
-        project_id=project_id,
-        environment_id=environment_id,
-        name="pytest job",
-        execute_steps=["dbt seed", "dbt run", "dbt test"],
+        api_token=api_token, account_id=account_id, job_id=job_id
     )
+    yield command
+
+
+@pytest.fixture
+def job_run_command(api_token, account_id, project_id, environment_id):
+    command = DbtCloudJobRunCommand()
     yield command
 
 
@@ -128,6 +130,7 @@ def mock_job_api(
     job_get_command,
     job_create_command,
     job_delete_command,
+    job_run_command,
     job_get_response,
     job_create_response,
     job_delete_response,
@@ -148,6 +151,11 @@ def mock_job_api(
         job_delete_command.api_url,
         json=job_delete_response,
         status_code=job_delete_response["status"]["code"],
+    )
+    requests_mock.post(
+        job_run_command.api_url,
+        json=job_run_response,
+        status_code=job_run_response["status"]["code"],
     )
 
     job_template = job.copy()

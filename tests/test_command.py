@@ -21,6 +21,7 @@ def response(request):
         pytest.param(
             "job_delete_command", "job_delete_response", marks=pytest.mark.job
         ),
+        pytest.param("job_run_command", "job_run_response", marks=pytest.mark.job),
     ],
     indirect=True,
 )

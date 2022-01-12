@@ -20,6 +20,7 @@ from dbt_cloud.command import (
     DbtCloudJobGetCommand,
     DbtCloudJobCreateCommand,
     DbtCloudJobDeleteCommand,
+    DbtCloudJobRunCommand,
 )
 from dbt_cloud.metadata import DbtCloudMetadataAPI
 from dbt_cloud.serde import json_to_dict, dict_to_json
@@ -54,8 +55,8 @@ def metadata():
     pass
 
 
-@job.command(help="Triggers a dbt Cloud job run and returns a status JSON response.")
-@DbtCloudJobRunArgs.click_options
+@job.command(help=DbtCloudJobRunCommand.get_description())
+@DbtCloudJobRunCommand.click_options
 @click.option(
     f"--wait/--no-wait",
     default=False,
@@ -69,7 +70,10 @@ def metadata():
     help="Response export file path.",
 )
 def run(wait, file, **kwargs):
-    args = DbtCloudJobRunArgs.from_click_options(**kwargs)
+    command = DbtCloudJobRunCommand.from_click_options(**kwargs)
+    response = command.execute()
+    # TODO: Implement wait
+    """
     job = args.get_job()
     response, run = job.run(args=args)
     if wait:
@@ -84,6 +88,7 @@ def run(wait, file, **kwargs):
                     f"Job run failed with {status.name} status. For more information, see {href}."
                 )
             time.sleep(5)
+    """
     file.write(dict_to_json(response.json()))
     response.raise_for_status()
 
