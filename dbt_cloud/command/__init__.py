@@ -10,4 +10,5 @@ from .run import (
     DbtCloudRunGetArtifactCommand,
     DbtCloudRunStatus,
 )
+from .metadata import DbtCloudMetadataQueryCommand
 from .command import DbtCloudCommand
