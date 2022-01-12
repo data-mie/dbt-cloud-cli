@@ -133,11 +133,12 @@ def mock_job_api(
     job_delete_response,
     job_run_response,
 ):
-    requests_mock.get(
-        job_get_command.api_url,
-        json=job_get_response,
-        status_code=job_get_response["status"]["code"],
-    )
+    for url in (job_get_command.api_url, job_get_command.api_url + "/"):
+        requests_mock.get(
+            url,
+            json=job_get_response,
+            status_code=job_get_response["status"]["code"],
+        )
     requests_mock.post(
         job_create_command.api_url,
         json=job_create_response,
