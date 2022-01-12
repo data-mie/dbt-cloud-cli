@@ -78,7 +78,7 @@ class DbtCloudJobCreateCommand(DbtCloudCommand):
         api_url = f"{super().api_url}/jobs"
         return api_url
 
-    def execute(self):
+    def execute(self) -> requests.Response:
         response = requests.post(
             url=self.api_url, headers=self.request_headers, json=self.get_payload()
         )

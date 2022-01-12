@@ -1,7 +1,11 @@
 import json
 import pytest
 from dbt_cloud import DbtCloudJob, DbtCloudRun
-from dbt_cloud.command import DbtCloudJobGetCommand, DbtCloudJobCreateCommand
+from dbt_cloud.command import (
+    DbtCloudJobGetCommand,
+    DbtCloudJobCreateCommand,
+    DbtCloudJobDeleteCommand,
+)
 
 
 def load_response(shared_datadir, response_name):
@@ -18,6 +22,11 @@ def job_get_response(shared_datadir):
 @pytest.fixture
 def job_create_response(shared_datadir):
     return load_response(shared_datadir, "job_create_response")
+
+
+@pytest.fixture
+def job_delete_response(shared_datadir):
+    return load_response(shared_datadir, "job_delete_response")
 
 
 @pytest.fixture
@@ -86,6 +95,19 @@ def job_create_command(api_token, account_id, project_id, environment_id):
     yield command
 
 
+@pytest.fixture
+def job_delete_command(api_token, account_id, project_id, environment_id):
+    command = DbtCloudJobDeleteCommand(
+        api_token=api_token,
+        account_id=account_id,
+        project_id=project_id,
+        environment_id=environment_id,
+        name="pytest job",
+        execute_steps=["dbt seed", "dbt run", "dbt test"],
+    )
+    yield command
+
+
 """ OLD BELOW """
 
 
@@ -105,14 +127,28 @@ def mock_job_api(
     job,
     job_get_command,
     job_create_command,
+    job_delete_command,
     job_get_response,
     job_create_response,
+    job_delete_response,
     job_run_response,
 ):
-    requests_mock.get(job_get_command.api_url, json=job_get_response, status_code=200)
-    requests_mock.post(
-        job_create_command.api_url, json=job_create_response, status_code=201
+    requests_mock.get(
+        job_get_command.api_url,
+        json=job_get_response,
+        status_code=job_get_response["status"]["code"],
     )
+    requests_mock.post(
+        job_create_command.api_url,
+        json=job_create_response,
+        status_code=job_create_response["status"]["code"],
+    )
+    requests_mock.delete(
+        job_delete_command.api_url,
+        json=job_delete_response,
+        status_code=job_delete_response["status"]["code"],
+    )
+
     job_template = job.copy()
     job_template.job_id = None
     requests_mock.post(

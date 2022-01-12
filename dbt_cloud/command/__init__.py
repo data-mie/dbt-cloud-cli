@@ -1,1 +1,5 @@
-from .job import DbtCloudJobGetCommand, DbtCloudJobCreateCommand
+from .job import (
+    DbtCloudJobGetCommand,
+    DbtCloudJobCreateCommand,
+    DbtCloudJobDeleteCommand,
+)

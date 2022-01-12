@@ -1,19 +1,15 @@
 import os
 import requests
-from typing import Optional
 from pydantic import Field
 from dbt_cloud.command.command import DbtCloudCommand
 
 
-class DbtCloudJobGetCommand(DbtCloudCommand):
-    """Returns the details of a dbt Cloud job."""
+class DbtCloudJobDeleteCommand(DbtCloudCommand):
+    """Deletes a job from a dbt Cloud project."""
 
     job_id: int = Field(
         default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
         description="Numeric ID of the job to run (default: 'DBT_CLOUD_JOB_ID' environment variable)",
-    )
-    order_by: Optional[str] = Field(
-        description="Field to order the result by. Use '-' to indicate reverse order."
     )
 
     @property
@@ -24,9 +20,5 @@ class DbtCloudJobGetCommand(DbtCloudCommand):
         return api_url
 
     def execute(self) -> requests.Response:
-        response = requests.get(
-            url=self.api_url,
-            headers=self.request_headers,
-            params={"order_by": self.order_by},
-        )
+        response = requests.delete(url=self.api_url, headers=self.request_headers)
         return response

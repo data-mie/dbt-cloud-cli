@@ -16,7 +16,11 @@ from dbt_cloud.run import (
     DbtCloudRunListArtifactsArgs,
     DbtCloudRunGetArtifactArgs,
 )
-from dbt_cloud.command import DbtCloudJobGetCommand, DbtCloudJobCreateCommand
+from dbt_cloud.command import (
+    DbtCloudJobGetCommand,
+    DbtCloudJobCreateCommand,
+    DbtCloudJobDeleteCommand,
+)
 from dbt_cloud.metadata import DbtCloudMetadataAPI
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
@@ -102,12 +106,11 @@ def create(**kwargs):
     response.raise_for_status()
 
 
-@job.command(help="Deletes a job from a dbt Cloud project.")
-@DbtCloudJobArgs.click_options
+@job.command(help=DbtCloudJobDeleteCommand.get_description())
+@DbtCloudJobDeleteCommand.click_options
 def delete(**kwargs):
-    args = DbtCloudJobArgs.from_click_options(**kwargs)
-    job = args.get_job()
-    response = job.delete()
+    command = DbtCloudJobDeleteCommand.from_click_options(**kwargs)
+    response = command.execute()
     click.echo(dict_to_json(response.json()))
     response.raise_for_status()
 
