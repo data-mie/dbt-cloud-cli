@@ -23,6 +23,7 @@ from dbt_cloud.command import (
     DbtCloudJobRunCommand,
     DbtCloudCommand,
     DbtCloudRunGetCommand,
+    DbtCloudRunListArtifactsCommand,
 )
 from dbt_cloud.metadata import DbtCloudMetadataAPI
 from dbt_cloud.serde import json_to_dict, dict_to_json
@@ -171,12 +172,11 @@ def get(**kwargs):
     response.raise_for_status()
 
 
-@job_run.command(help="Fetches a list of artifact files generated for a completed run.")
-@DbtCloudRunListArtifactsArgs.click_options
+@job_run.command(help=DbtCloudRunListArtifactsCommand.get_description())
+@DbtCloudRunListArtifactsCommand.click_options
 def list_artifacts(**kwargs):
-    args = DbtCloudRunListArtifactsArgs.from_click_options(**kwargs)
-    run = args.get_run()
-    response = run.list_artifacts(step=args.step)
+    command = DbtCloudRunListArtifactsCommand.from_click_options(**kwargs)
+    response = command.execute()
     click.echo(dict_to_json(response.json()))
     response.raise_for_status()
 

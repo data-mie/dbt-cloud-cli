@@ -7,6 +7,7 @@ from dbt_cloud.command import (
     DbtCloudJobDeleteCommand,
     DbtCloudJobRunCommand,
     DbtCloudRunGetCommand,
+    DbtCloudRunListArtifactsCommand,
 )
 
 
@@ -124,6 +125,14 @@ def run_get_command(api_token, account_id, run_id):
     yield command
 
 
+@pytest.fixture
+def run_list_artifacts_command(api_token, account_id, run_id):
+    command = DbtCloudRunListArtifactsCommand(
+        api_token=api_token, account_id=account_id, run_id=run_id
+    )
+    yield command
+
+
 """ OLD BELOW """
 
 
@@ -150,6 +159,8 @@ def mock_dbt_cloud_api(
     job_run_response,
     run_get_command,
     run_get_response,
+    run_list_artifacts_command,
+    run_list_artifacts_response,
 ):
     requests_mock.get(
         job_get_command.api_url,
@@ -179,4 +190,10 @@ def mock_dbt_cloud_api(
         run_get_command.api_url,
         json=run_get_response,
         status_code=run_get_response["status"]["code"],
+    )
+
+    requests_mock.get(
+        run_list_artifacts_command.api_url,
+        json=run_list_artifacts_response,
+        status_code=run_list_artifacts_response["status"]["code"],
     )

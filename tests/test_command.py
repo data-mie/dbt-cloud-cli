@@ -23,6 +23,11 @@ def response(request):
         ),
         pytest.param("job_run_command", "job_run_response", marks=pytest.mark.job),
         pytest.param("run_get_command", "run_get_response", marks=pytest.mark.run),
+        pytest.param(
+            "run_list_artifacts_command",
+            "run_list_artifacts_response",
+            marks=pytest.mark.run,
+        ),
     ],
     indirect=True,
 )
