@@ -74,14 +74,18 @@ def metadata():
 def run(wait, file, **kwargs):
     command = DbtCloudJobRunCommand.from_click_options(**kwargs)
     response = command.execute()
-    # TODO: Implement wait
-    """
-    job = args.get_job()
-    response, run = job.run(args=args)
+
     if wait:
+        run_id = response.json()["data"]["id"]
         while True:
-            response, status = run.get_status()
-            click.echo(f"Job {job.job_id} run {run.run_id}: {status.name} ...")
+            run_get_command = DbtCloudRunGetCommand(
+                api_token=command.api_token,
+                account_id=command.account_id,
+                run_id=run_id,
+            )
+            response = run_get_command.execute()
+            status = DbtCloudRunStatus(response.json()["data"]["status"])
+            click.echo(f"Job {command.job_id} run {run_id}: {status.name} ...")
             if status == DbtCloudRunStatus.SUCCESS:
                 break
             elif status in (DbtCloudRunStatus.ERROR, DbtCloudRunStatus.CANCELLED):
@@ -90,7 +94,7 @@ def run(wait, file, **kwargs):
                     f"Job run failed with {status.name} status. For more information, see {href}."
                 )
             time.sleep(5)
-    """
+
     file.write(dict_to_json(response.json()))
     response.raise_for_status()
 
