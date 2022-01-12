@@ -8,7 +8,7 @@ Client: The client decides which receiver objects it assigns to the command obje
 import os
 import click
 from mergedeep import merge
-from pydantic import Field, validator, BaseModel
+from pydantic import Field, validator, BaseModel, PrivateAttr
 from dbt_cloud.serde import json_to_dict
 
 
@@ -81,7 +81,7 @@ class DbtCloudCommand(DbtCloudBaseModel):
         default_factory=lambda: os.environ["DBT_CLOUD_ACCOUNT_ID"],
         description="Numeric ID of the Account that the job belongs to (default: 'DBT_CLOUD_ACCOUNT_ID' environment variable)",
     )
-    api_version: str = Field("v2")
+    _api_version: str = PrivateAttr("v2")
 
     @property
     def request_headers(self) -> dict:
@@ -89,12 +89,12 @@ class DbtCloudCommand(DbtCloudBaseModel):
 
     @property
     def api_url(self) -> str:
-        return f"https://cloud.getdbt.com/api/{self.api_version}/accounts/{self.account_id}"
+        return f"https://cloud.getdbt.com/api/{self._api_version}/accounts/{self.account_id}"
 
     @classmethod
     def get_description(cls) -> str:
         return cls.__doc__.strip()
 
-    def get_payload(self, exclude=["api_token", "account_id", "job_id"]) -> dict:
+    def get_payload(self, exclude=["api_token"]) -> dict:
         payload = self.json(exclude=set(exclude))
         return json_to_dict(payload)
