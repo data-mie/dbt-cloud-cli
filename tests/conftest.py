@@ -30,7 +30,9 @@ def load_response(response_name):
 COMMAND_TEST_CASES = [
     pytest.param(
         "job_get",
-        DbtCloudJobGetCommand(api_token=API_TOKEN, account_id=123456, job_id=43167),
+        DbtCloudJobGetCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, job_id=JOB_ID
+        ),
         load_response("job_get_response"),
         "get",
         marks=pytest.mark.job,
