@@ -1,6 +1,5 @@
 import json
 import pytest
-from dbt_cloud import DbtCloudJob, DbtCloudRun
 from dbt_cloud.command import (
     DbtCloudJobGetCommand,
     DbtCloudJobCreateCommand,

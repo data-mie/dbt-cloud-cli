@@ -1,4 +1,5 @@
 import pytest
+from dbt_cloud.command.command import translate_click_options
 
 
 @pytest.fixture
@@ -41,3 +42,18 @@ class TestCommand:
         actual_response = command.execute()
         actual_response.raise_for_status()
         assert actual_response.json() == response
+
+
+def test_translate_nested_click_options():
+    kwargs = {
+        "project_id": 12345,
+        "settings__threads": 4,
+        "foo__bar__baz": "apple",
+        "foo__baz": "orange",
+    }
+    kwargs_translated = translate_click_options(**kwargs)
+    assert kwargs_translated == {
+        "project_id": 12345,
+        "settings": {"threads": 4},
+        "foo": {"baz": "orange", "bar": {"baz": "apple"}},
+    }

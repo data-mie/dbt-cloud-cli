@@ -1,8 +1,8 @@
 import requests
-from dbt_cloud.account import DbtCloudAccount
+from dbt_cloud.command import DbtCloudCommand
 
 
-class DbtCloudMetadataAPI(DbtCloudAccount):
+class DbtCloudMetadataAPI(DbtCloudCommand):
     @property
     def request_headers(self):
         return {"Authorization": f"Bearer {self.api_token}"}

@@ -1,8 +1,18 @@
 import os
 import requests
+from enum import IntEnum
 from typing import Optional, List
 from pydantic import Field
 from dbt_cloud.command.command import DbtCloudCommand
+
+
+class DbtCloudRunStatus(IntEnum):
+    QUEUED = 1
+    STARTING = 2
+    RUNNING = 3
+    SUCCESS = 10
+    ERROR = 20
+    CANCELLED = 30
 
 
 class DbtCloudRunGetCommand(DbtCloudCommand):
