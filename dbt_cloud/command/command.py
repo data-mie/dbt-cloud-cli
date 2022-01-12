@@ -10,6 +10,7 @@ import click
 from mergedeep import merge
 from pydantic import Field, validator, BaseModel, PrivateAttr
 from dbt_cloud.serde import json_to_dict
+from dbt_cloud.field import API_TOKEN_FIELD, ACCOUNT_ID_FIELD
 
 
 def translate_click_options(**kwargs) -> dict:
@@ -73,14 +74,8 @@ class DbtCloudBaseModel(BaseModel):
 
 
 class DbtCloudCommand(DbtCloudBaseModel):
-    api_token: str = Field(
-        default_factory=lambda: os.environ["DBT_CLOUD_API_TOKEN"],
-        description="API authentication key (default: 'DBT_CLOUD_API_TOKEN' environment variable)",
-    )
-    account_id: int = Field(
-        default_factory=lambda: os.environ["DBT_CLOUD_ACCOUNT_ID"],
-        description="Numeric ID of the Account that the job belongs to (default: 'DBT_CLOUD_ACCOUNT_ID' environment variable)",
-    )
+    api_token: str = API_TOKEN_FIELD
+    account_id: int = ACCOUNT_ID_FIELD
     _api_version: str = PrivateAttr("v2")
 
     @property

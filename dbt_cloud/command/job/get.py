@@ -3,15 +3,13 @@ import requests
 from typing import Optional
 from pydantic import Field
 from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.field import JOB_ID_FIELD
 
 
 class DbtCloudJobGetCommand(DbtCloudCommand):
     """Returns the details of a dbt Cloud job."""
 
-    job_id: int = Field(
-        default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
-        description="Numeric ID of the job to run (default: 'DBT_CLOUD_JOB_ID' environment variable)",
-    )
+    job_id: int = JOB_ID_FIELD
     order_by: Optional[str] = Field(
         description="Field to order the result by. Use '-' to indicate reverse order."
     )

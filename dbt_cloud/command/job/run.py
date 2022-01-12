@@ -3,15 +3,13 @@ import requests
 from typing import Optional, List
 from pydantic import Field, validator
 from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.field import JOB_ID_FIELD
 
 
 class DbtCloudJobRunCommand(DbtCloudCommand):
     """Triggers a dbt Cloud job run and returns a status JSON response."""
 
-    job_id: int = Field(
-        default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
-        description="Numeric ID of the job to run (default: 'DBT_CLOUD_JOB_ID' environment variable)",
-    )
+    job_id: int = JOB_ID_FIELD
     cause: str = Field(
         default="Triggered via API",
         description="A text description of the reason for running this job",

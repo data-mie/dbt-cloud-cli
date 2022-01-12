@@ -185,7 +185,7 @@ def get_artifact(file, **kwargs):
     response.raise_for_status()
 
 
-@metadata.command(help="Queries the dbt Cloud Metadata API using GraphQL.")
+@metadata.command(help=DbtCloudMetadataAPI.get_description())
 @click.option(
     "-f",
     "--file",
@@ -196,7 +196,7 @@ def get_artifact(file, **kwargs):
 @DbtCloudMetadataAPI.click_options
 def query(file, **kwargs):
     query = file.read()
-    metadata_api = DbtCloudMetadataAPI.from_click_options(**kwargs)
-    response = metadata_api.query(query)
+    api = DbtCloudMetadataAPI.from_click_options(**kwargs)
+    response = api.query(query)
     click.echo(dict_to_json(response.json()))
     response.raise_for_status()
