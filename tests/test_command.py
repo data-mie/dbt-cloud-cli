@@ -28,6 +28,11 @@ def response(request):
             "run_list_artifacts_response",
             marks=pytest.mark.run,
         ),
+        pytest.param(
+            "run_get_artifact_command",
+            "run_get_artifact_response",
+            marks=pytest.mark.run,
+        ),
     ],
     indirect=True,
 )

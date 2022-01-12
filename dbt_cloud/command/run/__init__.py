@@ -1,2 +1,3 @@
 from .get import DbtCloudRunGetCommand
 from .list_artifacts import DbtCloudRunListArtifactsCommand
+from .get_artifact import DbtCloudRunGetArtifactCommand

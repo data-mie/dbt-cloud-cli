@@ -8,6 +8,7 @@ from dbt_cloud.command import (
     DbtCloudJobRunCommand,
     DbtCloudRunGetCommand,
     DbtCloudRunListArtifactsCommand,
+    DbtCloudRunGetArtifactCommand,
 )
 
 
@@ -133,6 +134,17 @@ def run_list_artifacts_command(api_token, account_id, run_id):
     yield command
 
 
+@pytest.fixture
+def run_get_artifact_command(api_token, account_id, run_id):
+    command = DbtCloudRunGetArtifactCommand(
+        api_token=api_token,
+        account_id=account_id,
+        run_id=run_id,
+        path="run_results.json",
+    )
+    yield command
+
+
 """ OLD BELOW """
 
 
@@ -161,6 +173,8 @@ def mock_dbt_cloud_api(
     run_get_response,
     run_list_artifacts_command,
     run_list_artifacts_response,
+    run_get_artifact_command,
+    run_get_artifact_response,
 ):
     requests_mock.get(
         job_get_command.api_url,
@@ -196,4 +210,11 @@ def mock_dbt_cloud_api(
         run_list_artifacts_command.api_url,
         json=run_list_artifacts_response,
         status_code=run_list_artifacts_response["status"]["code"],
+    )
+
+    # Get artifact response include a status code
+    requests_mock.get(
+        run_get_artifact_command.api_url,
+        json=run_get_artifact_response,
+        status_code=200,
     )
