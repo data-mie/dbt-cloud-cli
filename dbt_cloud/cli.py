@@ -21,6 +21,7 @@ from dbt_cloud.command import (
     DbtCloudJobCreateCommand,
     DbtCloudJobDeleteCommand,
     DbtCloudJobRunCommand,
+    DbtCloudCommand,
 )
 from dbt_cloud.metadata import DbtCloudMetadataAPI
 from dbt_cloud.serde import json_to_dict, dict_to_json
@@ -121,7 +122,7 @@ def delete(**kwargs):
 
 
 @job.command(help="Exports a dbt Cloud job as JSON to a file.")
-@DbtCloudJobArgs.click_options
+@DbtCloudJobGetCommand.click_options
 @click.option(
     "-f",
     "--file",
@@ -130,14 +131,16 @@ def delete(**kwargs):
     help="Export file path.",
 )
 def export(file, **kwargs):
-    args = DbtCloudJobArgs.from_click_options(**kwargs)
-    job = args.get_job()
-    exclude = ["id"]
-    file.write(job.to_json(exclude=exclude))
+    command = DbtCloudJobGetCommand.from_click_options(**kwargs)
+    response = command.execute()
+    response.raise_for_status()
+    job_dict = response.json()["data"]
+    job_dict.pop("id")
+    file.write(dict_to_json(job_dict))
 
 
 @job.command(help="Imports a dbt Cloud job from exported JSON.", name="import")
-@DbtCloudAccount.click_options
+@DbtCloudCommand.click_options
 @click.option(
     "-f",
     "--file",
@@ -146,11 +149,10 @@ def export(file, **kwargs):
     help="Import file path.",
 )
 def import_job(file, **kwargs):
-    args = DbtCloudAccount.from_click_options(**kwargs)
-    job_create_kwargs = json_to_dict(file.read())
-    job_create_args = DbtCloudJobCreateArgs(**job_create_kwargs)
-    job = DbtCloudJob(job_id=None, **args.dict())
-    response = job.create(job_create_args)
+    base_command = DbtCloudCommand.from_click_options(**kwargs)
+    job_create_kwargs = {**json_to_dict(file.read()), **base_command.dict()}
+    command = DbtCloudJobCreateCommand(**job_create_kwargs)
+    response = command.execute()
     click.echo(dict_to_json(response.json()))
     response.raise_for_status()
 
