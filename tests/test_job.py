@@ -10,7 +10,7 @@ def test_job_run_command_steps_override_is_none_if_empty():
 
 
 def test_job_create_command_import_from_json(job_get):
-    response = job_get.values[1]
+    response = job_get.values[2]
     job_dict = response["data"]
     command = DbtCloudJobCreateCommand(**job_dict)
     assert command.environment_id == 49819
