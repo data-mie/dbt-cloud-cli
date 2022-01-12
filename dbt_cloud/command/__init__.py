@@ -4,4 +4,7 @@ from .job import (
     DbtCloudJobDeleteCommand,
     DbtCloudJobRunCommand,
 )
+from .run import (
+    DbtCloudRunGetCommand,
+)
 from .command import DbtCloudCommand

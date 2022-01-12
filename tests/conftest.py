@@ -6,6 +6,7 @@ from dbt_cloud.command import (
     DbtCloudJobCreateCommand,
     DbtCloudJobDeleteCommand,
     DbtCloudJobRunCommand,
+    DbtCloudRunGetCommand,
 )
 
 
@@ -76,6 +77,11 @@ def job_id():
 
 
 @pytest.fixture
+def run_id():
+    return 36053848
+
+
+@pytest.fixture
 def job_get_command(api_token, account_id, job_id):
     command = DbtCloudJobGetCommand(
         api_token=api_token, account_id=account_id, job_id=job_id
@@ -110,6 +116,14 @@ def job_run_command(api_token, account_id, project_id, environment_id):
     yield command
 
 
+@pytest.fixture
+def run_get_command(api_token, account_id, run_id):
+    command = DbtCloudRunGetCommand(
+        api_token=api_token, account_id=account_id, run_id=run_id
+    )
+    yield command
+
+
 """ OLD BELOW """
 
 
@@ -124,45 +138,45 @@ def run(job):
 
 
 @pytest.fixture
-def mock_job_api(
+def mock_dbt_cloud_api(
     requests_mock,
-    job,
     job_get_command,
-    job_create_command,
-    job_delete_command,
-    job_run_command,
     job_get_response,
+    job_create_command,
     job_create_response,
+    job_delete_command,
     job_delete_response,
+    job_run_command,
     job_run_response,
+    run_get_command,
+    run_get_response,
 ):
-    for url in (job_get_command.api_url, job_get_command.api_url + "/"):
-        requests_mock.get(
-            url,
-            json=job_get_response,
-            status_code=job_get_response["status"]["code"],
-        )
+    requests_mock.get(
+        job_get_command.api_url,
+        json=job_get_response,
+        status_code=job_get_response["status"]["code"],
+    )
+
     requests_mock.post(
         job_create_command.api_url,
         json=job_create_response,
         status_code=job_create_response["status"]["code"],
     )
+
     requests_mock.delete(
         job_delete_command.api_url,
         json=job_delete_response,
         status_code=job_delete_response["status"]["code"],
     )
+
     requests_mock.post(
         job_run_command.api_url,
         json=job_run_response,
         status_code=job_run_response["status"]["code"],
     )
 
-    job_template = job.copy()
-    job_template.job_id = None
-    requests_mock.post(
-        job_template.get_api_url() + "/", json=job_create_response, status_code=201
-    )
-    requests_mock.post(
-        job.get_api_url() + "/run/", json=job_run_response, status_code=200
+    requests_mock.get(
+        run_get_command.api_url,
+        json=run_get_response,
+        status_code=run_get_response["status"]["code"],
     )

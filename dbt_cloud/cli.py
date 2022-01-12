@@ -22,6 +22,7 @@ from dbt_cloud.command import (
     DbtCloudJobDeleteCommand,
     DbtCloudJobRunCommand,
     DbtCloudCommand,
+    DbtCloudRunGetCommand,
 )
 from dbt_cloud.metadata import DbtCloudMetadataAPI
 from dbt_cloud.serde import json_to_dict, dict_to_json
@@ -157,12 +158,11 @@ def import_job(file, **kwargs):
     response.raise_for_status()
 
 
-@job_run.command(help="Prints a dbt Cloud run status JSON response.")
-@DbtCloudRunGetArgs.click_options
+@job_run.command(help=DbtCloudRunGetCommand.get_description())
+@DbtCloudRunGetCommand.click_options
 def get(**kwargs):
-    args = DbtCloudRunGetArgs.from_click_options(**kwargs)
-    run = args.get_run()
-    response, _ = run.get_status()
+    command = DbtCloudRunGetCommand.from_click_options(**kwargs)
+    response = command.execute()
     click.echo(dict_to_json(response.json()))
     response.raise_for_status()
 
