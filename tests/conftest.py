@@ -18,16 +18,6 @@ def load_response(shared_datadir, response_name):
 
 
 @pytest.fixture
-def job_delete_response(shared_datadir):
-    return load_response(shared_datadir, "job_delete_response")
-
-
-@pytest.fixture
-def job_run_response(shared_datadir):
-    return load_response(shared_datadir, "job_run_response")
-
-
-@pytest.fixture
 def api_token():
     return "foo"
 
@@ -58,46 +48,13 @@ def run_id():
 
 
 @pytest.fixture
-def run_get(shared_datadir, api_token, account_id, run_id):
-    command = DbtCloudRunGetCommand(
-        api_token=api_token, account_id=account_id, run_id=run_id
-    )
-    response = load_response(shared_datadir, "run_get_response")
-    http_method = "get"
-    yield command, response, http_method
-
-
-@pytest.fixture
-def run_list_artifacts(shared_datadir, api_token, account_id, run_id):
-    command = DbtCloudRunListArtifactsCommand(
-        api_token=api_token, account_id=account_id, run_id=run_id
-    )
-    response = load_response(shared_datadir, "run_list_artifacts_response")
-    http_method = "get"
-    yield command, response, http_method
-
-
-@pytest.fixture
-def run_get_artifact(shared_datadir, api_token, account_id, run_id):
-    command = DbtCloudRunGetArtifactCommand(
-        api_token=api_token,
-        account_id=account_id,
-        run_id=run_id,
-        path="run_results.json",
-    )
-    response = load_response(shared_datadir, "run_get_artifact_response")
-    http_method = "get"
-    yield command, response, http_method
-
-
-@pytest.fixture
 def job_get(shared_datadir, api_token, account_id, job_id):
     command = DbtCloudJobGetCommand(
         api_token=api_token, account_id=account_id, job_id=job_id
     )
     response = load_response(shared_datadir, "job_get_response")
     http_method = "get"
-    yield command, response, http_method
+    yield pytest.param(command, response, http_method, marks=pytest.mark.job)
 
 
 @pytest.fixture
@@ -112,7 +69,7 @@ def job_create(shared_datadir, api_token, account_id, project_id, environment_id
     )
     response = load_response(shared_datadir, "job_create_response")
     http_method = "post"
-    yield command, response, http_method
+    yield pytest.param(command, response, http_method, marks=pytest.mark.job)
 
 
 @pytest.fixture
@@ -122,7 +79,7 @@ def job_delete(shared_datadir, api_token, account_id, job_id):
     )
     response = load_response(shared_datadir, "job_delete_response")
     http_method = "delete"
-    yield command, response, http_method
+    yield pytest.param(command, response, http_method, marks=pytest.mark.job)
 
 
 @pytest.fixture
@@ -132,12 +89,44 @@ def job_run(shared_datadir, api_token, account_id, job_id):
     )
     response = load_response(shared_datadir, "job_run_response")
     http_method = "post"
-    yield command, response, http_method
+    yield pytest.param(command, response, http_method, marks=pytest.mark.job)
 
 
 @pytest.fixture
-def mock_dbt_cloud_api(
-    requests_mock,
+def run_get(shared_datadir, api_token, account_id, run_id):
+    command = DbtCloudRunGetCommand(
+        api_token=api_token, account_id=account_id, run_id=run_id
+    )
+    response = load_response(shared_datadir, "run_get_response")
+    http_method = "get"
+    yield pytest.param(command, response, http_method, marks=pytest.mark.run)
+
+
+@pytest.fixture
+def run_list_artifacts(shared_datadir, api_token, account_id, run_id):
+    command = DbtCloudRunListArtifactsCommand(
+        api_token=api_token, account_id=account_id, run_id=run_id
+    )
+    response = load_response(shared_datadir, "run_list_artifacts_response")
+    http_method = "get"
+    yield pytest.param(command, response, http_method, marks=pytest.mark.run)
+
+
+@pytest.fixture
+def run_get_artifact(shared_datadir, api_token, account_id, run_id):
+    command = DbtCloudRunGetArtifactCommand(
+        api_token=api_token,
+        account_id=account_id,
+        run_id=run_id,
+        path="run_results.json",
+    )
+    response = load_response(shared_datadir, "run_get_artifact_response")
+    http_method = "get"
+    yield pytest.param(command, response, http_method, marks=pytest.mark.run)
+
+
+@pytest.fixture
+def command_fixtures(
     job_get,
     job_create,
     job_delete,
@@ -146,7 +135,7 @@ def mock_dbt_cloud_api(
     run_list_artifacts,
     run_get_artifact,
 ):
-    command_fixtures = (
+    return (
         job_get,
         job_create,
         job_delete,
@@ -155,7 +144,13 @@ def mock_dbt_cloud_api(
         run_list_artifacts,
         run_get_artifact,
     )
-    for command, response, http_method in command_fixtures:
+
+
+@pytest.fixture
+def mock_dbt_cloud_api(requests_mock, command_fixtures):
+
+    for param in command_fixtures:
+        command, response, http_method = param.values
         try:
             status_code = response["status"]["code"]
         except KeyError:
