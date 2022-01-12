@@ -16,6 +16,7 @@ from dbt_cloud.run import (
     DbtCloudRunListArtifactsArgs,
     DbtCloudRunGetArtifactArgs,
 )
+from dbt_cloud.command import DbtCloudJobGetCommand, DbtCloudJobCreateCommand
 from dbt_cloud.metadata import DbtCloudMetadataAPI
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
@@ -83,22 +84,20 @@ def run(wait, file, **kwargs):
     response.raise_for_status()
 
 
-@job.command(help="Returns the details of a dbt Cloud job.")
-@DbtCloudJobGetArgs.click_options
+@job.command(help=DbtCloudJobGetCommand.get_description())
+@DbtCloudJobGetCommand.click_options
 def get(**kwargs):
-    args = DbtCloudJobGetArgs.from_click_options(**kwargs)
-    job = DbtCloudJob(**args.dict())
-    response = job.get(order_by=args.order_by)
+    command = DbtCloudJobGetCommand.from_click_options(**kwargs)
+    response = command.execute()
     click.echo(dict_to_json(response.json()))
     response.raise_for_status()
 
 
-@job.command(help="Creates a job in a dbt Cloud project.")
-@DbtCloudJobCreateArgs.click_options
+@job.command(help=DbtCloudJobCreateCommand.get_description())
+@DbtCloudJobCreateCommand.click_options
 def create(**kwargs):
-    args = DbtCloudJobCreateArgs.from_click_options(**kwargs)
-    job = DbtCloudJob(job_id=None, **args.dict())
-    response = job.create(args)
+    command = DbtCloudJobCreateCommand.from_click_options(**kwargs)
+    response = command.execute()
     click.echo(dict_to_json(response.json()))
     response.raise_for_status()
 
