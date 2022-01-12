@@ -3,42 +3,47 @@ from dbt_cloud.command.command import translate_click_options
 
 
 @pytest.fixture
-def command(request):
-    return request.getfixturevalue(request.param)
-
-
-@pytest.fixture
-def response(request):
+def command_fixture(request):
     return request.getfixturevalue(request.param)
 
 
 @pytest.mark.parametrize(
-    "command,response",
+    "command_fixture",
     [
-        pytest.param("job_get_command", "job_get_response", marks=pytest.mark.job),
         pytest.param(
-            "job_create_command", "job_create_response", marks=pytest.mark.job
+            "job_get",
+            marks=pytest.mark.job,
         ),
         pytest.param(
-            "job_delete_command", "job_delete_response", marks=pytest.mark.job
+            "job_create",
+            marks=pytest.mark.job,
         ),
-        pytest.param("job_run_command", "job_run_response", marks=pytest.mark.job),
-        pytest.param("run_get_command", "run_get_response", marks=pytest.mark.run),
         pytest.param(
-            "run_list_artifacts_command",
-            "run_list_artifacts_response",
+            "job_delete",
+            marks=pytest.mark.job,
+        ),
+        pytest.param(
+            "job_run",
+            marks=pytest.mark.job,
+        ),
+        pytest.param(
+            "run_get",
             marks=pytest.mark.run,
         ),
         pytest.param(
-            "run_get_artifact_command",
-            "run_get_artifact_response",
+            "run_list_artifacts",
+            marks=pytest.mark.run,
+        ),
+        pytest.param(
+            "run_get_artifact",
             marks=pytest.mark.run,
         ),
     ],
     indirect=True,
 )
-class TestCommand:
-    def test_execute(self, command, response, mock_dbt_cloud_api):
+class TestCommandV2:
+    def test_execute(self, command_fixture, mock_dbt_cloud_api):
+        command, response, _ = command_fixture
         actual_response = command.execute()
         actual_response.raise_for_status()
         assert actual_response.json() == response

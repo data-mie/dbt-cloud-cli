@@ -9,8 +9,9 @@ def test_job_run_command_steps_override_is_none_if_empty():
     assert command.steps_override is None
 
 
-def test_job_create_command_import_from_json(job_get_response):
-    job_dict = job_get_response["data"]
+def test_job_create_command_import_from_json(job_get):
+    response = job_get[1]
+    job_dict = response["data"]
     command = DbtCloudJobCreateCommand(**job_dict)
     assert command.environment_id == 49819
     assert command.account_id == 123456
