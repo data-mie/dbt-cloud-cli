@@ -192,6 +192,7 @@ def get_artifact(file, **kwargs):
 )
 @DbtCloudMetadataQueryCommand.click_options
 def query(file, **kwargs):
-    command = DbtCloudMetadataQueryCommand.from_click_options(**kwargs)
-    command._query = file.read()
+    command = DbtCloudMetadataQueryCommand.from_click_options(
+        query=file.read(), **kwargs
+    )
     execute_and_print(command)

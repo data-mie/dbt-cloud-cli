@@ -1,12 +1,12 @@
 import requests
-from pydantic import PrivateAttr
+from pydantic import PrivateAttr, Field
 from dbt_cloud.command.command import DbtCloudCommand
 
 
 class DbtCloudMetadataQueryCommand(DbtCloudCommand):
     """Queries the dbt Cloud Metadata API using GraphQL."""
 
-    _query: str = PrivateAttr()
+    query: str = Field(exclude_from_click_options=True)
 
     @property
     def request_headers(self):
@@ -18,6 +18,6 @@ class DbtCloudMetadataQueryCommand(DbtCloudCommand):
 
     def execute(self) -> requests.Response:
         response = requests.post(
-            url=self.api_url, headers=self.request_headers, data={"query": self._query}
+            url=self.api_url, headers=self.request_headers, data={"query": self.query}
         )
         return response

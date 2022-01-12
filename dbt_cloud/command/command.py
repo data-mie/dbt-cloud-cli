@@ -32,6 +32,8 @@ class DbtCloudBaseModel(BaseModel):
                     function, key_prefix=f"{key_prefix}__{key}".strip("_")
                 )
             else:
+                if field.field_info.extra.get("exclude_from_click_options", False):
+                    continue
                 help = field.field_info.description or ""
                 kwarg_name = f"{key_prefix}__{key}".strip("_")
                 key = kwarg_name.replace("__", "-").replace("_", "-")
