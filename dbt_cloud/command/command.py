@@ -1,14 +1,6 @@
-"""
-Command
-Receiver
-Invoker: An invoker object knows how to execute a command, and optionally does bookkeeping about the command execution. The invoker does not know anything about a concrete command, it knows only about the command interface.
-Client: The client decides which receiver objects it assigns to the command objects, and which commands it assigns to the invoker.
-"""
-
-import os
 import click
 from mergedeep import merge
-from pydantic import Field, validator, BaseModel, PrivateAttr
+from pydantic import validator, BaseModel, PrivateAttr
 from dbt_cloud.serde import json_to_dict
 from dbt_cloud.field import API_TOKEN_FIELD, ACCOUNT_ID_FIELD
 
