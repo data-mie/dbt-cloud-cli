@@ -1,8 +1,16 @@
-import click
+"""
+Command
+Receiver
+Invoker: An invoker object knows how to execute a command, and optionally does bookkeeping about the command execution. The invoker does not know anything about a concrete command, it knows only about the command interface.
+Client: The client decides which receiver objects it assigns to the command objects, and which commands it assigns to the invoker.
+"""
+
 import os
+import click
 from mergedeep import merge
-from pydantic import BaseModel, validator, Field
+from pydantic import Field, validator, BaseModel, PrivateAttr
 from dbt_cloud.serde import json_to_dict
+from dbt_cloud.field import API_TOKEN_FIELD, ACCOUNT_ID_FIELD
 
 
 def translate_click_options(**kwargs) -> dict:
@@ -18,7 +26,7 @@ def translate_click_options(**kwargs) -> dict:
     return kwargs_translated
 
 
-class ArgsBaseModel(BaseModel):
+class DbtCloudBaseModel(BaseModel):
     @classmethod
     def click_options(cls, function, key_prefix: str = ""):
         for key, field in reversed(cls.__fields__.items()):
@@ -59,17 +67,29 @@ class ArgsBaseModel(BaseModel):
         else:
             return value
 
-    def get_payload(self, exclude=["api_token", "account_id", "job_id"]) -> dict:
+    @classmethod
+    def from_click_options(cls, **kwargs):
+        kwargs_translated = translate_click_options(**kwargs)
+        return cls(**kwargs_translated)
+
+
+class DbtCloudCommand(DbtCloudBaseModel):
+    api_token: str = API_TOKEN_FIELD
+    account_id: int = ACCOUNT_ID_FIELD
+    _api_version: str = PrivateAttr("v2")
+
+    @property
+    def request_headers(self) -> dict:
+        return {"Authorization": f"Token {self.api_token}"}
+
+    @property
+    def api_url(self) -> str:
+        return f"https://cloud.getdbt.com/api/{self._api_version}/accounts/{self.account_id}"
+
+    @classmethod
+    def get_description(cls) -> str:
+        return cls.__doc__.strip()
+
+    def get_payload(self, exclude=["api_token"]) -> dict:
         payload = self.json(exclude=set(exclude))
         return json_to_dict(payload)
-
-
-class DbtCloudArgsBaseModel(ArgsBaseModel):
-    api_token: str = Field(
-        default_factory=lambda: os.environ["DBT_CLOUD_API_TOKEN"],
-        description="API authentication key (default: 'DBT_CLOUD_API_TOKEN' environment variable)",
-    )
-    account_id: int = Field(
-        default_factory=lambda: os.environ["DBT_CLOUD_ACCOUNT_ID"],
-        description="Numeric ID of the Account that the job belongs to (default: 'DBT_CLOUD_ACCOUNT_ID' environment variable)",
-    )

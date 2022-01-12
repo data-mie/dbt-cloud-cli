@@ -2,23 +2,27 @@ import os
 import logging
 import time
 import click
-from dbt_cloud.args import DbtCloudArgsBaseModel, translate_click_options
-from dbt_cloud.job import (
-    DbtCloudJob,
-    DbtCloudJobArgs,
-    DbtCloudJobRunArgs,
-    DbtCloudJobGetArgs,
-    DbtCloudJobCreateArgs,
+from dbt_cloud import DbtCloudRunStatus
+from dbt_cloud.command import (
+    DbtCloudJobGetCommand,
+    DbtCloudJobCreateCommand,
+    DbtCloudJobDeleteCommand,
+    DbtCloudJobRunCommand,
+    DbtCloudCommand,
+    DbtCloudRunGetCommand,
+    DbtCloudRunListArtifactsCommand,
+    DbtCloudRunGetArtifactCommand,
+    DbtCloudMetadataQueryCommand,
 )
-from dbt_cloud.run import (
-    DbtCloudRunStatus,
-    DbtCloudRunGetArgs,
-    DbtCloudRunListArtifactsArgs,
-    DbtCloudRunGetArtifactArgs,
-)
-from dbt_cloud.metadata import DbtCloudMetadataAPI
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
+
+
+def execute_and_print(command):
+    response = command.execute()
+    click.echo(dict_to_json(response.json()))
+    response.raise_for_status()
+    return response
 
 
 @click.group()
@@ -49,8 +53,8 @@ def metadata():
     pass
 
 
-@job.command(help="Triggers a dbt Cloud job run and returns a status JSON response.")
-@DbtCloudJobRunArgs.click_options
+@job.command(help=DbtCloudJobRunCommand.get_description())
+@DbtCloudJobRunCommand.click_options
 @click.option(
     f"--wait/--no-wait",
     default=False,
@@ -64,14 +68,20 @@ def metadata():
     help="Response export file path.",
 )
 def run(wait, file, **kwargs):
-    kwargs_translated = translate_click_options(**kwargs)
-    args = DbtCloudJobRunArgs(**kwargs_translated)
-    job = args.get_job()
-    response, run = job.run(args=args)
+    command = DbtCloudJobRunCommand.from_click_options(**kwargs)
+    response = command.execute()
+
     if wait:
+        run_id = response.json()["data"]["id"]
         while True:
-            response, status = run.get_status()
-            click.echo(f"Job {job.job_id} run {run.run_id}: {status.name} ...")
+            run_get_command = DbtCloudRunGetCommand(
+                api_token=command.api_token,
+                account_id=command.account_id,
+                run_id=run_id,
+            )
+            response = run_get_command.execute()
+            status = DbtCloudRunStatus(response.json()["data"]["status"])
+            click.echo(f"Job {command.job_id} run {run_id}: {status.name} ...")
             if status == DbtCloudRunStatus.SUCCESS:
                 break
             elif status in (DbtCloudRunStatus.ERROR, DbtCloudRunStatus.CANCELLED):
@@ -80,45 +90,34 @@ def run(wait, file, **kwargs):
                     f"Job run failed with {status.name} status. For more information, see {href}."
                 )
             time.sleep(5)
+
     file.write(dict_to_json(response.json()))
     response.raise_for_status()
 
 
-@job.command(help="Returns the details of a dbt Cloud job.")
-@DbtCloudJobGetArgs.click_options
+@job.command(help=DbtCloudJobGetCommand.get_description())
+@DbtCloudJobGetCommand.click_options
 def get(**kwargs):
-    kwargs_translated = translate_click_options(**kwargs)
-    args = DbtCloudJobGetArgs(**kwargs_translated)
-    job = DbtCloudJob(**args.dict())
-    response = job.get(order_by=args.order_by)
-    click.echo(dict_to_json(response.json()))
-    response.raise_for_status()
+    command = DbtCloudJobGetCommand.from_click_options(**kwargs)
+    execute_and_print(command)
 
 
-@job.command(help="Creates a job in a dbt Cloud project.")
-@DbtCloudJobCreateArgs.click_options
+@job.command(help=DbtCloudJobCreateCommand.get_description())
+@DbtCloudJobCreateCommand.click_options
 def create(**kwargs):
-    kwargs_translated = translate_click_options(**kwargs)
-    args = DbtCloudJobCreateArgs(**kwargs_translated)
-    job = DbtCloudJob(job_id=None, **args.dict())
-    response = job.create(args)
-    click.echo(dict_to_json(response.json()))
-    response.raise_for_status()
+    command = DbtCloudJobCreateCommand.from_click_options(**kwargs)
+    execute_and_print(command)
 
 
-@job.command(help="Deletes a job from a dbt Cloud project.")
-@DbtCloudJobArgs.click_options
+@job.command(help=DbtCloudJobDeleteCommand.get_description())
+@DbtCloudJobDeleteCommand.click_options
 def delete(**kwargs):
-    kwargs_translated = translate_click_options(**kwargs)
-    args = DbtCloudJobArgs(**kwargs_translated)
-    job = args.get_job()
-    response = job.delete()
-    click.echo(dict_to_json(response.json()))
-    response.raise_for_status()
+    command = DbtCloudJobDeleteCommand.from_click_options(**kwargs)
+    execute_and_print(command)
 
 
 @job.command(help="Exports a dbt Cloud job as JSON to a file.")
-@DbtCloudJobArgs.click_options
+@DbtCloudJobGetCommand.click_options
 @click.option(
     "-f",
     "--file",
@@ -127,15 +126,16 @@ def delete(**kwargs):
     help="Export file path.",
 )
 def export(file, **kwargs):
-    kwargs_translated = translate_click_options(**kwargs)
-    args = DbtCloudJobArgs(**kwargs_translated)
-    job = args.get_job()
-    exclude = ["id"]
-    file.write(job.to_json(exclude=exclude))
+    command = DbtCloudJobGetCommand.from_click_options(**kwargs)
+    response = command.execute()
+    response.raise_for_status()
+    job_dict = response.json()["data"]
+    job_dict.pop("id")
+    file.write(dict_to_json(job_dict))
 
 
 @job.command(help="Imports a dbt Cloud job from exported JSON.", name="import")
-@DbtCloudArgsBaseModel.click_options
+@DbtCloudCommand.click_options
 @click.option(
     "-f",
     "--file",
@@ -144,40 +144,30 @@ def export(file, **kwargs):
     help="Import file path.",
 )
 def import_job(file, **kwargs):
-    kwargs_translated = translate_click_options(**kwargs)
-    args = DbtCloudArgsBaseModel(**kwargs_translated)
-    job_create_kwargs = json_to_dict(file.read())
-    job_create_args = DbtCloudJobCreateArgs(**job_create_kwargs)
-    job = DbtCloudJob(job_id=None, **args.dict())
-    response = job.create(job_create_args)
+    base_command = DbtCloudCommand.from_click_options(**kwargs)
+    job_create_kwargs = {**json_to_dict(file.read()), **base_command.dict()}
+    command = DbtCloudJobCreateCommand(**job_create_kwargs)
+    response = command.execute()
     click.echo(dict_to_json(response.json()))
     response.raise_for_status()
 
 
-@job_run.command(help="Prints a dbt Cloud run status JSON response.")
-@DbtCloudRunGetArgs.click_options
+@job_run.command(help=DbtCloudRunGetCommand.get_description())
+@DbtCloudRunGetCommand.click_options
 def get(**kwargs):
-    kwargs_translated = translate_click_options(**kwargs)
-    args = DbtCloudRunGetArgs(**kwargs_translated)
-    run = args.get_run()
-    response, _ = run.get_status()
-    click.echo(dict_to_json(response.json()))
-    response.raise_for_status()
+    command = DbtCloudRunGetCommand.from_click_options(**kwargs)
+    execute_and_print(command)
 
 
-@job_run.command(help="Fetches a list of artifact files generated for a completed run.")
-@DbtCloudRunListArtifactsArgs.click_options
+@job_run.command(help=DbtCloudRunListArtifactsCommand.get_description())
+@DbtCloudRunListArtifactsCommand.click_options
 def list_artifacts(**kwargs):
-    kwargs_translated = translate_click_options(**kwargs)
-    args = DbtCloudRunListArtifactsArgs(**kwargs_translated)
-    run = args.get_run()
-    response = run.list_artifacts(step=args.step)
-    click.echo(dict_to_json(response.json()))
-    response.raise_for_status()
+    command = DbtCloudRunListArtifactsCommand.from_click_options(**kwargs)
+    execute_and_print(command)
 
 
-@job_run.command(help="Fetches an artifact file from a completed run.")
-@DbtCloudRunGetArtifactArgs.click_options
+@job_run.command(help=DbtCloudRunGetArtifactCommand.get_description())
+@DbtCloudRunGetArtifactCommand.click_options
 @click.option(
     "-f",
     "--file",
@@ -186,15 +176,13 @@ def list_artifacts(**kwargs):
     help="Export file path.",
 )
 def get_artifact(file, **kwargs):
-    kwargs_translated = translate_click_options(**kwargs)
-    args = DbtCloudRunGetArtifactArgs(**kwargs_translated)
-    run = args.get_run()
-    response = run.get_artifact(path=args.path, step=args.step)
+    command = DbtCloudRunGetArtifactCommand.from_click_options(**kwargs)
+    response = command.execute()
     file.write(response.content)
     response.raise_for_status()
 
 
-@metadata.command(help="Queries the dbt Cloud Metadata API using GraphQL.")
+@metadata.command(help=DbtCloudMetadataQueryCommand.get_description())
 @click.option(
     "-f",
     "--file",
@@ -202,11 +190,8 @@ def get_artifact(file, **kwargs):
     type=click.File("r"),
     help="Read query from file.",
 )
-@DbtCloudMetadataAPI.click_options
+@DbtCloudMetadataQueryCommand.click_options
 def query(file, **kwargs):
-    query = file.read()
-    kwargs_translated = translate_click_options(**kwargs)
-    metadata_api = DbtCloudMetadataAPI(**kwargs_translated)
-    response = metadata_api.query(query)
-    click.echo(dict_to_json(response.json()))
-    response.raise_for_status()
+    command = DbtCloudMetadataQueryCommand.from_click_options(**kwargs)
+    command._query = file.read()
+    execute_and_print(command)
