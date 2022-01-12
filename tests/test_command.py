@@ -1,30 +1,23 @@
 import pytest
-from pytest_cases import parametrize
 from dbt_cloud.command.command import translate_click_options
 
 
-@pytest.fixture
-def command_fixture(request):
-    fixt = request.getfixturevalue(request.param)
-    return pytest.param(*fixt.values, marks=fixt.marks)
-
-
 @pytest.mark.parametrize(
-    "command_fixture",
+    "fixture_name",
+    # TODO: How to dynamically get markers from the fixtures?
     [
-        "job_get",
-        "job_create",
-        "job_delete",
-        "job_run",
-        "run_get",
-        "run_list_artifacts",
-        "run_get_artifact",
+        pytest.param("job_get", marks=pytest.mark.job),
+        pytest.param("job_create", marks=pytest.mark.job),
+        pytest.param("job_delete", marks=pytest.mark.job),
+        pytest.param("job_run", marks=pytest.mark.job),
+        pytest.param("run_get", marks=pytest.mark.run),
+        pytest.param("run_list_artifacts", marks=pytest.mark.run),
+        pytest.param("run_get_artifact", marks=pytest.mark.run),
     ],
-    indirect=True,
 )
 class TestCommandV2:
-    def test_execute(self, command_fixture, mock_dbt_cloud_api):
-        print(command_fixture.marks)
+    def test_execute(self, fixture_name, mock_dbt_cloud_api, request):
+        command_fixture = request.getfixturevalue(fixture_name)
         command, response, _ = command_fixture.values
         actual_response = command.execute()
         actual_response.raise_for_status()
