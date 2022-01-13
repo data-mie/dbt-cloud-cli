@@ -5,14 +5,16 @@ pytestmark = pytest.mark.job
 
 
 def test_job_run_command_steps_override_is_none_if_empty():
-    command = DbtCloudJobRunCommand(steps_override=())
+    command = DbtCloudJobRunCommand(
+        api_token="foo", account_id=123, job_id=123, steps_override=()
+    )
     assert command.steps_override is None
 
 
 def test_job_create_command_import_from_json(job_get):
     response = job_get.values[2]
     job_dict = response["data"]
-    command = DbtCloudJobCreateCommand(**job_dict)
+    command = DbtCloudJobCreateCommand(api_token="foo", **job_dict)
     assert command.environment_id == 49819
     assert command.account_id == 123456
     assert command.project_id == 123457

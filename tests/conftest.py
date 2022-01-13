@@ -27,6 +27,9 @@ def load_response(response_name):
     return json.loads(response_json)
 
 
+# A test case reads an example JSON response from tests/data and loads it to the request mocker (see mock_dbt_cloud_api fixture).
+# A command.execute test then calls the API endpoint and verifies the response (the same example response that was loaded to the mocker).
+# In other words, the test verifies that command.execute calls the correct endpoint with the correct HTTP method.
 COMMAND_TEST_CASES = [
     pytest.param(
         "job_get",
@@ -103,12 +106,8 @@ COMMAND_TEST_CASES = [
 
 
 @pytest.fixture
-def job_get():
-    yield COMMAND_TEST_CASES[0]
-
-
-@pytest.fixture
 def mock_dbt_cloud_api(requests_mock):
+    """Loads static JSON responses to a request mocker. Dynamic response mocking based on request has not been implemented yet."""
     for param in COMMAND_TEST_CASES:
         test_case_name, command, response, http_method = param.values
         try:
@@ -123,3 +122,8 @@ def mock_dbt_cloud_api(requests_mock):
             json=response,
             status_code=status_code,
         )
+
+
+@pytest.fixture
+def job_get():
+    yield COMMAND_TEST_CASES[0]
