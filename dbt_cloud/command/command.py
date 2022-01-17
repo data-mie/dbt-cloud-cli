@@ -41,6 +41,7 @@ class DbtCloudBaseModel(BaseModel):
                     is_list_arg = issubclass(field.outer_type_.__origin__, list)
                 except AttributeError:
                     is_list_arg = False
+
                 function = click.option(
                     f"--{key}",
                     kwarg_name,
@@ -48,6 +49,7 @@ class DbtCloudBaseModel(BaseModel):
                     required=field.required,
                     default=field.default,
                     multiple=is_list_arg,
+                    is_flag=field.field_info.extra.get("is_flag", False),
                     help=help,
                 )(function)
         return function
