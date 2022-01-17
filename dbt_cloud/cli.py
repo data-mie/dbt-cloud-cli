@@ -13,13 +13,14 @@ from dbt_cloud.command import (
     DbtCloudRunListArtifactsCommand,
     DbtCloudRunGetArtifactCommand,
     DbtCloudMetadataQueryCommand,
+    DbtCloudRunListCommand,
 )
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
 
 
-def execute_and_print(command):
-    response = command.execute()
+def execute_and_print(command, **kwargs):
+    response = command.execute(**kwargs)
     click.echo(dict_to_json(response.json()))
     response.raise_for_status()
     return response
@@ -164,6 +165,18 @@ def get(**kwargs):
 def list_artifacts(**kwargs):
     command = DbtCloudRunListArtifactsCommand.from_click_options(**kwargs)
     execute_and_print(command)
+
+
+@job_run.command(help=DbtCloudRunListCommand.get_description())
+@DbtCloudRunListCommand.click_options
+def list(**kwargs):
+    command = DbtCloudRunListCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+    if command.paginate:
+        pagination_token = response.headers.get("X-Dbt-Continuation-Token")
+        while pagination_token is not None:
+            response = execute_and_print(command, pagination_token=pagination_token)
+            pagination_token = response.headers.get("X-Dbt-Continuation-Token")
 
 
 @job_run.command(help=DbtCloudRunGetArtifactCommand.get_description())

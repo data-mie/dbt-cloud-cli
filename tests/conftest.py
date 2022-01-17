@@ -9,6 +9,7 @@ from dbt_cloud.command import (
     DbtCloudRunGetCommand,
     DbtCloudRunListArtifactsCommand,
     DbtCloudRunGetArtifactCommand,
+    DbtCloudRunListCommand,
 )
 
 
@@ -78,6 +79,13 @@ COMMAND_TEST_CASES = [
             api_token=API_TOKEN, account_id=ACCOUNT_ID, run_id=RUN_ID
         ),
         load_response("run_get_response"),
+        "get",
+        marks=pytest.mark.run,
+    ),
+    pytest.param(
+        "run_list",
+        DbtCloudRunListCommand(api_token=API_TOKEN, account_id=ACCOUNT_ID),
+        load_response("run_list_response"),
         "get",
         marks=pytest.mark.run,
     ),
