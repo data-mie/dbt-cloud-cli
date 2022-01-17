@@ -34,6 +34,7 @@ The following environment variables are used as argument defaults:
 * [dbt-cloud job export](#dbt-cloud-job-export)
 * [dbt-cloud job import](#dbt-cloud-job-import)
 * [dbt-cloud run get](#dbt-cloud-run-get)
+* [dbt-cloud run list](#dbt-cloud-run-list)
 * [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts)
 * [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact)
 * [dbt-cloud metadata query](#dbt-cloud-metadata-query)
@@ -492,6 +493,99 @@ This command prints a dbt Cloud run status JSON response. For more information o
     "finished_at_humanized": "2 weeks, 1 day ago",
     "job_id": 43167
   }
+}
+```
+
+## dbt-cloud run list
+This command returns a list of runs in the account. For more information on the API endpoint arguments and response, run `dbt-cloud run list --help` and check out the [dbt Cloud API v4 docs](https://docs.getdbt.com/dbt-cloud/api-v4#operation/list-account-runs).
+
+### Usage
+
+```bash
+>> dbt-cloud run list --limit 2
+{
+  "data": [
+    {
+      "id": "40650768",
+      "environment_id": "49819",
+      "account_id": REDACTED,
+      "project_id": REDACTED,
+      "job_id": "49663",
+      "trigger": {
+        "cause": "scheduled",
+        "git_provider": null,
+        "pull_request_id": null,
+        "git_branch": "main",
+        "git_sha": "981c5cf1ba299e942c6c277c38c8dec9b0738dd0"
+      },
+      "replace": {
+        "schema_with": null,
+        "target_name_with": null,
+        "dbt_version_with": null,
+        "generate_docs_with": null,
+        "run_steps_with": null,
+        "thread_count_with": null,
+        "timeout_after_with": null
+      },
+      "href": "https://cloud.getdbt.com/api/v4/accounts/REDACTED/runs/40650768",
+      "status": "Succeeded",
+      "status_message": null,
+      "dbt_version": "0.21.0",
+      "waiting_on": [],
+      "triggered_at": 1642377765,
+      "created_at": 1642377765,
+      "updated_at": 1642378181,
+      "dequeued_at": 1642377904,
+      "started_at": 1642378141,
+      "finished_at": 1642378181,
+      "duration": 416,
+      "queued_duration": 376,
+      "run_duration": 40,
+      "artifacts_saved": true,
+      "has_docs_generated": true,
+      "has_sources_generated": false
+    },
+    {
+      "id": "40538548",
+      "environment_id": "49819",
+      "account_id": REDACTED,
+      "project_id": REDACTED,
+      "job_id": "49663",
+      "trigger": {
+        "cause": "scheduled",
+        "git_provider": null,
+        "pull_request_id": null,
+        "git_branch": "main",
+        "git_sha": "981c5cf1ba299e942c6c277c38c8dec9b0738dd0"
+      },
+      "replace": {
+        "schema_with": null,
+        "target_name_with": null,
+        "dbt_version_with": null,
+        "generate_docs_with": null,
+        "run_steps_with": null,
+        "thread_count_with": null,
+        "timeout_after_with": null
+      },
+      "href": "https://cloud.getdbt.com/api/v4/accounts/REDACTED/runs/40538548",
+      "status": "Succeeded",
+      "status_message": null,
+      "dbt_version": "0.21.0",
+      "waiting_on": [],
+      "triggered_at": 1642291308,
+      "created_at": 1642291308,
+      "updated_at": 1642291725,
+      "dequeued_at": 1642291455,
+      "started_at": 1642291683,
+      "finished_at": 1642291725,
+      "duration": 417,
+      "queued_duration": 375,
+      "run_duration": 42,
+      "artifacts_saved": true,
+      "has_docs_generated": true,
+      "has_sources_generated": false
+    }
+  ]
 }
 ```
 

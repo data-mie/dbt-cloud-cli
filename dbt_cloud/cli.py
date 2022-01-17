@@ -13,6 +13,7 @@ from dbt_cloud.command import (
     DbtCloudRunListArtifactsCommand,
     DbtCloudRunGetArtifactCommand,
     DbtCloudMetadataQueryCommand,
+    DbtCloudRunListCommand,
 )
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
@@ -163,6 +164,13 @@ def get(**kwargs):
 @DbtCloudRunListArtifactsCommand.click_options
 def list_artifacts(**kwargs):
     command = DbtCloudRunListArtifactsCommand.from_click_options(**kwargs)
+    execute_and_print(command)
+
+
+@job_run.command(help=DbtCloudRunListCommand.get_description())
+@DbtCloudRunListCommand.click_options
+def list(**kwargs):
+    command = DbtCloudRunListCommand.from_click_options(**kwargs)
     execute_and_print(command)
 
 
