@@ -1,3 +1,4 @@
+from multiprocessing.sharedctypes import Value
 import requests
 from enum import Enum
 from typing import Optional
@@ -39,6 +40,10 @@ class DbtCloudRunListCommand(DbtCloudCommand):
         return f"{super().api_url}/runs"
 
     def execute(self, pagination_token: str = None) -> requests.Response:
+        if self.status is None:
+            status = None
+        else:
+            status = self.status.value
         response = requests.get(
             url=self.api_url,
             headers={
@@ -50,7 +55,7 @@ class DbtCloudRunListCommand(DbtCloudCommand):
                 "environment": self.environment_id,
                 "project": self.project_id,
                 "job": self.job_id,
-                "status": self.status.value,
+                "status": status,
             },
         )
         return response
