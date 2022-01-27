@@ -32,6 +32,7 @@ The following environment variables are used as argument defaults:
 * [dbt-cloud job list](#dbt-cloud-job-list)
 * [dbt-cloud job create](#dbt-cloud-job-create)
 * [dbt-cloud job delete](#dbt-cloud-job-delete)
+* [dbt-cloud job delete-all](#dbt-cloud-job-delete-all)
 * [dbt-cloud job export](#dbt-cloud-job-export)
 * [dbt-cloud job import](#dbt-cloud-job-import)
 * [dbt-cloud run get](#dbt-cloud-run-get)
