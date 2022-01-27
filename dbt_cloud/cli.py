@@ -2,6 +2,7 @@ import os
 import logging
 import time
 import click
+import ast
 from dbt_cloud import DbtCloudRunStatus
 from dbt_cloud.command import (
     DbtCloudJobGetCommand,
@@ -18,6 +19,14 @@ from dbt_cloud.command import (
 )
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
+
+
+class PythonLiteralOption(click.Option):
+    def type_cast_value(self, ctx, value):
+        try:
+            return ast.literal_eval(value)
+        except:
+            raise click.BadParameter(value)
 
 
 def execute_and_print(command, **kwargs):
@@ -123,6 +132,51 @@ def create(**kwargs):
 def delete(**kwargs):
     command = DbtCloudJobDeleteCommand.from_click_options(**kwargs)
     execute_and_print(command)
+
+
+@job.command(help="Delete all jobs on the account.")
+@DbtCloudJobListCommand.click_options
+@click.option(
+    "--keep-jobs",
+    cls=PythonLiteralOption,
+    default=[],
+    help="List of job IDs to exclude from deletion.",
+)
+@click.option("--dry-run", is_flag=True, help="Execute as a dry run.")
+@click.option(
+    "-y", "--yes", "assume_yes", is_flag=True, help="Automatic yes to prompts."
+)
+@click.option(
+    "-f",
+    "--file",
+    default="-",
+    type=click.File("w"),
+    help="Response export file path.",
+)
+def delete_all(keep_jobs, dry_run, file, assume_yes, **kwargs):
+    list_command = DbtCloudJobListCommand.from_click_options(**kwargs)
+    response = list_command.execute()
+    response.raise_for_status()
+    job_ids_to_delete = [
+        job_dict["id"]
+        for job_dict in response.json()["data"]
+        if job_dict["id"] not in keep_jobs
+    ]
+    click.echo(f"Jobs to delete: {job_ids_to_delete}")
+    deleted_job_responses = []
+    if not dry_run:
+        for job_id in job_ids_to_delete:
+            delete_command = DbtCloudJobDeleteCommand(**kwargs, job_id=job_id)
+            if assume_yes:
+                is_confirmed = True
+            else:
+                is_confirmed = click.confirm(f"Delete job {job_id}?")
+            if is_confirmed:
+                response = delete_command.execute()
+                response.raise_for_status()
+                deleted_job_responses.append(response.json())
+                click.echo(f"Job {job_id} was deleted.")
+    file.write(dict_to_json(deleted_job_responses))
 
 
 @job.command(help="Exports a dbt Cloud job as JSON to a file.")

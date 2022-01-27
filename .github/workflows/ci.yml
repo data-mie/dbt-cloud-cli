@@ -80,6 +80,9 @@ jobs:
       - name: Test 'dbt-cloud job delete'
         run: dbt-cloud job delete --job-id $(cat job_imported.json | jq .data.id)
 
+      - name: Test 'dbt-cloud job delete-all'
+        run: dbt-cloud job delete-all --keep-jobs "[43167, 49663]" -y
+
       - name: Test 'dbt-cloub job create'
         id: job_create
         run: |
