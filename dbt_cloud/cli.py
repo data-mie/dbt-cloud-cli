@@ -14,6 +14,7 @@ from dbt_cloud.command import (
     DbtCloudRunGetArtifactCommand,
     DbtCloudMetadataQueryCommand,
     DbtCloudRunListCommand,
+    DbtCloudJobListCommand,
 )
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
@@ -94,6 +95,13 @@ def run(wait, file, **kwargs):
 
     file.write(dict_to_json(response.json()))
     response.raise_for_status()
+
+
+@job.command(help=DbtCloudJobListCommand.get_description())
+@DbtCloudJobListCommand.click_options
+def list(**kwargs):
+    command = DbtCloudJobListCommand.from_click_options(**kwargs)
+    execute_and_print(command)
 
 
 @job.command(help=DbtCloudJobGetCommand.get_description())

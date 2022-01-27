@@ -3,6 +3,7 @@ from .job import (
     DbtCloudJobCreateCommand,
     DbtCloudJobDeleteCommand,
     DbtCloudJobRunCommand,
+    DbtCloudJobListCommand,
 )
 from .run import (
     DbtCloudRunGetCommand,

@@ -1,0 +1,57 @@
+{
+    "status": {
+      "code": 200,
+      "is_success": true,
+      "user_message": "Success!",
+      "developer_message": ""
+    },
+    "data": [
+      {
+        "execution": {
+          "timeout_seconds": 0
+        },
+        "generate_docs": false,
+        "run_generate_sources": false,
+        "id": 43167,
+        "account_id": 123456,
+        "project_id": 123457,
+        "environment_id": 49819,
+        "name": "Do nothing!",
+        "dbt_version": null,
+        "created_at": "2021-11-18T15:19:03.185668+00:00",
+        "updated_at": "2021-12-25T09:17:12.788186+00:00",
+        "execute_steps": [
+          "dbt run -s not_a_model"
+        ],
+        "state": 1,
+        "deferring_job_definition_id": null,
+        "lifecycle_webhooks": false,
+        "lifecycle_webhooks_url": null,
+        "triggers": {
+          "github_webhook": false,
+          "git_provider_webhook": null,
+          "custom_branch_only": true,
+          "schedule": false
+        },
+        "settings": {
+          "threads": 4,
+          "target_name": "default"
+        },
+        "schedule": {
+          "cron": "0 * * * *",
+          "date": {
+            "type": "every_day"
+          },
+          "time": {
+            "type": "every_hour",
+            "interval": 1
+          }
+        },
+        "is_deferrable": false,
+        "generate_sources": false,
+        "cron_humanized": "Every hour",
+        "next_run": null,
+        "next_run_humanized": null
+      }
+    ]
+  }
