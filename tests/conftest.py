@@ -3,6 +3,7 @@ import pytest
 from pathlib import Path
 from dbt_cloud.command import (
     DbtCloudJobGetCommand,
+    DbtCloudJobListCommand,
     DbtCloudJobCreateCommand,
     DbtCloudJobDeleteCommand,
     DbtCloudJobRunCommand,
@@ -38,6 +39,13 @@ COMMAND_TEST_CASES = [
             api_token=API_TOKEN, account_id=ACCOUNT_ID, job_id=JOB_ID
         ),
         load_response("job_get_response"),
+        "get",
+        marks=pytest.mark.job,
+    ),
+    pytest.param(
+        "job_list",
+        DbtCloudJobListCommand(api_token=API_TOKEN, account_id=ACCOUNT_ID),
+        load_response("job_list_response"),
         "get",
         marks=pytest.mark.job,
     ),
