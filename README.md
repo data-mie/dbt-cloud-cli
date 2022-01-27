@@ -311,7 +311,7 @@ dbt-cloud job create --project-id REFACTED --environment-id 49819 --name "Create
 
 ## dbt-cloud job delete
 
-This command deletes a job in a dbt Cloud project. Note that this command uses an undocumented v3 API endpoint.
+This command deletes a job in a dbt Cloud project. Note that this command uses an undocumented v3 API endpoint. For more information on the command and its arguments, run `dbt-cloud job delete --help`.
 
 ### Usage
 
@@ -372,6 +372,133 @@ This command deletes a job in a dbt Cloud project. Note that this command uses a
     "next_run_humanized": null
   }
 }
+```
+
+## dbt-cloud job delete-all
+
+This command fetches all jobs on the account, deletes them one-by-one after user confirmation via prompt and prints out the job delete responses. For more information on the command and its arguments, run `dbt-cloud job delete-all --help`.
+
+### Usage
+
+```bash
+>> dbt-cloud job delete-all --keep-jobs "[43167, 49663]"
+Jobs to delete: [54658, 54659]
+Delete job 54658? [y/N]: yes
+Job 54658 was deleted.
+Delete job 54659? [y/N]: yes
+Job 54659 was deleted.
+[
+  {
+    "status": {
+      "code": 200,
+      "is_success": true,
+      "user_message": "Success!",
+      "developer_message": ""
+    },
+    "data": {
+      "execution": {
+        "timeout_seconds": 0
+      },
+      "generate_docs": false,
+      "run_generate_sources": false,
+      "id": 54658,
+      "account_id": REDACTED,
+      "project_id": REDACTED,
+      "environment_id": 49819,
+      "name": "Do nothing!",
+      "dbt_version": null,
+      "created_at": "2022-01-27T09:04:26.080595+00:00",
+      "updated_at": "2022-01-27T09:05:10.527583+00:00",
+      "execute_steps": [
+        "dbt run -s not_a_model"
+      ],
+      "state": 2,
+      "deferring_job_definition_id": null,
+      "lifecycle_webhooks": false,
+      "lifecycle_webhooks_url": null,
+      "triggers": {
+        "github_webhook": false,
+        "git_provider_webhook": null,
+        "custom_branch_only": true,
+        "schedule": false
+      },
+      "settings": {
+        "threads": 4,
+        "target_name": "default"
+      },
+      "schedule": {
+        "cron": "0 * * * *",
+        "date": {
+          "type": "every_day"
+        },
+        "time": {
+          "type": "every_hour",
+          "interval": 1
+        }
+      },
+      "is_deferrable": false,
+      "generate_sources": false,
+      "cron_humanized": "Every hour",
+      "next_run": null,
+      "next_run_humanized": null
+    }
+  },
+  {
+    "status": {
+      "code": 200,
+      "is_success": true,
+      "user_message": "Success!",
+      "developer_message": ""
+    },
+    "data": {
+      "execution": {
+        "timeout_seconds": 0
+      },
+      "generate_docs": false,
+      "run_generate_sources": false,
+      "id": 54659,
+      "account_id": REDACTED,
+      "project_id": REDACTED,
+      "environment_id": 49819,
+      "name": "Do nothing!",
+      "dbt_version": null,
+      "created_at": "2022-01-27T09:04:43.231873+00:00",
+      "updated_at": "2022-01-27T09:05:19.533456+00:00",
+      "execute_steps": [
+        "dbt run -s not_a_model"
+      ],
+      "state": 2,
+      "deferring_job_definition_id": null,
+      "lifecycle_webhooks": false,
+      "lifecycle_webhooks_url": null,
+      "triggers": {
+        "github_webhook": false,
+        "git_provider_webhook": null,
+        "custom_branch_only": true,
+        "schedule": false
+      },
+      "settings": {
+        "threads": 4,
+        "target_name": "default"
+      },
+      "schedule": {
+        "cron": "0 * * * *",
+        "date": {
+          "type": "every_day"
+        },
+        "time": {
+          "type": "every_hour",
+          "interval": 1
+        }
+      },
+      "is_deferrable": false,
+      "generate_sources": false,
+      "cron_humanized": "Every hour",
+      "next_run": null,
+      "next_run_humanized": null
+    }
+  }
+]
 ```
 
 ## dbt-cloud job export
