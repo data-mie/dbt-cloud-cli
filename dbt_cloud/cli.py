@@ -144,13 +144,16 @@ def delete(**kwargs):
 )
 @click.option("--dry-run", is_flag=True, help="Execute as a dry run.")
 @click.option(
+    "-y", "--yes", "assume_yes", is_flag=True, help="Automatic yes to prompts."
+)
+@click.option(
     "-f",
     "--file",
     default="-",
     type=click.File("w"),
     help="Response export file path.",
 )
-def delete_all(keep_jobs, dry_run, file, **kwargs):
+def delete_all(keep_jobs, dry_run, file, assume_yes, **kwargs):
     list_command = DbtCloudJobListCommand.from_click_options(**kwargs)
     response = list_command.execute()
     response.raise_for_status()
@@ -164,7 +167,11 @@ def delete_all(keep_jobs, dry_run, file, **kwargs):
     if not dry_run:
         for job_id in job_ids_to_delete:
             delete_command = DbtCloudJobDeleteCommand(**kwargs, job_id=job_id)
-            if click.confirm(f"Delete job {job_id}?"):
+            if assume_yes:
+                is_confirmed = True
+            else:
+                is_confirmed = click.confirm(f"Delete job {job_id}?")
+            if is_confirmed:
                 response = delete_command.execute()
                 response.raise_for_status()
                 deleted_job_responses.append(response.json())
