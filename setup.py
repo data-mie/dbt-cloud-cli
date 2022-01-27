@@ -1,12 +1,12 @@
 from pathlib import Path
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 README = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name="dbt-cloud-cli",
-    version="0.5.0",
+    version="0.5.1",
     description="dbt Cloud command line interface (CLI)",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -20,7 +20,7 @@ setup(
         "Programming Language :: Python :: 3.6",
     ],
     python_requires=">=3.6",
-    packages=["dbt_cloud"],
+    packages=find_packages(exclude=("tests",)),
     install_requires=["requests", "click", "pydantic", "mergedeep"],
     extras_require={
         "test": ["pytest", "pytest-cov", "pytest-datadir", "requests-mock"],
