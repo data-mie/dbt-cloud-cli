@@ -2,7 +2,7 @@ import click
 from mergedeep import merge
 from pydantic import validator, BaseModel, PrivateAttr
 from dbt_cloud.serde import json_to_dict
-from dbt_cloud.field import API_TOKEN_FIELD, ACCOUNT_ID_FIELD
+from dbt_cloud.field import API_TOKEN_FIELD, ACCOUNT_ID_FIELD, DBT_CLOUD_HOST_FIELD
 
 
 def translate_click_options(**kwargs) -> dict:
@@ -72,6 +72,7 @@ class DbtCloudBaseModel(BaseModel):
 class DbtCloudCommand(DbtCloudBaseModel):
     api_token: str = API_TOKEN_FIELD
     account_id: int = ACCOUNT_ID_FIELD
+    dbt_cloud_host: str = DBT_CLOUD_HOST_FIELD
     _api_version: str = PrivateAttr("v2")
 
     @property
@@ -80,7 +81,7 @@ class DbtCloudCommand(DbtCloudBaseModel):
 
     @property
     def api_url(self) -> str:
-        return f"https://cloud.getdbt.com/api/{self._api_version}/accounts/{self.account_id}"
+        return f"https://{self.dbt_cloud_host}/api/{self._api_version}/accounts/{self.account_id}"
 
     @classmethod
     def get_description(cls) -> str:
