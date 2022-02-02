@@ -87,6 +87,6 @@ class DbtCloudCommand(DbtCloudBaseModel):
     def get_description(cls) -> str:
         return cls.__doc__.strip()
 
-    def get_payload(self, exclude=["api_token","dbt_cloud_host"]) -> dict:
+    def get_payload(self, exclude=["api_token", "dbt_cloud_host"]) -> dict:
         payload = self.json(exclude=set(exclude))
         return json_to_dict(payload)
