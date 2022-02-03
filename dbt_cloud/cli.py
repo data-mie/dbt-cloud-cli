@@ -16,6 +16,7 @@ from dbt_cloud.command import (
     DbtCloudMetadataQueryCommand,
     DbtCloudRunListCommand,
     DbtCloudJobListCommand,
+    DbtCloudProjectListCommand,
 )
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
@@ -56,6 +57,11 @@ def job():
 
 @dbt_cloud.group(name="run")
 def job_run():
+    pass
+
+
+@dbt_cloud.group()
+def project():
     pass
 
 
@@ -255,6 +261,13 @@ def get_artifact(file, **kwargs):
     response = command.execute()
     file.write(response.content)
     response.raise_for_status()
+
+
+@project.command(help=DbtCloudProjectListCommand.get_description())
+@DbtCloudProjectListCommand.click_options
+def list(**kwargs):
+    command = DbtCloudProjectListCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
 
 
 @metadata.command(help=DbtCloudMetadataQueryCommand.get_description())
