@@ -21,7 +21,7 @@ Installation from GitHub:
 
 The following environment variables are used as argument defaults:
 
-* `DBT_CLOUD_HOST` (`--dbt-cloud-host`): dbt Cloud host (`cloud.synoste.com` (multi-tenant instance) by default if the environment variable is not set)
+* `DBT_CLOUD_HOST` (`--dbt-cloud-host`): dbt Cloud host (`cloud.getdbt.com` (multi-tenant instance) by default if the environment variable is not set)
 * `DBT_CLOUD_API_TOKEN` (`--api-token`): API authentication key
 * `DBT_CLOUD_ACCOUNT_ID` (`--account-id`): Numeric ID of the dbt Cloud account
 * `DBT_CLOUD_JOB_ID` (`--job-id`): Numeric ID of a dbt Cloud job
