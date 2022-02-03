@@ -976,4 +976,4 @@ This command queries the dbt Cloud Metadata API using GraphQL. For more informat
 
 ## Acknowledgements
 
-Thanks to [Sean McInture](https://github.com/boxysean) for his initial work on triggering a dbt Cloud job using Python as proposed in [this post on dbt Discourse](https://discourse.getdbt.com/t/triggering-a-dbt-cloud-job-in-your-automated-workflow-with-python/2573). Thank you for sharing your work with the community!
+Thanks to [Sean McIntyre](https://github.com/boxysean) for his initial work on triggering a dbt Cloud job using Python as proposed in [this post on dbt Discourse](https://discourse.getdbt.com/t/triggering-a-dbt-cloud-job-in-your-automated-workflow-with-python/2573). Thank you for sharing your work with the community!
