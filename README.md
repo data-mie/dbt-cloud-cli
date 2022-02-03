@@ -24,6 +24,7 @@ The following environment variables are used as argument defaults:
 * `DBT_CLOUD_API_TOKEN` (`--api-token`)
 * `DBT_CLOUD_ACCOUNT_ID` (`--account-id`)
 * `DBT_CLOUD_JOB_ID` (`--job-id`)
+* `DBT_CLOUD_HOST` (`--dbt-cloud-host`)
 
 # Commands
 

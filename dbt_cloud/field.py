@@ -1,6 +1,11 @@
 import os
 from pydantic import Field
 
+DBT_CLOUD_HOST_FIELD = Field(
+    default_factory=lambda: os.getenv("DBT_CLOUD_HOST", default="cloud.getdbt.com"),
+    description="dbt Cloud Host (defaults to 'cloud.getdbt.com' unless 'DBT_CLOUD_HOST environment variable is set)",
+)
+
 API_TOKEN_FIELD = Field(
     default_factory=lambda: os.environ["DBT_CLOUD_API_TOKEN"],
     description="API authentication key (default: 'DBT_CLOUD_API_TOKEN' environment variable)",
