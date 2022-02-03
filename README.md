@@ -21,13 +21,15 @@ Installation from GitHub:
 
 The following environment variables are used as argument defaults:
 
-* `DBT_CLOUD_API_TOKEN` (`--api-token`)
-* `DBT_CLOUD_ACCOUNT_ID` (`--account-id`)
-* `DBT_CLOUD_JOB_ID` (`--job-id`)
-* `DBT_CLOUD_HOST` (`--dbt-cloud-host`)
+* `DBT_CLOUD_HOST` (`--dbt-cloud-host`): dbt Cloud host (`cloud.synoste.com` (multi-tenant instance) by default if the environment variable is not set)
+* `DBT_CLOUD_API_TOKEN` (`--api-token`): API authentication key
+* `DBT_CLOUD_ACCOUNT_ID` (`--account-id`): Numeric ID of the dbt Cloud account
+* `DBT_CLOUD_JOB_ID` (`--job-id`): Numeric ID of a dbt Cloud job
+
 
 # Commands
 
+* [dbt-cloud project list](#dbt-cloud-project-list)
 * [dbt-cloud job run](#dbt-cloud-job-run)
 * [dbt-cloud job get](#dbt-cloud-job-get)
 * [dbt-cloud job list](#dbt-cloud-job-list)
@@ -41,6 +43,56 @@ The following environment variables are used as argument defaults:
 * [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts)
 * [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact)
 * [dbt-cloud metadata query](#dbt-cloud-metadata-query)
+
+
+## dbt-cloud project list
+This command returns a list of projects in the account. For more information on the API endpoint arguments and response, run `dbt-cloud project list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listProjects).
+
+### Usage
+```bash
+>> dbt-cloud project list
+{
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": [
+    {
+      "name": "jaffle_shop",
+      "account_id": REDACTED,
+      "repository_id": REDACTED,
+      "connection_id": REDACTED,
+      "id": 26597,
+      "created_at": "2021-04-14 20:23:00.395285+00:00",
+      "updated_at": "2021-11-16 16:32:43.960836+00:00",
+      "skipped_setup": false,
+      "state": 1,
+      "dbt_project_subdirectory": null,
+      "connection": REDACTED,
+      "repository": REDACTED,
+      "group_permissions": [],
+      "docs_job_id": null,
+      "freshness_job_id": null,
+      "docs_job": null,
+      "freshness_job": null
+    }
+  ],
+  "extra": {
+    "filters": {
+      "account_id": REDACTED,
+      "limit": 100,
+      "offset": 0
+    },
+    "order_by": "id",
+    "pagination": {
+      "count": 1,
+      "total_count": 1
+    }
+  }
+}
+```
 
 ## dbt-cloud job run
 This command triggers a dbt Cloud job run and returns a status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud job run --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun).
