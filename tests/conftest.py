@@ -11,6 +11,7 @@ from dbt_cloud.command import (
     DbtCloudRunListArtifactsCommand,
     DbtCloudRunGetArtifactCommand,
     DbtCloudRunListCommand,
+    DbtCloudProjectListCommand,
 )
 
 
@@ -117,6 +118,13 @@ COMMAND_TEST_CASES = [
         load_response("run_get_artifact_response"),
         "get",
         marks=pytest.mark.run,
+    ),
+    pytest.param(
+        "project_list_artifact",
+        DbtCloudProjectListCommand(api_token=API_TOKEN, account_id=ACCOUNT_ID),
+        load_response("project_list_response"),
+        "get",
+        marks=pytest.mark.project,
     ),
 ]
 
