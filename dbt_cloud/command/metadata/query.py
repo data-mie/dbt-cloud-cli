@@ -1,5 +1,5 @@
 import requests
-from pydantic import PrivateAttr, Field
+from pydantic import Field
 from dbt_cloud.command.command import DbtCloudCommand
 
 
@@ -14,7 +14,7 @@ class DbtCloudMetadataQueryCommand(DbtCloudCommand):
 
     @property
     def api_url(self) -> str:
-        return "https://metadata.cloud.getdbt.com/graphql"
+        return f"https://metadata.{self.dbt_cloud_host}/graphql"
 
     def execute(self) -> requests.Response:
         response = requests.post(

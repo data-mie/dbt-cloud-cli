@@ -12,10 +12,7 @@ class DbtCloudJobDeleteCommand(DbtCloudCommand):
 
     @property
     def api_url(self) -> str:
-        api_url = f"{super().api_url}/jobs"
-        if self.job_id is not None:
-            api_url = f"{api_url}/{self.job_id}"
-        return api_url
+        return f"{super().api_url}/jobs/{self.job_id}"
 
     def execute(self) -> requests.Response:
         response = requests.delete(url=self.api_url, headers=self.request_headers)

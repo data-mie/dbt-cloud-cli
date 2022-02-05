@@ -16,7 +16,7 @@ class DbtCloudRunStatus(IntEnum):
 
 
 class DbtCloudRunGetCommand(DbtCloudCommand):
-    """Prints a dbt Cloud run status JSON response."""
+    """Returns the details of a dbt Cloud run."""
 
     run_id: int = RUN_ID_FIELD
     include_related: Optional[List[str]] = Field(
