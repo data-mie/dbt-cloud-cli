@@ -2,8 +2,10 @@
 
 `dbt-cloud-cli` is a command line interface for [dbt Cloud API](https://docs.getdbt.com/dbt-cloud/api-v2). It abstracts the REST API calls in an easy-to-use interface that can be incorporated into automated and manual (ad-hoc) workloads. Here are some example use cases for `dbt-cloud-cli`:
 
-1. Triggering dbt Cloud jobs in CI/CD: You can use [dbt-cloud job run](#dbt-cloud-job-run) in a CI/CD workflow (e.g., Github Actions) to trigger a dbt Cloud job that runs and tests the changes in a commit branch
-2. Setting up dbt Cloud jobs: You can use [dbt-cloud job create](#dbt-cloud-job-create) to create standardized jobs between dbt Cloud projects.
+1. Triggering a dbt Cloud job to run in a CI/CD pipeline: Use [dbt-cloud job run](#dbt-cloud-job-run) in a CI/CD workflow (e.g., Github Actions) to trigger a dbt Cloud job that runs and tests the changes in a commit branch
+2. Setting up dbt Cloud jobs: Use [dbt-cloud job create](#dbt-cloud-job-create) to create standardized jobs between dbt Cloud projects. You can also use [dbt-cloud job export](#dbt-cloud-job-export) to export an existing job from one dbt Cloud project and then [dbt-cloud job import](#dbt-cloud-job-import) to import it to another.
+3. Downloading run artifacts: Use [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) to download run artifacts (e.g., `catalog.json`) from dbt Cloud.
+4. Retrieving metadata: Use [dbt-cloud metadata query](#dbt-cloud-metadata-query) to retrieve metadata (e.g., model execution times, test results) from a dbt Cloud project.
 
 ## Installation
 
@@ -25,6 +27,27 @@ The following environment variables are used as argument defaults:
 * `DBT_CLOUD_API_TOKEN` (`--api-token`): API authentication key
 * `DBT_CLOUD_ACCOUNT_ID` (`--account-id`): Numeric ID of the dbt Cloud account
 * `DBT_CLOUD_JOB_ID` (`--job-id`): Numeric ID of a dbt Cloud job
+
+# API coverage
+
+Group | API endpoint | Command | Description |
+| --- | --- | --- | --- |
+| Accounts | [https://cloud.getdbt.com/api/v2/accounts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts) | `dbt-cloud account list` | Not implemented yet |
+| Accounts | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getAccountById) | `dbt-cloud account get` | Not implemented yet |
+| Projects | https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | Returns a list of projects in the account |
+| Projects | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/{projectId}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getProjectById) | `dbt-cloud project get` | Not implemented yet |
+| Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listJobsForAccount) | [dbt-cloud job list](#dbt-cloud-job-list) | Returns a list of jobs in the account |
+| Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getJobById) | [dbt-cloud job get](#dbt-cloud-job-get) | Returns the details of a dbt Cloud job |
+| Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/createJob) | [dbt-cloud job create](#dbt-cloud-job-create) | Creates a job in a dbt Cloud project |
+| Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/updateJobById) | `dbt-cloud job update` | Not implemented yet |
+| Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/run/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun) | [dbt-cloud job run](#dbt-cloud-job-run) | Triggers a dbt Cloud job run and returns a run status JSON response |
+| Jobs | https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/ | [dbt-cloud job delete](#dbt-cloud-job-delete) | Deletes a job in a dbt Cloud project |
+| Runs | [https://cloud.getdbt.com/api/v4/accounts/{accountID}/runs](https://docs.getdbt.com/dbt-cloud/api-v4#operation/list-account-runs) | [dbt-cloud run list](#dbt-cloud-run-list) | Returns a list of runs in the account |
+| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById) | [dbt-cloud run get](#dbt-cloud-run-get) | Returns the details of a dbt Cloud run |
+| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/artifacts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listArtifactsByRunId) | [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts) | Fetches a list of artifact files generated for a completed run |
+| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/artifacts/{path}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getArtifactsByRunId) | [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) | Fetches an artifact file from a completed run |
+| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/cancel/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/cancelRunById) | `dbt-cloud run cancel` | Not implemented yet |
+| Metadata | [https://metadata.cloud.getdbt.com/graphql](https://docs.getdbt.com/docs/dbt-cloud/dbt-cloud-api/metadata/metadata-overview) | [dbt-cloud metadata query](#dbt-cloud-metadata-query) | Queries the dbt Cloud Metadata API using GraphQL |
 
 
 # Commands
@@ -146,7 +169,7 @@ This command returns a list of projects in the account. For more information on 
 ```
 
 ## dbt-cloud job run
-This command triggers a dbt Cloud job run and returns a status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud job run --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun).
+This command triggers a dbt Cloud job run and returns a run status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud job run --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun).
 
 ### Usage
 
@@ -481,6 +504,8 @@ This command deletes a job in a dbt Cloud project. Note that this command uses a
 
 ## dbt-cloud job delete-all
 
+**This command is a composition of one or more base commands.**
+
 This command fetches all jobs on the account, deletes them one-by-one after user confirmation via prompt and prints out the job delete responses. For more information on the command and its arguments, run `dbt-cloud job delete-all --help`.
 
 ### Usage
@@ -608,6 +633,8 @@ Job 54659 was deleted.
 
 ## dbt-cloud job export
 
+**This command is a composition of one or more base commands.**
+
 This command exports a dbt Cloud job as JSON to a file and can be used in conjunction with [dbt-cloud job import](#dbt-cloud-job-import) to copy jobs between dbt Cloud projects.
 
 ### Usage
@@ -663,6 +690,8 @@ This command exports a dbt Cloud job as JSON to a file and can be used in conjun
 ```
 
 ## dbt-cloud job import
+
+**This command is a composition of one or more base commands.**
 
 This command imports a dbt Cloud job from exported JSON. You can use JSON manipulation tools (e.g., [jq](https://stedolan.github.io/jq/)) to modify the job definition before importing it.
 
@@ -728,7 +757,7 @@ This command imports a dbt Cloud job from exported JSON. You can use JSON manipu
 ```
 
 ## dbt-cloud run get
-This command prints a dbt Cloud run status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud run get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById).
+This command returns the details of a dbt Cloud run. For more information on the API endpoint arguments and response, run `dbt-cloud run get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById).
 
 ### Usage
 
