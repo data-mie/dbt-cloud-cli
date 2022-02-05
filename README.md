@@ -2,8 +2,10 @@
 
 `dbt-cloud-cli` is a command line interface for [dbt Cloud API](https://docs.getdbt.com/dbt-cloud/api-v2). It abstracts the REST API calls in an easy-to-use interface that can be incorporated into automated and manual (ad-hoc) workloads. Here are some example use cases for `dbt-cloud-cli`:
 
-1. Triggering dbt Cloud jobs in CI/CD: You can use [dbt-cloud job run](#dbt-cloud-job-run) in a CI/CD workflow (e.g., Github Actions) to trigger a dbt Cloud job that runs and tests the changes in a commit branch
-2. Setting up dbt Cloud jobs: You can use [dbt-cloud job create](#dbt-cloud-job-create) to create standardized jobs between dbt Cloud projects.
+1. Triggering a dbt Cloud job to run in a CI/CD pipeline: Use [dbt-cloud job run](#dbt-cloud-job-run) in a CI/CD workflow (e.g., Github Actions) to trigger a dbt Cloud job that runs and tests the changes in a commit branch
+2. Setting up dbt Cloud jobs: Use [dbt-cloud job create](#dbt-cloud-job-create) to create standardized jobs between dbt Cloud projects. You can also use [dbt-cloud job export](#dbt-cloud-job-export) to export an existing job from one dbt Cloud project and then [dbt-cloud job import](#dbt-cloud-job-import) to import it to another.
+3. Downloading run artifacts: Use [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) to download run artifacts (e.g., `catalog.json`) from dbt Cloud.
+4. Retrieving metadata: Use [dbt-cloud metadata query](#dbt-cloud-metadata-query) to retrieve metadata (e.g., model execution times, test results) from a dbt Cloud project.
 
 ## Installation
 
