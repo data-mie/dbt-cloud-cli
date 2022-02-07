@@ -27,5 +27,10 @@ setup(
         "lint": ["black"],
     },
     scripts=[],
-    entry_points={"console_scripts": ["dbt-cloud = dbt_cloud.cli:dbt_cloud"]},
+    entry_points={
+        "console_scripts": [
+            "dbt-cloud = dbt_cloud.cli:dbt_cloud",
+            "dbt-catalog = dbt_cloud.demo.catalog:catalog",
+        ]
+    },
 )

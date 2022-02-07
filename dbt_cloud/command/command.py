@@ -68,6 +68,10 @@ class DbtCloudBaseModel(BaseModel):
         kwargs_translated = translate_click_options(**kwargs)
         return cls(**kwargs_translated)
 
+    @classmethod
+    def get_description(cls) -> str:
+        return cls.__doc__.strip()
+
 
 class DbtCloudCommand(DbtCloudBaseModel):
     api_token: str = API_TOKEN_FIELD
@@ -82,10 +86,6 @@ class DbtCloudCommand(DbtCloudBaseModel):
     @property
     def api_url(self) -> str:
         return f"https://{self.dbt_cloud_host}/api/{self._api_version}/accounts/{self.account_id}"
-
-    @classmethod
-    def get_description(cls) -> str:
-        return cls.__doc__.strip()
 
     def get_payload(self, exclude=["api_token", "dbt_cloud_host"]) -> dict:
         payload = self.json(exclude=set(exclude))
