@@ -1003,6 +1003,37 @@ This command queries the dbt Cloud Metadata API using GraphQL. For more informat
 }
 ```
 
+# Demo utilities
+
+## dbt-cloud demo data-catalog
+
+An interactive CLI application for exploring `catalog.json` artifacts.
+
+### Usage
+
+```bash
+>> latest_run_id=$(dbt-cloud run list --job-id $DBT_CLOUD_JOB_ID --limit 1 | jq .data[0].id -r)
+>> dbt-cloud run get-artifact --run-id $latest_run_id --path catalog.json -f catalog.json
+>> dbt-cloud demo data-catalog -f catalog.json
+
+
+
+  #####           ##              ###           ##           ##               
+  ##  ##          ##             ## ##          ##           ##               
+ ##   ##   ###  #####   ###     ##  ##   ###  #####   ###   ##    ###    #### 
+ ##   ##  #  ##  ##    #  ##    ##      #  ##  ##    #  ##  ##   ## ##  ## ## 
+ ##  ##    ####  ##     ####   ##        ####  ##     ####  ##  ##  ##  #  ## 
+##   ##  ## ##  ##    ## ##    ##   #  ## ##  ##    ## ##  ##   ##  ## ##  #  
+##  ##   ## ##  ##    ## ##    ##  ##  ## ##  ##    ## ##  ##   ## ##  ## ##  
+#####     ## ##  ##    ## ##    ####    ## ##  ##    ## ## ##    ###    ####  
+                                                                         ##   
+                                                                       ###    
+
+[?] Select attribute to explore: sources
+ > sources
+   nodes
+```
+
 ## Acknowledgements
 
 Thanks to [Sean McIntyre](https://github.com/boxysean) for his initial work on triggering a dbt Cloud job using Python as proposed in [this post on dbt Discourse](https://discourse.getdbt.com/t/triggering-a-dbt-cloud-job-in-your-automated-workflow-with-python/2573). Thank you for sharing your work with the community!

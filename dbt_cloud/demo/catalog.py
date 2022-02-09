@@ -121,12 +121,20 @@ def explore_nodes(nodes: Dict[str, Node], node_type: str = "node"):
 
 
 @click.command(help="An inteactive application for exploring catalog artifacts.")
-def data_catalog(**kwargs):
+@click.option(
+    "-f",
+    "--file",
+    default="catalog.json",
+    type=str,
+    help="Catalog file path.",
+)
+def data_catalog(file):
     import inquirer
+    from art import tprint
 
-    catalog = Catalog.parse_file("catalog.json")
+    catalog = Catalog.parse_file(file)
     nodes = {node.name: node for node in catalog.nodes.values()}
-
+    tprint("Data Catalog", font="rand-large")
     while True:
         attribute_options = [
             inquirer.List(
