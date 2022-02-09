@@ -1005,6 +1005,8 @@ This command queries the dbt Cloud Metadata API using GraphQL. For more informat
 
 # Demo utilities
 
+The utilities listed here are for demonstration purposes only and are subject to change.
+
 ## dbt-cloud demo data-catalog
 
 An interactive CLI application for exploring `catalog.json` artifacts.
