@@ -41,13 +41,8 @@ class Catalog(DbtCloudBaseModel):
     errors: Optional[Dict]
 
 
-@click.group()
-def catalog():
-    pass
-
-
-@catalog.command(help="Explores a dbt catalog.json artifact.")
-def explore(**kwargs):
+@click.command(help="An inteactive application for exploring catalog artifacts.")
+def data_catalog(**kwargs):
     import inquirer
 
     catalog = Catalog.parse_file("catalog.json")
