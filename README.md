@@ -1005,7 +1005,11 @@ This command queries the dbt Cloud Metadata API using GraphQL. For more informat
 
 # Demo utilities
 
-The utilities listed here are for demonstration purposes only and are subject to change.
+The utilities listed here are for demonstration purposes only and are subject to change. In order to use the demo utilities you need to install the `dbt-cloud-cli` with extra `demo` dependencies:
+
+```bash
+pip install dbt-cloud-cli[demo]
+```
 
 ## dbt-cloud demo data-catalog
 
