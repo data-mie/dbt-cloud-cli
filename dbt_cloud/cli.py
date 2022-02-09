@@ -18,6 +18,7 @@ from dbt_cloud.command import (
     DbtCloudJobListCommand,
     DbtCloudProjectListCommand,
 )
+from dbt_cloud.demo import data_catalog
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
 
@@ -50,22 +51,22 @@ def dbt_cloud():
         http_client.HTTPConnection.debuglevel = 1
 
 
-@dbt_cloud.group()
+@dbt_cloud.group(help="dbt Cloud job commands")
 def job():
     pass
 
 
-@dbt_cloud.group(name="run")
+@dbt_cloud.group(name="run", help="dbt Cloud run commands")
 def job_run():
     pass
 
 
-@dbt_cloud.group()
+@dbt_cloud.group(help="dbt Cloud project commands")
 def project():
     pass
 
 
-@dbt_cloud.group()
+@dbt_cloud.group(help="dbt Cloud Metadata API commands")
 def metadata():
     pass
 
@@ -284,3 +285,11 @@ def query(file, **kwargs):
         query=file.read(), **kwargs
     )
     execute_and_print(command)
+
+
+@dbt_cloud.group(help="Demo applications")
+def demo():
+    pass
+
+
+demo.add_command(data_catalog)
