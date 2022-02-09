@@ -25,6 +25,7 @@ setup(
     extras_require={
         "test": ["pytest", "pytest-cov", "pytest-datadir", "requests-mock"],
         "lint": ["black"],
+        "demo": ["inquirer"],
     },
     scripts=[],
     entry_points={"console_scripts": ["dbt-cloud = dbt_cloud.cli:dbt_cloud"]},
