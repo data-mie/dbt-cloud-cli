@@ -1,6 +1,5 @@
 import click
-from typing import Optional, Dict, Any
-from pydantic import Field, BaseModel
+from typing import Optional, Dict, Any, List
 from dbt_cloud.command.command import DbtCloudBaseModel
 
 
@@ -76,36 +75,26 @@ class Catalog(DbtCloudBaseModel):
     errors: Optional[Dict]
 
 
-def explore_nodes(nodes: Dict[str, Node], node_type: str = "node"):
+def explore_nodes(nodes: List[Node], node_type: str = "node"):
     import inquirer
 
     while True:
-        databases = sorted(set([node.database for node in nodes.values()]))
+        databases = sorted(set(map(lambda x: x.database, nodes)))
         database_options = [
             inquirer.List("database", message="Select database", choices=databases)
         ]
         database = inquirer.prompt(database_options)["database"]
-        nodes_filtered = {
-            node_name: node
-            for node_name, node in nodes.items()
-            if node.database == database
-        }
+        nodes_filtered = list(filter(lambda x: x.database == database, nodes))
 
-        schemas = sorted(set([node.schema for node in nodes_filtered.values()]))
+        schemas = sorted(set(map(lambda x: x.schema, nodes_filtered)))
         schema_options = [
             inquirer.List("schema", message="Select schema", choices=schemas)
         ]
         schema = inquirer.prompt(schema_options)["schema"]
-        nodes_filtered = {
-            node_name: node
-            for node_name, node in nodes_filtered.items()
-            if node.schema == schema
-        }
+        nodes_filtered = list(filter(lambda x: x.schema == schema, nodes_filtered))
 
         node_options = [
-            inquirer.List(
-                "node", message="Select node", choices=sorted(nodes_filtered.values())
-            )
+            inquirer.List("node", message="Select node", choices=sorted(nodes_filtered))
         ]
         node = inquirer.prompt(node_options)["node"]
         click.echo(f"{node.name} columns:")
@@ -133,7 +122,8 @@ def data_catalog(file):
     from art import tprint
 
     catalog = Catalog.parse_file(file)
-    nodes = {node.name: node for node in catalog.nodes.values()}
+    nodes = list(catalog.nodes.values())
+    sources = list(catalog.sources.values())
     tprint("Data Catalog", font="rand-large")
     while True:
         attribute_options = [
@@ -148,6 +138,6 @@ def data_catalog(file):
         if attribute == "nodes":
             explore_nodes(nodes)
         elif attribute == "sources":
-            explore_nodes(catalog.sources, node_type="source")
+            explore_nodes(sources, node_type="source")
         if not click.confirm("Explore another attribute?"):
             break
