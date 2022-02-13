@@ -1035,9 +1035,9 @@ An interactive CLI application for exploring `catalog.json` artifacts.
                                                                          ##   
                                                                        ###    
 
-[?] Select attribute to explore: sources
- > sources
-   nodes
+[?] Select node type to explore: source
+ > source
+   node
 ```
 
 ## Acknowledgements

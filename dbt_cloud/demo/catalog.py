@@ -1,9 +1,9 @@
 import click
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
 from pydantic import BaseModel, Field
-from dbt_cloud.command.command import DbtCloudBaseModel
+from dbt_cloud.command.command import CLIBaseModel
 
 
 class Stats(BaseModel):
@@ -75,47 +75,57 @@ class Catalog(BaseModel):
 
 
 class NodeType(Enum):
-    NODE = "node"
     SOURCE = "source"
+    NODE = "node"
 
 
-class CatalogExploreCommand(DbtCloudBaseModel):
+class CatalogExploreCommand(CLIBaseModel):
     """An inteactive application for exploring catalog artifacts."""
 
     file: Path = Field(default="catalog.json", description="Catalog file path.")
+    title: str = Field(
+        default="Data Catalog", description="ASCII art title for the app."
+    )
+    title_font: str = Field(
+        default="rand-large",
+        description="ASCII art title font (see https://github.com/sepandhaghighi/art#try-art-in-your-browser for a list of available fonts)",
+    )
 
     def get_catalog(self) -> Catalog:
         return Catalog.parse_file(self.file)
 
-    def execute(self):
-        import inquirer
+    def print_title(self):
         from art import tprint
 
-        catalog = self.get_catalog()
-        nodes = list(catalog.nodes.values())
-        sources = list(catalog.sources.values())
-        tprint("Data Catalog", font="rand-large")
+        tprint(self.title, font=self.title_font)
+
+    def execute(self):
+        import inquirer
+
+        self.print_title()
+
         while True:
-            attribute_options = [
+            node_type_options = [
                 inquirer.List(
-                    "attribute",
-                    message="Select attribute to explore",
-                    choices=["sources", "nodes"],
+                    "node_type",
+                    message="Select node type to explore",
+                    choices=[node_type.value for node_type in NodeType],
                 )
             ]
-            attribute = inquirer.prompt(attribute_options)["attribute"]
-
-            if attribute == "nodes":
-                self.explore_nodes(nodes)
-            elif attribute == "sources":
-                self.explore_nodes(sources, node_type=NodeType.SOURCE)
-            if not click.confirm("Explore another attribute?"):
+            node_type = NodeType(inquirer.prompt(node_type_options)["node_type"])
+            self.explore(node_type=node_type)
+            if not click.confirm("Explore another node type?"):
                 break
 
-    @classmethod
-    def explore_nodes(cls, nodes: List[Node], node_type: NodeType = NodeType.NODE):
-        """Interactive exploration of nodes or sources to explore and display their metadata"""
+    def explore(self, node_type: NodeType):
+        """Interactive exploration of nodes to explore and display their metadata"""
         import inquirer
+
+        catalog = self.get_catalog()
+        if node_type == NodeType.SOURCE:
+            nodes = list(catalog.sources.values())
+        else:
+            nodes = list(catalog.nodes.values())
 
         while True:
             databases = sorted(set(map(lambda x: x.database, nodes)))
