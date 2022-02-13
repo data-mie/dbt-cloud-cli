@@ -3,7 +3,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Optional, Dict, Any
 from pydantic import BaseModel, Field
-from dbt_cloud.command.command import CLIBaseModel
+from dbt_cloud.command.command import ClickBaseModel
 
 
 class Stats(BaseModel):
@@ -79,7 +79,7 @@ class NodeType(Enum):
     NODE = "node"
 
 
-class CatalogExploreCommand(CLIBaseModel):
+class CatalogExploreCommand(ClickBaseModel):
     """An inteactive application for exploring catalog artifacts."""
 
     file: Path = Field(default="catalog.json", description="Catalog file path.")
