@@ -2,7 +2,7 @@ import requests
 from enum import Enum
 from typing import Optional, List
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudCommand, DbtCloudBaseModel
+from dbt_cloud.command.command import DbtCloudCommand, CLIBaseModel
 
 
 class DateTypeEnum(Enum):
@@ -16,13 +16,13 @@ class TimeTypeEnum(Enum):
     AT_EXACT_HOURS = "at_exact_hours"
 
 
-class DbtCloudJobTriggers(DbtCloudBaseModel):
+class DbtCloudJobTriggers(CLIBaseModel):
     github_webhook: bool = Field(default=False)
     schedule: bool = Field(default=False)
     custom_branch_only: bool = Field(default=False)
 
 
-class DbtCloudJobSettings(DbtCloudBaseModel):
+class DbtCloudJobSettings(CLIBaseModel):
     threads: int = Field(
         default=1,
         description="The maximum number of models to run in parallel in a single dbt run.",
@@ -33,16 +33,16 @@ class DbtCloudJobSettings(DbtCloudBaseModel):
     )
 
 
-class DbtCloudJobScheduleDate(DbtCloudBaseModel):
+class DbtCloudJobScheduleDate(CLIBaseModel):
     type: DateTypeEnum = Field(default="every_day", description=None)
 
 
-class DbtCloudJobScheduleTime(DbtCloudBaseModel):
+class DbtCloudJobScheduleTime(CLIBaseModel):
     type: TimeTypeEnum = Field(default="every_hour", description=None)
     interval: int = Field(default=1)
 
 
-class DbtCloudJobSchedule(DbtCloudBaseModel):
+class DbtCloudJobSchedule(CLIBaseModel):
     cron: str = Field(
         default="0 * * * *", description="Cron-syntax schedule for the job."
     )
