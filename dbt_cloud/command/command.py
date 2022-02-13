@@ -18,7 +18,7 @@ def translate_click_options(**kwargs) -> dict:
     return kwargs_translated
 
 
-class DbtCloudBaseModel(BaseModel):
+class ClickBaseModel(BaseModel):
     @classmethod
     def click_options(cls, function, key_prefix: str = ""):
         for key, field in reversed(cls.__fields__.items()):
@@ -73,7 +73,7 @@ class DbtCloudBaseModel(BaseModel):
         return cls.__doc__.strip()
 
 
-class DbtCloudCommand(DbtCloudBaseModel):
+class DbtCloudCommand(ClickBaseModel):
     api_token: str = API_TOKEN_FIELD
     account_id: int = ACCOUNT_ID_FIELD
     dbt_cloud_host: str = DBT_CLOUD_HOST_FIELD
