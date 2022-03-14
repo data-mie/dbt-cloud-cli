@@ -104,6 +104,9 @@ jobs:
       - name: Test 'dbt-cloud run list'
         run: dbt-cloud run list --paginate --status "Succeeded"
 
+      - name: Test 'dbt-cloud run cancel'
+        run: dbt-cloud run cancel --run-id  ${{ steps.job_run.outputs.run_id }}
+
       - name: Test 'dbt-cloud run list-artifacts'
         run: dbt-cloud run list-artifacts --run-id ${{ steps.job_run.outputs.run_id }}
 
@@ -123,4 +126,3 @@ jobs:
       - name: Cleanup
         run: dbt-cloud job delete --job-id ${{ steps.job_create.outputs.job_id }}
         if: always()
-

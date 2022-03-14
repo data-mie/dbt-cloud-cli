@@ -14,7 +14,7 @@ class DbtCloudRunStatus(IntEnum):
 
 
 class DbtCloudRunCancelCommand(DbtCloudCommand):
-    """Cancels a running dbt Cloud job."""
+    """Cancels a dbt Cloud run."""
 
     run_id: int = RUN_ID_FIELD
 
