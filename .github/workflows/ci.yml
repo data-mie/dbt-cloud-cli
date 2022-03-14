@@ -126,3 +126,4 @@ jobs:
       - name: Cleanup
         run: dbt-cloud job delete --job-id ${{ steps.job_create.outputs.job_id }}
         if: always()
+
