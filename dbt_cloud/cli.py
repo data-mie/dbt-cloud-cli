@@ -15,6 +15,7 @@ from dbt_cloud.command import (
     DbtCloudRunGetArtifactCommand,
     DbtCloudMetadataQueryCommand,
     DbtCloudRunListCommand,
+    DbtCloudRunCancelCommand,
     DbtCloudJobListCommand,
     DbtCloudProjectListCommand,
 )
@@ -220,6 +221,13 @@ def import_job(file, **kwargs):
     response = command.execute()
     click.echo(dict_to_json(response.json()))
     response.raise_for_status()
+
+
+@job_run.command(help=DbtCloudRunCancelCommand.get_description())
+@DbtCloudRunCancelCommand.click_options
+def cancel(**kwargs):
+    command = DbtCloudRunCancelCommand.from_click_options(**kwargs)
+    execute_and_print(command)
 
 
 @job_run.command(help=DbtCloudRunGetCommand.get_description())

@@ -46,7 +46,7 @@ Group | API endpoint | Command | Description |
 | Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById) | [dbt-cloud run get](#dbt-cloud-run-get) | Returns the details of a dbt Cloud run |
 | Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/artifacts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listArtifactsByRunId) | [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts) | Fetches a list of artifact files generated for a completed run |
 | Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/artifacts/{path}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getArtifactsByRunId) | [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) | Fetches an artifact file from a completed run |
-| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/cancel/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/cancelRunById) | `dbt-cloud run cancel` | Not implemented yet |
+| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/cancel/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/cancelRunById) | [`dbt-cloud run cancel`](#dbt-cloud-run-cancel) | Cancels a dbt Cloud run |
 | Metadata | [https://metadata.cloud.getdbt.com/graphql](https://docs.getdbt.com/docs/dbt-cloud/dbt-cloud-api/metadata/metadata-overview) | [dbt-cloud metadata query](#dbt-cloud-metadata-query) | Queries the dbt Cloud Metadata API using GraphQL |
 
 
@@ -914,6 +914,77 @@ This command returns a list of runs in the account. For more information on the 
       "has_sources_generated": false
     }
   ]
+}
+```
+
+## dbt-cloud run cancel
+This command cancels a dbt Cloud run. For more information on the API endpoint arguments and response, run `dbt-cloud run cancel --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/cancelRunById).
+
+> A run can be to be 'cancelled' irregardless of it's previous status. This means that you can send a request to cancel a previously successful / errored run (and nothing happens practically) and the response status would be similar to
+> cancelling a currently queued or running run.
+
+### Usage
+
+```bash
+>> dbt-cloud run cancel --run-id 36053848
+{
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": {
+    "id": 36053848,
+    "trigger_id": 48392125,
+    "account_id": 123456,
+    "environment_id": 49819,
+    "project_id": 123457,
+    "job_definition_id": 37119,
+    "status": 30,
+    "dbt_version": "0.19.1",
+    "git_branch": null,
+    "git_sha": null,
+    "status_message": "Cancelled by user.",
+    "owner_thread_id": null,
+    "executed_by_thread_id": null,
+    "deferring_run_id": null,
+    "artifacts_saved": false,
+    "artifact_s3_path": null,
+    "has_docs_generated": false,
+    "has_sources_generated": false,
+    "notifications_sent": false,
+    "blocked_by": [],
+    "scribe_enabled": true,
+    "created_at": "2022-03-14 09:58:13.138036+00:00",
+    "updated_at": "2022-03-14 09:58:22.869828+00:00",
+    "dequeued_at": null,
+    "started_at": null,
+    "finished_at": "2022-03-14 09:58:22.867735+00:00",
+    "last_checked_at": null,
+    "last_heartbeat_at": null,
+    "should_start_at": null,
+    "trigger": null,
+    "job": null,
+    "environment": null,
+    "run_steps": [],
+    "status_humanized": "Cancelled",
+    "in_progress": false,
+    "is_complete": true,
+    "is_success": false,
+    "is_error": false,
+    "is_cancelled": true,
+    "href": "REDACTED",
+    "duration": "00:00:09",
+    "queued_duration": "00:00:09",
+    "run_duration": "00:00:00",
+    "duration_humanized": "9 seconds",
+    "queued_duration_humanized": "9 seconds",
+    "run_duration_humanized": "0 minutes",
+    "created_at_humanized": "9 seconds ago",
+    "finished_at_humanized": "0 minutes ago",
+    "job_id": 43167
+  }
 }
 ```
 

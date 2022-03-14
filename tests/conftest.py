@@ -2,16 +2,17 @@ import json
 import pytest
 from pathlib import Path
 from dbt_cloud.command import (
-    DbtCloudJobGetCommand,
-    DbtCloudJobListCommand,
     DbtCloudJobCreateCommand,
     DbtCloudJobDeleteCommand,
+    DbtCloudJobGetCommand,
+    DbtCloudJobListCommand,
     DbtCloudJobRunCommand,
+    DbtCloudProjectListCommand,
+    DbtCloudRunCancelCommand,
+    DbtCloudRunGetArtifactCommand,
     DbtCloudRunGetCommand,
     DbtCloudRunListArtifactsCommand,
-    DbtCloudRunGetArtifactCommand,
     DbtCloudRunListCommand,
-    DbtCloudProjectListCommand,
 )
 
 
@@ -81,6 +82,15 @@ COMMAND_TEST_CASES = [
         load_response("job_run_response"),
         "post",
         marks=pytest.mark.job,
+    ),
+    pytest.param(
+        "run_cancel",
+        DbtCloudRunCancelCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, run_id=RUN_ID
+        ),
+        load_response("run_cancel_response"),
+        "post",
+        marks=pytest.mark.run,
     ),
     pytest.param(
         "run_get",

@@ -11,6 +11,7 @@ from .run import (
     DbtCloudRunGetArtifactCommand,
     DbtCloudRunStatus,
     DbtCloudRunListCommand,
+    DbtCloudRunCancelCommand,
 )
 from .project import DbtCloudProjectListCommand
 from .metadata import DbtCloudMetadataQueryCommand
