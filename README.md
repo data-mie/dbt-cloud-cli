@@ -46,7 +46,7 @@ Group | API endpoint | Command | Description |
 | Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById) | [dbt-cloud run get](#dbt-cloud-run-get) | Returns the details of a dbt Cloud run |
 | Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/artifacts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listArtifactsByRunId) | [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts) | Fetches a list of artifact files generated for a completed run |
 | Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/artifacts/{path}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getArtifactsByRunId) | [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) | Fetches an artifact file from a completed run |
-| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/cancel/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/cancelRunById) | [`dbt-cloud run cancel`](#dbt-cloud-run-cancel) | Cancels a dbt Cloud run |
+| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/cancel/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/cancelRunById) | [dbt-cloud run cancel](#dbt-cloud-run-cancel) | Cancels a dbt Cloud run |
 | Metadata | [https://metadata.cloud.getdbt.com/graphql](https://docs.getdbt.com/docs/dbt-cloud/dbt-cloud-api/metadata/metadata-overview) | [dbt-cloud metadata query](#dbt-cloud-metadata-query) | Queries the dbt Cloud Metadata API using GraphQL |
 
 
@@ -62,6 +62,7 @@ Group | API endpoint | Command | Description |
 * [dbt-cloud job export](#dbt-cloud-job-export)
 * [dbt-cloud job import](#dbt-cloud-job-import)
 * [dbt-cloud run get](#dbt-cloud-run-get)
+* [dbt-cloud run cancel](#dbt-cloud-run-cancel)
 * [dbt-cloud run list](#dbt-cloud-run-list)
 * [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts)
 * [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact)
