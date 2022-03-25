@@ -36,6 +36,7 @@ Group | API endpoint | Command | Description |
 | Accounts | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getAccountById) | `dbt-cloud account get` | Not implemented yet |
 | Projects | https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | Returns a list of projects in the account |
 | Projects | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/{projectId}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getProjectById) | `dbt-cloud project get` | Not implemented yet |
+| Environments | https://cloud.getdbt.com/api/v3/accounts/{accountId}/projects/{projectId}/environments | [dbt-cloud environment list](#dbt-cloud-environment-list) | Retrieves environments for a given project |
 | Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listJobsForAccount) | [dbt-cloud job list](#dbt-cloud-job-list) | Returns a list of jobs in the account |
 | Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getJobById) | [dbt-cloud job get](#dbt-cloud-job-get) | Returns the details of a dbt Cloud job |
 | Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/createJob) | [dbt-cloud job create](#dbt-cloud-job-create) | Creates a job in a dbt Cloud project |
@@ -53,6 +54,7 @@ Group | API endpoint | Command | Description |
 # Commands
 
 * [dbt-cloud project list](#dbt-cloud-project-list)
+* [dbt-cloud environment list](#dbt-cloud-environment-list)
 * [dbt-cloud job run](#dbt-cloud-job-run)
 * [dbt-cloud job get](#dbt-cloud-job-get)
 * [dbt-cloud job list](#dbt-cloud-job-list)
@@ -167,6 +169,126 @@ This command returns a list of projects in the account. For more information on 
       }
     }
   }
+```
+
+## dbt-cloud environment list
+This command retrieves environments for a given project. For more information on the command, run `dbt-cloud environment list --help`. This command uses the API v3 which has no official documentation yet.
+
+### Usage
+```bash
+>> dbt-cloud environment list
+{
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": [
+    {
+      "id": REDACTED,
+      "account_id": REDACTED,
+      "project_id": REDACTED,
+      "credentials_id": null,
+      "name": "Development",
+      "dbt_version": "0.21.0",
+      "type": "development",
+      "use_custom_branch": false,
+      "custom_branch": null,
+      "supports_docs": false,
+      "state": 1,
+      "created_at": "2021-11-16 16:26:02.542507+00:00",
+      "updated_at": "2021-11-16 16:26:02.542525+00:00",
+      "project": {
+        "name": "jaffle_shop",
+        "account_id": REDACTED,
+        "repository_id": REDACTED,
+        "connection_id": REDACTED,
+        "id": REDACTED,
+        "created_at": "2021-04-14 20:23:00.395285+00:00",
+        "updated_at": "2021-11-16 16:32:43.960836+00:00",
+        "skipped_setup": false,
+        "state": 1,
+        "dbt_project_subdirectory": null,
+        "connection": {
+          "id": REDACTED,
+          "account_id": REDACTED,
+          "project_id": REDACTED,
+          "name": "Bigquery",
+          "type": "bigquery",
+          "created_by_id": REDACTED,
+          "created_by_service_token_id": null,
+          "details": {
+            "project_id": "REDACTED",
+            "timeout_seconds": 300,
+            "private_key_id": "REDACTED",
+            "client_email": "REDACTED",
+            "client_id": "REDACTED",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "REDACTED",
+            "retries": 1,
+            "location": null,
+            "maximum_bytes_billed": null,
+            "is_configured_for_oauth": false
+          },
+          "state": 1,
+          "created_at": "2021-11-16 16:26:01.571115+00:00",
+          "updated_at": "2021-11-16 16:37:42.500015+00:00"
+        },
+        "repository": {
+          "id": REDACTED,
+          "account_id": REDACTED,
+          "project_id": REDACTED,
+          "full_name": "REDACTED",
+          "remote_url": "REDACTED",
+          "remote_backend": "github",
+          "git_clone_strategy": "github_app",
+          "deploy_key_id": REDACTED,
+          "repository_credentials_id": null,
+          "github_installation_id": REDACTED,
+          "pull_request_url_template": "REDACTED",
+          "state": 1,
+          "created_at": "2021-11-16 16:26:24.412439+00:00",
+          "updated_at": "2021-11-16 16:26:24.412455+00:00",
+          "deploy_key": {
+            "id": REDACTED,
+            "account_id": REDACTED,
+            "state": 1,
+            "public_key": "REDACTED"
+          },
+          "github_repo": "REDACTED",
+          "name": "jaffle_shop",
+          "git_provider_id": REDACTED,
+          "gitlab": null,
+          "git_provider": null
+        },
+        "group_permissions": null,
+        "docs_job_id": null,
+        "freshness_job_id": null,
+        "docs_job": null,
+        "freshness_job": null
+      },
+      "jobs": null,
+      "credentials": null,
+      "custom_environment_variables": null
+    }
+  ],
+  "extra": {
+    "filters": {
+      "account_id": REDACTED,
+      "project_id": REDACTED,
+      "limit": 100,
+      "offset": 0
+    },
+    "order_by": "id",
+    "pagination": {
+      "count": 2,
+      "total_count": 2
+    }
+  }
+}
 ```
 
 ## dbt-cloud job run

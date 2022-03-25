@@ -120,6 +120,13 @@ jobs:
           project_count=$(cat projects.json | jq '.data | length')
           [[ $project_count > 0 ]] && exit 0 || exit 1
 
+      - name: Test 'dbt-cloud environment list'
+        run: |
+          dbt-cloud environment list > environments.json
+          cat environments.json | jq '.data[] | {id: .id, name: .name}'
+          environment_count=$(cat environments.json | jq '.data | length')
+          [[ $environment_count > 0 ]] && exit 0 || exit 1
+
       - name: Test 'dbt-cloud metadata query'
         run: dbt-cloud metadata query -f tests/data/metadata_query.graphql
 

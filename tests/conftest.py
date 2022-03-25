@@ -13,6 +13,7 @@ from dbt_cloud.command import (
     DbtCloudRunGetCommand,
     DbtCloudRunListArtifactsCommand,
     DbtCloudRunListCommand,
+    DbtCloudEnvironmentListCommand,
 )
 
 
@@ -135,6 +136,15 @@ COMMAND_TEST_CASES = [
         load_response("project_list_response"),
         "get",
         marks=pytest.mark.project,
+    ),
+    pytest.param(
+        "environment_list",
+        DbtCloudEnvironmentListCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, project_id=PROJECT_ID
+        ),
+        load_response("environment_list_response"),
+        "get",
+        marks=pytest.mark.environment,
     ),
 ]
 
