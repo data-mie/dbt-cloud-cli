@@ -56,7 +56,7 @@ class DbtCloudJobCreateCommand(DbtCloudCommand):
 
     id: Optional[int] = Field(
         default=None,
-        const=True,
+        exclude_from_click_options=True,
         description="Assigned by the dbt Cloud API. Cannot be overridden.",
     )
     project_id: int = PROJECT_ID_FIELD
