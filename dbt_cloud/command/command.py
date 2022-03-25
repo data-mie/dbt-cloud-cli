@@ -32,25 +32,42 @@ class ClickBaseModel(BaseModel):
                     function, key_prefix=f"{key_prefix}__{key}".strip("_")
                 )
             else:
-                if field.field_info.extra.get("exclude_from_click_options", False):
+                if (
+                    field.field_info.extra.get("exclude_from_click_options", False)
+                    or field.field_info.const
+                ):
                     continue
                 help = field.field_info.description or ""
                 kwarg_name = f"{key_prefix}__{key}".strip("_")
                 key = kwarg_name.replace("__", "-").replace("_", "-")
+
+                cls = field.field_info.extra.get("click_cls")
+                override_cls = cls is not None
+
                 try:
-                    is_list_arg = issubclass(field.outer_type_.__origin__, list)
+                    is_list_arg = (
+                        issubclass(field.outer_type_.__origin__, list)
+                        and not override_cls
+                    )
                 except AttributeError:
                     is_list_arg = False
+
+                option_kwargs = {
+                    "required": field.required,
+                    "default": field.default,
+                    "multiple": is_list_arg,
+                    "is_flag": field.field_info.extra.get("is_flag", False),
+                    "help": help,
+                }
+                if override_cls:
+                    option_kwargs["cls"] = cls
+                else:
+                    option_kwargs["type"] = field.type_
 
                 function = click.option(
                     f"--{key}",
                     kwarg_name,
-                    type=field.type_,
-                    required=field.required,
-                    default=field.default,
-                    multiple=is_list_arg,
-                    is_flag=field.field_info.extra.get("is_flag", False),
-                    help=help,
+                    **option_kwargs,
                 )(function)
         return function
 

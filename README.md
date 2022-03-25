@@ -501,7 +501,7 @@ This command creates a job in a dbt Cloud project. For more information on the A
 
 ### Usage
 ```bash
-dbt-cloud job create --project-id REFACTED --environment-id 49819 --name "Create job" --execute-steps "dbt seed" --execute-steps "dbt run"
+dbt-cloud job create --project-id 12345 --environment-id 49819 --name "Create job" --execute-steps '["dbt seed", "dbt run"]'
 {
   "status": {
     "code": 201,
@@ -517,7 +517,7 @@ dbt-cloud job create --project-id REFACTED --environment-id 49819 --name "Create
     "run_generate_sources": false,
     "id": 48180,
     "account_id": REDACTED,
-    "project_id": REDACTED,
+    "project_id": 12345,
     "environment_id": 49819,
     "name": "Create job",
     "dbt_version": null,

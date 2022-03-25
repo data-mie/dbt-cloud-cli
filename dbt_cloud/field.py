@@ -1,5 +1,16 @@
 import os
+import click
+import ast
 from pydantic import Field
+
+
+class PythonLiteralOption(click.Option):
+    def type_cast_value(self, ctx, value):
+        try:
+            return ast.literal_eval(value)
+        except:
+            raise click.BadParameter(value)
+
 
 DBT_CLOUD_HOST_FIELD = Field(
     default_factory=lambda: os.getenv("DBT_CLOUD_HOST", default="cloud.getdbt.com"),
@@ -17,6 +28,10 @@ ACCOUNT_ID_FIELD = Field(
 PROJECT_ID_FIELD = Field(
     default_factory=lambda: os.environ["DBT_CLOUD_PROJECT_ID"],
     description="Numeric ID of a dbt Cloud project (default: DBT_CLOUD_PROJECT_ID environment variable)",
+)
+ENVIRONMENT_ID_FIELD = Field(
+    default_factory=lambda: os.environ["DBT_CLOUD_ENVIRONMENT_ID"],
+    description="Numeric ID of a dbt Cloud environment (default: DBT_CLOUD_ENVIRONMENT_ID environment variable)",
 )
 JOB_ID_FIELD = Field(
     default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
