@@ -14,6 +14,10 @@ ACCOUNT_ID_FIELD = Field(
     default_factory=lambda: os.environ["DBT_CLOUD_ACCOUNT_ID"],
     description="Numeric ID of the dbt Cloud account (default: DBT_CLOUD_ACCOUNT_ID environment variable)",
 )
+PROJECT_ID_FIELD = Field(
+    default_factory=lambda: os.environ["DBT_CLOUD_PROJECT_ID"],
+    description="Numeric ID of a dbt Cloud project (default: DBT_CLOUD_PROJECT_ID environment variable)",
+)
 JOB_ID_FIELD = Field(
     default_factory=lambda: os.environ["DBT_CLOUD_JOB_ID"],
     description="Numeric ID of a dbt Cloud job (default: DBT_CLOUD_JOB_ID environment variable)",

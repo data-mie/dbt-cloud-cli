@@ -18,6 +18,7 @@ from dbt_cloud.command import (
     DbtCloudRunCancelCommand,
     DbtCloudJobListCommand,
     DbtCloudProjectListCommand,
+    DbtCloudEnvironmentListCommand
 )
 from dbt_cloud.demo import data_catalog
 from dbt_cloud.serde import json_to_dict, dict_to_json
@@ -66,6 +67,9 @@ def job_run():
 def project():
     pass
 
+@dbt_cloud.group(help="dbt Cloud environment commands")
+def environment():
+    pass
 
 @dbt_cloud.group(help="dbt Cloud Metadata API commands")
 def metadata():
@@ -276,6 +280,13 @@ def get_artifact(file, **kwargs):
 @DbtCloudProjectListCommand.click_options
 def list(**kwargs):
     command = DbtCloudProjectListCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@environment.command(help=DbtCloudEnvironmentListCommand.get_description())
+@DbtCloudEnvironmentListCommand.click_options
+def list(**kwargs):
+    command = DbtCloudEnvironmentListCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 

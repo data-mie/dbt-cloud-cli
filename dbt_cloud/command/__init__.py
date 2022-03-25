@@ -14,5 +14,6 @@ from .run import (
     DbtCloudRunCancelCommand,
 )
 from .project import DbtCloudProjectListCommand
+from .environment import DbtCloudEnvironmentListCommand
 from .metadata import DbtCloudMetadataQueryCommand
 from .command import DbtCloudCommand
