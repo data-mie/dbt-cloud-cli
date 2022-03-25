@@ -129,7 +129,6 @@ def get(**kwargs):
 @job.command(help=DbtCloudJobCreateCommand.get_description())
 @DbtCloudJobCreateCommand.click_options
 def create(**kwargs):
-    print(kwargs)
     command = DbtCloudJobCreateCommand.from_click_options(**kwargs)
     execute_and_print(command)
 
