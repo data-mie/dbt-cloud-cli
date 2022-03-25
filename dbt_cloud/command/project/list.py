@@ -1,9 +1,11 @@
 import requests
+from pydantic import Field, PrivateAttr
 from dbt_cloud.command.command import DbtCloudCommand
 
 
 class DbtCloudProjectListCommand(DbtCloudCommand):
     """Returns a list of projects in the account."""
+    _api_version: str = PrivateAttr("v3")
 
     @property
     def api_url(self) -> str:
