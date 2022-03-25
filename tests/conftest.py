@@ -139,7 +139,9 @@ COMMAND_TEST_CASES = [
     ),
     pytest.param(
         "environment_list",
-        DbtCloudEnvironmentListCommand(api_token=API_TOKEN, account_id=ACCOUNT_ID),
+        DbtCloudEnvironmentListCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, project_id=PROJECT_ID
+        ),
         load_response("environment_list_response"),
         "get",
         marks=pytest.mark.environment,
