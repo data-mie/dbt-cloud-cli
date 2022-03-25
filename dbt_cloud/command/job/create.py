@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Optional, List
 from pydantic import Field
 from dbt_cloud.command.command import DbtCloudCommand, ClickBaseModel
+from dbt_cloud.field import PythonLiteralOption, PROJECT_ID_FIELD, ENVIRONMENT_ID_FIELD
 
 
 class DateTypeEnum(Enum):
@@ -53,13 +54,17 @@ class DbtCloudJobSchedule(ClickBaseModel):
 class DbtCloudJobCreateCommand(DbtCloudCommand):
     """Creates a job in a dbt Cloud project."""
 
-    id: Optional[int] = Field(default=None, description="Must be empty.")
-    project_id: int = Field(..., description="Numeric ID of the dbt Cloud project.")
-    environment_id: int = Field(
-        ..., description="Numeric ID of the dbt Cloud environment."
+    id: Optional[int] = Field(
+        default=None,
+        exclude_from_click_options=True,
+        description="Assigned by the dbt Cloud API. Cannot be overridden.",
     )
+    project_id: int = PROJECT_ID_FIELD
+    environment_id: int = ENVIRONMENT_ID_FIELD
     name: str = Field(..., description="A name for the job.")
-    execute_steps: List[str] = Field(..., description="Job execution steps.")
+    execute_steps: List[str] = Field(
+        ..., click_cls=PythonLiteralOption, description="Job execution steps."
+    )
     dbt_version: Optional[str] = Field(
         default=None,
         description="Overrides the dbt_version specified on the attached Environment if provided.",

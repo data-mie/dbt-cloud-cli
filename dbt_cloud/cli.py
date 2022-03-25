@@ -2,7 +2,6 @@ import os
 import logging
 import time
 import click
-import ast
 from dbt_cloud import DbtCloudRunStatus
 from dbt_cloud.command import (
     DbtCloudJobGetCommand,
@@ -23,14 +22,7 @@ from dbt_cloud.command import (
 from dbt_cloud.demo import data_catalog
 from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.exc import DbtCloudException
-
-
-class PythonLiteralOption(click.Option):
-    def type_cast_value(self, ctx, value):
-        try:
-            return ast.literal_eval(value)
-        except:
-            raise click.BadParameter(value)
+from dbt_cloud.field import PythonLiteralOption
 
 
 def execute_and_print(command, **kwargs):
