@@ -18,7 +18,7 @@ from dbt_cloud.command import (
     DbtCloudRunCancelCommand,
     DbtCloudJobListCommand,
     DbtCloudProjectListCommand,
-    DbtCloudEnvironmentListCommand
+    DbtCloudEnvironmentListCommand,
 )
 from dbt_cloud.demo import data_catalog
 from dbt_cloud.serde import json_to_dict, dict_to_json
@@ -67,9 +67,11 @@ def job_run():
 def project():
     pass
 
+
 @dbt_cloud.group(help="dbt Cloud environment commands")
 def environment():
     pass
+
 
 @dbt_cloud.group(help="dbt Cloud Metadata API commands")
 def metadata():

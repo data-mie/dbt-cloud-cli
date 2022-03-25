@@ -13,7 +13,7 @@ from dbt_cloud.command import (
     DbtCloudRunGetCommand,
     DbtCloudRunListArtifactsCommand,
     DbtCloudRunListCommand,
-    DbtCloudEnvironmentListCommand
+    DbtCloudEnvironmentListCommand,
 )
 
 
