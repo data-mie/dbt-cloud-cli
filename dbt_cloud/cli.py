@@ -8,7 +8,7 @@ from dbt_cloud.command import (
     DbtCloudJobCreateCommand,
     DbtCloudJobDeleteCommand,
     DbtCloudJobRunCommand,
-    DbtCloudCommand,
+    DbtCloudAccountCommand,
     DbtCloudRunGetCommand,
     DbtCloudRunListArtifactsCommand,
     DbtCloudRunGetArtifactCommand,
@@ -18,6 +18,7 @@ from dbt_cloud.command import (
     DbtCloudJobListCommand,
     DbtCloudProjectListCommand,
     DbtCloudEnvironmentListCommand,
+    DbtCloudAccountListCommand,
 )
 from dbt_cloud.demo import data_catalog
 from dbt_cloud.serde import json_to_dict, dict_to_json
@@ -32,7 +33,7 @@ def execute_and_print(command, **kwargs):
     return response
 
 
-@click.group()
+@click.group(help="The dbt Cloud command line interface.")
 def dbt_cloud():
     import http.client as http_client
 
@@ -45,27 +46,32 @@ def dbt_cloud():
         http_client.HTTPConnection.debuglevel = 1
 
 
-@dbt_cloud.group(help="dbt Cloud job commands")
+@dbt_cloud.group(help="Interact with dbt Cloud jobs.")
 def job():
     pass
 
 
-@dbt_cloud.group(name="run", help="dbt Cloud run commands")
+@dbt_cloud.group(name="run", help="Interact with dbt Cloud job runs.")
 def job_run():
     pass
 
 
-@dbt_cloud.group(help="dbt Cloud project commands")
+@dbt_cloud.group(help="Interact with dbt Cloud projects.")
 def project():
     pass
 
 
-@dbt_cloud.group(help="dbt Cloud environment commands")
+@dbt_cloud.group(help="Interact with dbt Cloud environments.")
 def environment():
     pass
 
 
-@dbt_cloud.group(help="dbt Cloud Metadata API commands")
+@dbt_cloud.group(help="Interact with dbt Cloud accounts.")
+def account():
+    pass
+
+
+@dbt_cloud.group(help="Interact with the dbt Cloud Metadata API.")
 def metadata():
     pass
 
@@ -204,7 +210,7 @@ def export(file, **kwargs):
 
 
 @job.command(help="Imports a dbt Cloud job from exported JSON.", name="import")
-@DbtCloudCommand.click_options
+@DbtCloudAccountCommand.click_options
 @click.option(
     "-f",
     "--file",
@@ -213,7 +219,7 @@ def export(file, **kwargs):
     help="Import file path.",
 )
 def import_job(file, **kwargs):
-    base_command = DbtCloudCommand.from_click_options(**kwargs)
+    base_command = DbtCloudAccountCommand.from_click_options(**kwargs)
     job_create_kwargs = {**json_to_dict(file.read()), **base_command.dict()}
     command = DbtCloudJobCreateCommand(**job_create_kwargs)
     response = command.execute()
@@ -281,6 +287,13 @@ def list(**kwargs):
 @DbtCloudEnvironmentListCommand.click_options
 def list(**kwargs):
     command = DbtCloudEnvironmentListCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@account.command(help=DbtCloudAccountListCommand.get_description())
+@DbtCloudAccountListCommand.click_options
+def list(**kwargs):
+    command = DbtCloudAccountListCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 
