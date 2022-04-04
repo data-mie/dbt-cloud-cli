@@ -2,11 +2,11 @@ import os
 import requests
 from typing import Optional, List
 from pydantic import Field, validator
-from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import JOB_ID_FIELD
 
 
-class DbtCloudJobRunCommand(DbtCloudCommand):
+class DbtCloudJobRunCommand(DbtCloudAccountCommand):
     """Triggers a dbt Cloud job run and returns a status JSON response."""
 
     job_id: int = JOB_ID_FIELD

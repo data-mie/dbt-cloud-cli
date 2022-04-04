@@ -15,5 +15,6 @@ from .run import (
 )
 from .project import DbtCloudProjectListCommand
 from .environment import DbtCloudEnvironmentListCommand
+from .account import DbtCloudAccountListCommand
 from .metadata import DbtCloudMetadataQueryCommand
-from .command import DbtCloudCommand
+from .command import DbtCloudAccountCommand

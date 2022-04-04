@@ -1,6 +1,6 @@
 import requests
 from enum import IntEnum
-from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import RUN_ID_FIELD
 
 
@@ -13,7 +13,7 @@ class DbtCloudRunStatus(IntEnum):
     CANCELLED = 30
 
 
-class DbtCloudRunCancelCommand(DbtCloudCommand):
+class DbtCloudRunCancelCommand(DbtCloudAccountCommand):
     """Cancels a dbt Cloud run."""
 
     run_id: int = RUN_ID_FIELD

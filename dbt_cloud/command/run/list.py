@@ -3,7 +3,7 @@ import requests
 from enum import Enum
 from typing import Optional
 from pydantic import Field, PrivateAttr
-from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.command.command import DbtCloudAccountCommand
 
 
 class DbtCloudRunStatus(Enum):
@@ -15,7 +15,7 @@ class DbtCloudRunStatus(Enum):
     CANCELED = "Canceled"
 
 
-class DbtCloudRunListCommand(DbtCloudCommand):
+class DbtCloudRunListCommand(DbtCloudAccountCommand):
     """Returns a list of runs in the account. The runs are returned sorted by creation date, with the most recent run appearing first."""
 
     limit: Optional[int] = Field(

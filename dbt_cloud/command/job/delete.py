@@ -1,11 +1,11 @@
 import os
 import requests
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import JOB_ID_FIELD
 
 
-class DbtCloudJobDeleteCommand(DbtCloudCommand):
+class DbtCloudJobDeleteCommand(DbtCloudAccountCommand):
     """Deletes a job from a dbt Cloud project."""
 
     job_id: int = JOB_ID_FIELD

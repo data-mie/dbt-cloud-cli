@@ -92,7 +92,6 @@ class ClickBaseModel(BaseModel):
 
 class DbtCloudCommand(ClickBaseModel):
     api_token: str = API_TOKEN_FIELD
-    account_id: int = ACCOUNT_ID_FIELD
     dbt_cloud_host: str = DBT_CLOUD_HOST_FIELD
     _api_version: str = PrivateAttr("v2")
 
@@ -102,8 +101,16 @@ class DbtCloudCommand(ClickBaseModel):
 
     @property
     def api_url(self) -> str:
-        return f"https://{self.dbt_cloud_host}/api/{self._api_version}/accounts/{self.account_id}"
+        return f"https://{self.dbt_cloud_host}/api/{self._api_version}"
 
     def get_payload(self, exclude=["api_token", "dbt_cloud_host"]) -> dict:
         payload = self.json(exclude=set(exclude))
         return json_to_dict(payload)
+
+
+class DbtCloudAccountCommand(DbtCloudCommand):
+    account_id: int = ACCOUNT_ID_FIELD
+
+    @property
+    def api_url(self) -> str:
+        return f"{super().api_url}/accounts/{self.account_id}"
