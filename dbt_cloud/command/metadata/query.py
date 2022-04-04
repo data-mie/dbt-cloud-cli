@@ -1,9 +1,9 @@
 import requests
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.command.command import DbtCloudAccountCommand
 
 
-class DbtCloudMetadataQueryCommand(DbtCloudCommand):
+class DbtCloudMetadataQueryCommand(DbtCloudAccountCommand):
     """Queries the dbt Cloud Metadata API using GraphQL."""
 
     query: str = Field(exclude_from_click_options=True)

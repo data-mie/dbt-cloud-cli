@@ -1,8 +1,8 @@
 import requests
-from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.command.command import DbtCloudAccountCommand
 
 
-class DbtCloudProjectListCommand(DbtCloudCommand):
+class DbtCloudProjectListCommand(DbtCloudAccountCommand):
     """Returns a list of projects in the account."""
 
     @property

@@ -1,10 +1,10 @@
 import requests
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import RUN_ID_FIELD
 
 
-class DbtCloudRunListArtifactsCommand(DbtCloudCommand):
+class DbtCloudRunListArtifactsCommand(DbtCloudAccountCommand):
     """Fetches a list of artifact files generated for a completed run."""
 
     run_id: int = RUN_ID_FIELD

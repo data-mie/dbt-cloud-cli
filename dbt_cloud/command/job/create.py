@@ -2,7 +2,7 @@ import requests
 from enum import Enum
 from typing import Optional, List
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudCommand, ClickBaseModel
+from dbt_cloud.command.command import DbtCloudAccountCommand, ClickBaseModel
 from dbt_cloud.field import PythonLiteralOption, PROJECT_ID_FIELD, ENVIRONMENT_ID_FIELD
 
 
@@ -51,7 +51,7 @@ class DbtCloudJobSchedule(ClickBaseModel):
     time: DbtCloudJobScheduleTime = Field(default_factory=DbtCloudJobScheduleTime)
 
 
-class DbtCloudJobCreateCommand(DbtCloudCommand):
+class DbtCloudJobCreateCommand(DbtCloudAccountCommand):
     """Creates a job in a dbt Cloud project."""
 
     id: Optional[int] = Field(

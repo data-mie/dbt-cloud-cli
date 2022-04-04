@@ -1,10 +1,10 @@
 import requests
 from typing import Optional
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.command.command import DbtCloudAccountCommand
 
 
-class DbtCloudJobListCommand(DbtCloudCommand):
+class DbtCloudJobListCommand(DbtCloudAccountCommand):
     """Returns a list of jobs in the account."""
 
     order_by: Optional[str] = Field(

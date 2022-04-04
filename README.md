@@ -32,7 +32,7 @@ The following environment variables are used as argument defaults:
 
 Group | API endpoint | Command | Description |
 | --- | --- | --- | --- |
-| Accounts | [https://cloud.getdbt.com/api/v2/accounts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts) | `dbt-cloud account list` | Not implemented yet |
+| Accounts | [https://cloud.getdbt.com/api/v2/accounts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts) | [dbt-cloud account list](#dbt-cloud-account-list) | Retrieves all available accounts |
 | Accounts | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getAccountById) | `dbt-cloud account get` | Not implemented yet |
 | Projects | https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | Returns a list of projects in the account |
 | Projects | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/{projectId}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getProjectById) | `dbt-cloud project get` | Not implemented yet |
@@ -53,6 +53,7 @@ Group | API endpoint | Command | Description |
 
 # Commands
 
+* [dbt-cloud account list](#dbt-cloud-account-list)
 * [dbt-cloud project list](#dbt-cloud-project-list)
 * [dbt-cloud environment list](#dbt-cloud-environment-list)
 * [dbt-cloud job run](#dbt-cloud-job-run)
@@ -70,6 +71,68 @@ Group | API endpoint | Command | Description |
 * [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact)
 * [dbt-cloud metadata query](#dbt-cloud-metadata-query)
 
+## dbt-cloud account list
+This command retrieves all available dbt Cloud accounts. For more information on the API endpoint arguments and response, run `dbt-cloud account list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts).
+
+### Usage
+```bash
+>> dbt-cloud account list
+{
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": [
+    {
+      "docs_job_id": null,
+      "freshness_job_id": null,
+      "lock_reason": null,
+      "unlock_if_subscription_renewed": false,
+      "read_only_seats": 50,
+      "id": REDACTED,
+      "name": "Jaffle Shop",
+      "state": 1,
+      "plan": "team",
+      "pending_cancel": false,
+      "run_slots": 5,
+      "developer_seats": 4,
+      "queue_limit": 50,
+      "pod_memory_request_mebibytes": 600,
+      "run_duration_limit_seconds": 86400,
+      "enterprise_authentication_method": null,
+      "enterprise_login_slug": null,
+      "enterprise_unique_identifier": null,
+      "billing_email_address": "REDACTED",
+      "locked": false,
+      "develop_file_system": true,
+      "unlocked_at": null,
+      "created_at": "2021-09-06T07:41:12.146234+00:00",
+      "updated_at": "2022-03-07T06:05:33.350381+00:00",
+      "starter_repo_url": null,
+      "sso_reauth": false,
+      "git_auth_level": "team",
+      "identifier": "REDACTED",
+      "docs_job": null,
+      "freshness_job": null,
+      "enterprise_login_url": "https://cloud.getdbt.com/enterprise-login/None/"
+    }
+  ],
+  "extra": {
+    "filters": {
+      "pk__in": [
+        REDACTED
+      ]
+    },
+    "order_by": null,
+    "pagination": {
+      "count": 1,
+      "total_count": 1
+    }
+  }
+}
+```
 
 ## dbt-cloud project list
 This command returns a list of projects in the account. For more information on the API endpoint arguments and response, run `dbt-cloud project list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listProjects).
@@ -78,97 +141,97 @@ This command returns a list of projects in the account. For more information on 
 ```bash
 >> dbt-cloud project list
 {
-    "status": {
-      "code": 200,
-      "is_success": true,
-      "user_message": "Success!",
-      "developer_message": ""
-    },
-    "data": [
-      {
-        "name": "jaffle_shop",
-        "account_id": REDACTED,
-        "repository_id": REDACTED,
-        "connection_id": REDACTED,
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": [
+    {
+      "name": "jaffle_shop",
+      "account_id": REDACTED,
+      "repository_id": REDACTED,
+      "connection_id": REDACTED,
+      "id": REDACTED,
+      "created_at": "2021-04-14 20:23:00.395285+00:00",
+      "updated_at": "2021-11-16 16:32:43.960836+00:00",
+      "skipped_setup": false,
+      "state": 1,
+      "dbt_project_subdirectory": null,
+      "connection": {
         "id": REDACTED,
-        "created_at": "2021-04-14 20:23:00.395285+00:00",
-        "updated_at": "2021-11-16 16:32:43.960836+00:00",
-        "skipped_setup": false,
-        "state": 1,
-        "dbt_project_subdirectory": null,
-        "connection": {
-          "id": REDACTED,
-          "account_id": REDACTED,
-          "project_id": REDACTED,
-          "name": "Bigquery",
-          "type": "bigquery",
-          "created_by_id": REDACTED,
-          "created_by_service_token_id": null,
-          "details": {
-            "project_id": "REDACTED",
-            "timeout_seconds": 300,
-            "private_key_id": "REDACTED",
-            "client_email": "REDACTED",
-            "client_id": "REDACTED",
-            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-            "token_uri": "https://oauth2.googleapis.com/token",
-            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-            "client_x509_cert_url": "REDACTED",
-            "retries": 1,
-            "location": null,
-            "is_configured_for_oauth": false
-          },
-          "state": 1,
-          "created_at": "2021-11-16 16:26:01.571115+00:00",
-          "updated_at": "2021-11-16 16:37:42.500015+00:00"
-        },
-        "repository": {
-          "id": REDACTED,
-          "account_id": REDACTED,
-          "project_id": REDACTED,
-          "full_name": "REDACTED",
-          "remote_url": "REDACTED",
-          "remote_backend": "github",
-          "git_clone_strategy": "github_app",
-          "deploy_key_id": REDACTED,
-          "repository_credentials_id": null,
-          "github_installation_id": REDACTED,
-          "pull_request_url_template": "REDACTED",
-          "state": 1,
-          "created_at": "2021-11-16 16:26:24.412439+00:00",
-          "updated_at": "2021-11-16 16:26:24.412455+00:00",
-          "deploy_key": {
-            "id": REDACTED,
-            "account_id": REDACTED,
-            "state": 1,
-            "public_key": "REDACTED"
-          },
-          "github_repo": "REDACTED",
-          "name": "jaffle_shop",
-          "git_provider_id": REDACTED,
-          "gitlab": null,
-          "git_provider": null
-        },
-        "group_permissions": [],
-        "docs_job_id": null,
-        "freshness_job_id": null,
-        "docs_job": null,
-        "freshness_job": null
-      }
-    ],
-    "extra": {
-      "filters": {
         "account_id": REDACTED,
-        "limit": 100,
-        "offset": 0
+        "project_id": REDACTED,
+        "name": "Bigquery",
+        "type": "bigquery",
+        "created_by_id": REDACTED,
+        "created_by_service_token_id": null,
+        "details": {
+          "project_id": "REDACTED",
+          "timeout_seconds": 300,
+          "private_key_id": "REDACTED",
+          "client_email": "REDACTED",
+          "client_id": "REDACTED",
+          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+          "token_uri": "https://oauth2.googleapis.com/token",
+          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+          "client_x509_cert_url": "REDACTED",
+          "retries": 1,
+          "location": null,
+          "is_configured_for_oauth": false
+        },
+        "state": 1,
+        "created_at": "2021-11-16 16:26:01.571115+00:00",
+        "updated_at": "2021-11-16 16:37:42.500015+00:00"
       },
-      "order_by": "id",
-      "pagination": {
-        "count": 1,
-        "total_count": 1
-      }
+      "repository": {
+        "id": REDACTED,
+        "account_id": REDACTED,
+        "project_id": REDACTED,
+        "full_name": "REDACTED",
+        "remote_url": "REDACTED",
+        "remote_backend": "github",
+        "git_clone_strategy": "github_app",
+        "deploy_key_id": REDACTED,
+        "repository_credentials_id": null,
+        "github_installation_id": REDACTED,
+        "pull_request_url_template": "REDACTED",
+        "state": 1,
+        "created_at": "2021-11-16 16:26:24.412439+00:00",
+        "updated_at": "2021-11-16 16:26:24.412455+00:00",
+        "deploy_key": {
+          "id": REDACTED,
+          "account_id": REDACTED,
+          "state": 1,
+          "public_key": "REDACTED"
+        },
+        "github_repo": "REDACTED",
+        "name": "jaffle_shop",
+        "git_provider_id": REDACTED,
+        "gitlab": null,
+        "git_provider": null
+      },
+      "group_permissions": [],
+      "docs_job_id": null,
+      "freshness_job_id": null,
+      "docs_job": null,
+      "freshness_job": null
+    }
+  ],
+  "extra": {
+    "filters": {
+      "account_id": REDACTED,
+      "limit": 100,
+      "offset": 0
+    },
+    "order_by": "id",
+    "pagination": {
+      "count": 1,
+      "total_count": 1
     }
   }
+}
 ```
 
 ## dbt-cloud environment list

@@ -1,10 +1,10 @@
 import requests
 from pydantic import Field, PrivateAttr
-from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import PROJECT_ID_FIELD
 
 
-class DbtCloudEnvironmentListCommand(DbtCloudCommand):
+class DbtCloudEnvironmentListCommand(DbtCloudAccountCommand):
     """Retrieves environments for a given project."""
 
     project_id: int = PROJECT_ID_FIELD

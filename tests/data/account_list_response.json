@@ -1,0 +1,55 @@
+{
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": [
+    {
+      "docs_job_id": null,
+      "freshness_job_id": null,
+      "lock_reason": null,
+      "unlock_if_subscription_renewed": false,
+      "read_only_seats": 50,
+      "id": 1,
+      "name": "Jaffle Shop",
+      "state": 1,
+      "plan": "team",
+      "pending_cancel": false,
+      "run_slots": 5,
+      "developer_seats": 4,
+      "queue_limit": 50,
+      "pod_memory_request_mebibytes": 600,
+      "run_duration_limit_seconds": 86400,
+      "enterprise_authentication_method": null,
+      "enterprise_login_slug": null,
+      "enterprise_unique_identifier": null,
+      "billing_email_address": "ap@jaffleshop.com",
+      "locked": false,
+      "develop_file_system": true,
+      "unlocked_at": null,
+      "created_at": "2021-09-06T07:41:12.146234+00:00",
+      "updated_at": "2022-03-07T06:05:33.350381+00:00",
+      "starter_repo_url": null,
+      "sso_reauth": false,
+      "git_auth_level": "team",
+      "identifier": "jaffle-123",
+      "docs_job": null,
+      "freshness_job": null,
+      "enterprise_login_url": "https://cloud.getdbt.com/enterprise-login/None/"
+    }
+  ],
+  "extra": {
+    "filters": {
+      "pk__in": [
+        27299
+      ]
+    },
+    "order_by": null,
+    "pagination": {
+      "count": 1,
+      "total_count": 1
+    }
+  }
+}

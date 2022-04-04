@@ -2,11 +2,11 @@ import os
 import requests
 from typing import Optional
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudCommand
+from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import JOB_ID_FIELD
 
 
-class DbtCloudJobGetCommand(DbtCloudCommand):
+class DbtCloudJobGetCommand(DbtCloudAccountCommand):
     """Returns the details of a dbt Cloud job."""
 
     job_id: int = JOB_ID_FIELD
