@@ -32,7 +32,7 @@ The following environment variables are used as argument defaults:
 
 Group | API endpoint | Command | Description |
 | --- | --- | --- | --- |
-| Accounts | [https://cloud.getdbt.com/api/v2/accounts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts) | [dbt-cloud account list](#dbt-cloud-account-list) | Retrieves accounts |
+| Accounts | [https://cloud.getdbt.com/api/v2/accounts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts) | [dbt-cloud account list](#dbt-cloud-account-list) | Retrieves all available accounts |
 | Accounts | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getAccountById) | `dbt-cloud account get` | Not implemented yet |
 | Projects | https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | Returns a list of projects in the account |
 | Projects | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/{projectId}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getProjectById) | `dbt-cloud project get` | Not implemented yet |
@@ -72,7 +72,7 @@ Group | API endpoint | Command | Description |
 * [dbt-cloud metadata query](#dbt-cloud-metadata-query)
 
 ## dbt-cloud account list
-This command retrieves available dbt Cloud accounts. For more information on the API endpoint arguments and response, run `dbt-cloud account list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts).
+This command retrieves all available dbt Cloud accounts. For more information on the API endpoint arguments and response, run `dbt-cloud account list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts).
 
 ### Usage
 ```bash

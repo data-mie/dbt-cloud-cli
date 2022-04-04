@@ -3,7 +3,7 @@ from dbt_cloud.command.command import DbtCloudCommand
 
 
 class DbtCloudAccountListCommand(DbtCloudCommand):
-    """Retrieves accounts."""
+    """Retrieves all available accounts."""
 
     @property
     def api_url(self) -> str:
