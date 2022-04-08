@@ -66,6 +66,7 @@ Group | API endpoint | Command | Description |
 * [dbt-cloud job import](#dbt-cloud-job-import)
 * [dbt-cloud run get](#dbt-cloud-run-get)
 * [dbt-cloud run cancel](#dbt-cloud-run-cancel)
+* [dbt-cloud run cancel-all](#dbt-cloud-run-cancel-all)
 * [dbt-cloud run list](#dbt-cloud-run-list)
 * [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts)
 * [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact)
@@ -1172,6 +1173,84 @@ This command cancels a dbt Cloud run. For more information on the API endpoint a
     "job_id": 43167
   }
 }
+```
+
+## dbt-cloud run cancel-all
+
+**This command is a composition of one or more base commands.**
+
+This command fetches all runs on the account, cancels them one-by-one after user confirmation via prompt and prints out the run cancellation responses. For more information on the command and its arguments, run `dbt-cloud run cancel-all --help`.
+
+> You should typically use this with a `--status` arg of either `Running` or `Queued` as cancellations can be requested against all runs. Without this, you will effectively be trying to cancel all runs that had ever been scheduled in the project irregardless of its' current status (which could take a long time if your project has had a lot of previous runs).
+
+### Usage
+
+```bash
+>> dbt-cloud run cancel-all --status Running
+Runs to cancel: [36053848]
+Cancel run 36053848? [y/N]: yes
+Run 36053848 has been cancelled.
+[
+  {
+    "status": {
+      "code": 200,
+      "is_success": true,
+      "user_message": "Success!",
+      "developer_message": ""
+    },
+    "data": {
+      "id": 36053848,
+      "trigger_id": 48392125,
+      "account_id": 123456,
+      "environment_id": 49819,
+      "project_id": 123457,
+      "job_definition_id": 37119,
+      "status": 30,
+      "dbt_version": "0.19.1",
+      "git_branch": null,
+      "git_sha": null,
+      "status_message": "Cancelled by user.",
+      "owner_thread_id": null,
+      "executed_by_thread_id": null,
+      "deferring_run_id": null,
+      "artifacts_saved": false,
+      "artifact_s3_path": null,
+      "has_docs_generated": false,
+      "has_sources_generated": false,
+      "notifications_sent": false,
+      "blocked_by": [],
+      "scribe_enabled": true,
+      "created_at": "2022-03-14 09:58:13.138036+00:00",
+      "updated_at": "2022-03-14 09:58:22.869828+00:00",
+      "dequeued_at": null,
+      "started_at": null,
+      "finished_at": "2022-03-14 09:58:22.867735+00:00",
+      "last_checked_at": null,
+      "last_heartbeat_at": null,
+      "should_start_at": null,
+      "trigger": null,
+      "job": null,
+      "environment": null,
+      "run_steps": [],
+      "status_humanized": "Cancelled",
+      "in_progress": false,
+      "is_complete": true,
+      "is_success": false,
+      "is_error": false,
+      "is_cancelled": true,
+      "href": "REDACTED",
+      "duration": "00:00:09",
+      "queued_duration": "00:00:09",
+      "run_duration": "00:00:00",
+      "duration_humanized": "9 seconds",
+      "queued_duration_humanized": "9 seconds",
+      "run_duration_humanized": "0 minutes",
+      "created_at_humanized": "9 seconds ago",
+      "finished_at_humanized": "0 minutes ago",
+      "job_id": 43167
+    }
+  }
+]
 ```
 
 ## dbt-cloud run list-artifacts
