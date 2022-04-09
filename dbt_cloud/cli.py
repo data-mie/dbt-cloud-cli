@@ -234,6 +234,41 @@ def cancel(**kwargs):
     execute_and_print(command)
 
 
+@job_run.command(help="Cancel all running jobs by status.")
+@DbtCloudRunListCommand.click_options
+@click.option("--dry-run", is_flag=True, help="Execute as a dry run.")
+@click.option(
+    "-y", "--yes", "assume_yes", is_flag=True, help="Automatic yes to prompts."
+)
+@click.option(
+    "-f",
+    "--file",
+    default="-",
+    type=click.File("w"),
+    help="Response export file path.",
+)
+def cancel_all(dry_run, file, assume_yes, **kwargs):
+    list_command = DbtCloudRunListCommand.from_click_options(**kwargs)
+    response = list_command.execute()
+    response.raise_for_status()
+    run_ids_to_cancel = [run_dict["id"] for run_dict in response.json()["data"]]
+    click.echo(f"Runs to cancel: {run_ids_to_cancel}")
+    cancelled_job_responses = []
+    if not dry_run:
+        for run_id in run_ids_to_cancel:
+            cancel_command = DbtCloudRunCancelCommand(**kwargs, run_id=run_id)
+            if assume_yes:
+                is_confirmed = True
+            else:
+                is_confirmed = click.confirm(f"Cancel run {run_id}?")
+            if is_confirmed:
+                response = cancel_command.execute()
+                response.raise_for_status()
+                cancelled_job_responses.append(response.json())
+                click.echo(f"Run {run_id} has been cancelled.")
+    file.write(dict_to_json(cancelled_job_responses))
+
+
 @job_run.command(help=DbtCloudRunGetCommand.get_description())
 @DbtCloudRunGetCommand.click_options
 def get(**kwargs):
