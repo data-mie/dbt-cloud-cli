@@ -4,6 +4,8 @@ jobs:
   unit-tests:
     docker:
       - image: cimg/python:3.9.9
+
+    resource_class: small
     
     steps:
       - checkout
@@ -28,6 +30,8 @@ jobs:
   integration-tests:
     docker:
       - image: cimg/python:3.9.9
+
+    resource_class: small
 
     environment:
       DBT_CLOUD_PROJECT_ID: 26597
