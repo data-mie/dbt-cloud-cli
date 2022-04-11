@@ -75,6 +75,20 @@ jobs:
           command: |
             dbt-cloud job delete-all --keep-jobs "[43167, 49663]" -y
 
+      - run:
+          name: Test 'dbt-cloub job create'
+          command: |
+            set -o pipefail
+            dbt-cloud job create --project-id $DBT_CLOUD_PROJECT_ID --environment-id $DBT_CLOUD_ENVIRONMENT_ID --name "Test nested args" --settings-threads 4 --execute-steps '["dbt seed"]' | tee job_created.json ; echo $?
+            job_threads=$(cat job_created.json | jq .data.settings.threads)
+            [[ $job_threads = 4 ]] && exit 0 || exit 1
+
+      - run:
+          name: Test 'dbt-cloud job run'
+          command: |
+            job_id=$(cat job_created.json | jq .data.id -r)
+            dbt-cloud job run --job-id $job_id --wait -f run.json
+
 workflows:
   version: 2
   continuous-integration:
