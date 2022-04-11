@@ -30,6 +30,9 @@ The following environment variables are used as argument defaults:
 
 # API coverage
 
+<details>
+  <summary><b>Coverage matrix</b></summary>
+
 Group | API endpoint | Command | Description |
 | --- | --- | --- | --- |
 | Accounts | [https://cloud.getdbt.com/api/v2/accounts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts) | [dbt-cloud account list](#dbt-cloud-account-list) | Retrieves all available accounts |
@@ -49,7 +52,7 @@ Group | API endpoint | Command | Description |
 | Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/artifacts/{path}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getArtifactsByRunId) | [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) | Fetches an artifact file from a completed run |
 | Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/cancel/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/cancelRunById) | [dbt-cloud run cancel](#dbt-cloud-run-cancel) | Cancels a dbt Cloud run |
 | Metadata | [https://metadata.cloud.getdbt.com/graphql](https://docs.getdbt.com/docs/dbt-cloud/dbt-cloud-api/metadata/metadata-overview) | [dbt-cloud metadata query](#dbt-cloud-metadata-query) | Queries the dbt Cloud Metadata API using GraphQL |
-
+</details>
 
 # Commands
 
@@ -75,7 +78,9 @@ Group | API endpoint | Command | Description |
 ## dbt-cloud account list
 This command retrieves all available dbt Cloud accounts. For more information on the API endpoint arguments and response, run `dbt-cloud account list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
+
 ```bash
 >> dbt-cloud account list
 {
@@ -134,11 +139,15 @@ This command retrieves all available dbt Cloud accounts. For more information on
   }
 }
 ```
+</details>
+
 
 ## dbt-cloud project list
 This command returns a list of projects in the account. For more information on the API endpoint arguments and response, run `dbt-cloud project list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listProjects).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
+
 ```bash
 >> dbt-cloud project list
 {
@@ -234,11 +243,14 @@ This command returns a list of projects in the account. For more information on 
   }
 }
 ```
+</details>
 
 ## dbt-cloud environment list
 This command retrieves environments for a given project. For more information on the command, run `dbt-cloud environment list --help`. This command uses the API v3 which has no official documentation yet.
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
+
 ```bash
 >> dbt-cloud environment list
 {
@@ -354,11 +366,13 @@ This command retrieves environments for a given project. For more information on
   }
 }
 ```
+</details>
 
 ## dbt-cloud job run
 This command triggers a dbt Cloud job run and returns a run status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud job run --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud job run --job-id 43167 --cause "My first run!" --wait
@@ -428,11 +442,13 @@ Job 43167 run 34929305: SUCCESS ...
   }
 }
 ```
+</details>
 
 ## dbt-cloud job get
 This command returns the details of a dbt Cloud job. For more information on the API endpoint arguments and response, run `dbt-cloud job get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getJobById).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud job get --job-id 43167
@@ -492,11 +508,13 @@ This command returns the details of a dbt Cloud job. For more information on the
   }
 }
 ```
+</details>
 
 ## dbt-cloud job list
 This command returns a list of jobs in the account. For more information on the API endpoint arguments and response, run `dbt-cloud job list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listJobsForAccount).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud job list
@@ -558,12 +576,15 @@ This command returns a list of jobs in the account. For more information on the 
   ]
 }
 ```
+</details>
 
 ## dbt-cloud job create
 
 This command creates a job in a dbt Cloud project. For more information on the API endpoint arguments and response, run `dbt-cloud job create --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/createJob).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
+
 ```bash
 dbt-cloud job create --project-id 12345 --environment-id 49819 --name "Create job" --execute-steps '["dbt seed", "dbt run"]'
 {
@@ -623,12 +644,14 @@ dbt-cloud job create --project-id 12345 --environment-id 49819 --name "Create jo
   }
 }
 ```
+</details>
 
 ## dbt-cloud job delete
 
 This command deletes a job in a dbt Cloud project. Note that this command uses an undocumented v3 API endpoint. For more information on the command and its arguments, run `dbt-cloud job delete --help`.
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud job delete --job-id 48474
@@ -688,6 +711,7 @@ This command deletes a job in a dbt Cloud project. Note that this command uses a
   }
 }
 ```
+</details>
 
 ## dbt-cloud job delete-all
 
@@ -695,7 +719,8 @@ This command deletes a job in a dbt Cloud project. Note that this command uses a
 
 This command fetches all jobs on the account, deletes them one-by-one after user confirmation via prompt and prints out the job delete responses. For more information on the command and its arguments, run `dbt-cloud job delete-all --help`.
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud job delete-all --keep-jobs "[43167, 49663]"
@@ -817,6 +842,7 @@ Job 54659 was deleted.
   }
 ]
 ```
+</details>
 
 ## dbt-cloud job export
 
@@ -824,7 +850,8 @@ Job 54659 was deleted.
 
 This command exports a dbt Cloud job as JSON to a file and can be used in conjunction with [dbt-cloud job import](#dbt-cloud-job-import) to copy jobs between dbt Cloud projects.
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud job export | tee job.json
@@ -875,6 +902,7 @@ This command exports a dbt Cloud job as JSON to a file and can be used in conjun
   "next_run_humanized": null
 }
 ```
+</details>
 
 ## dbt-cloud job import
 
@@ -882,7 +910,8 @@ This command exports a dbt Cloud job as JSON to a file and can be used in conjun
 
 This command imports a dbt Cloud job from exported JSON. You can use JSON manipulation tools (e.g., [jq](https://stedolan.github.io/jq/)) to modify the job definition before importing it.
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> cat job.json | jq '.environment_id = 49819 | .name = "Imported job"' | dbt-cloud job import
@@ -942,11 +971,13 @@ This command imports a dbt Cloud job from exported JSON. You can use JSON manipu
   }
 }
 ```
+</details>
 
 ## dbt-cloud run get
 This command returns the details of a dbt Cloud run. For more information on the API endpoint arguments and response, run `dbt-cloud run get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud run get --run-id 36053848
@@ -1010,11 +1041,13 @@ This command returns the details of a dbt Cloud run. For more information on the
   }
 }
 ```
+</details>
 
 ## dbt-cloud run list
 This command returns a list of runs in the account. For more information on the API endpoint arguments and response, run `dbt-cloud run list --help` and check out the [dbt Cloud API v4 docs](https://docs.getdbt.com/dbt-cloud/api-v4#operation/list-account-runs).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud run list --limit 2
@@ -1103,6 +1136,7 @@ This command returns a list of runs in the account. For more information on the 
   ]
 }
 ```
+</details>
 
 ## dbt-cloud run cancel
 This command cancels a dbt Cloud run. For more information on the API endpoint arguments and response, run `dbt-cloud run cancel --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/cancelRunById).
@@ -1110,7 +1144,8 @@ This command cancels a dbt Cloud run. For more information on the API endpoint a
 > A run can be to be 'cancelled' irregardless of it's previous status. This means that you can send a request to cancel a previously successful / errored run (and nothing happens practically) and the response status would be similar to
 > cancelling a currently queued or running run.
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud run cancel --run-id 36053848
@@ -1174,6 +1209,7 @@ This command cancels a dbt Cloud run. For more information on the API endpoint a
   }
 }
 ```
+</details>
 
 ## dbt-cloud run cancel-all
 
@@ -1183,7 +1219,8 @@ This command fetches all runs on the account, cancels them one-by-one after user
 
 > You should typically use this with a `--status` arg of either `Running` or `Queued` as cancellations can be requested against all runs. Without this, you will effectively be trying to cancel all runs that had ever been scheduled in the project irregardless of its' current status (which could take a long time if your project has had a lot of previous runs).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud run cancel-all --status Running
@@ -1252,11 +1289,13 @@ Run 36053848 has been cancelled.
   }
 ]
 ```
+</details>
 
 ## dbt-cloud run list-artifacts
 This command fetches a list of artifact files generated for a completed run. For more information on the API endpoint arguments and response, run `dbt-cloud run list-artifacts --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listArtifactsByRunId).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud run list-artifacts --run-id 36053848
@@ -1276,22 +1315,26 @@ This command fetches a list of artifact files generated for a completed run. For
   ]
 }
 ```
+</details>
 
 ## dbt-cloud run get-artifact
 This command fetches an artifact file from a completed run. Once a run has completed, you can use this command to download the manifest.json, run_results.json or catalog.json files from dbt Cloud. These artifacts contain information about the models in your dbt project, timing information around their execution, and a status message indicating the result of the model build.
 
 For more information on the API endpoint arguments and response, run `dbt-cloud run get-artifact --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getArtifactsByRunId).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud run get-artifact --run-id 36053848 --path manifest.json > manifest.json
 ```
+</details>
 
 ## dbt-cloud metadata query
 This command queries the dbt Cloud Metadata API using GraphQL. For more information on the Metadata API, see [the docs](https://docs.getdbt.com/docs/dbt-cloud/dbt-cloud-api/metadata/metadata-overview).
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> dbt-cloud metadata query -f query.graphql
@@ -1338,6 +1381,7 @@ This command queries the dbt Cloud Metadata API using GraphQL. For more informat
   }
 }
 ```
+</details>
 
 # Demo utilities
 
@@ -1351,7 +1395,8 @@ pip install dbt-cloud-cli[demo]
 
 An interactive CLI application for exploring `catalog.json` artifacts.
 
-### Usage
+<details>
+  <summary><b>Usage</b></summary>
 
 ```bash
 >> latest_run_id=$(dbt-cloud run list --job-id $DBT_CLOUD_JOB_ID --limit 1 | jq .data[0].id -r)
@@ -1375,6 +1420,7 @@ An interactive CLI application for exploring `catalog.json` artifacts.
  > source
    node
 ```
+</details>
 
 ## Acknowledgements
 
