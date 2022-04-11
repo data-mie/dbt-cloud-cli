@@ -143,107 +143,108 @@ This command returns a list of projects in the account. For more information on 
 
 <details>
   <summary>Usage</summary>
-```bash
->> dbt-cloud project list
-{
-  "status": {
-    "code": 200,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": [
-    {
-      "name": "jaffle_shop",
-      "account_id": REDACTED,
-      "repository_id": REDACTED,
-      "connection_id": REDACTED,
-      "id": REDACTED,
-      "created_at": "2021-04-14 20:23:00.395285+00:00",
-      "updated_at": "2021-11-16 16:32:43.960836+00:00",
-      "skipped_setup": false,
-      "state": 1,
-      "dbt_project_subdirectory": null,
-      "connection": {
-        "id": REDACTED,
+  ```bash
+  >> dbt-cloud project list
+  {
+    "status": {
+      "code": 200,
+      "is_success": true,
+      "user_message": "Success!",
+      "developer_message": ""
+    },
+    "data": [
+      {
+        "name": "jaffle_shop",
         "account_id": REDACTED,
-        "project_id": REDACTED,
-        "name": "Bigquery",
-        "type": "bigquery",
-        "created_by_id": REDACTED,
-        "created_by_service_token_id": null,
-        "details": {
-          "project_id": "REDACTED",
-          "timeout_seconds": 300,
-          "private_key_id": "REDACTED",
-          "client_email": "REDACTED",
-          "client_id": "REDACTED",
-          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-          "token_uri": "https://oauth2.googleapis.com/token",
-          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-          "client_x509_cert_url": "REDACTED",
-          "retries": 1,
-          "location": null,
-          "is_configured_for_oauth": false
-        },
-        "state": 1,
-        "created_at": "2021-11-16 16:26:01.571115+00:00",
-        "updated_at": "2021-11-16 16:37:42.500015+00:00"
-      },
-      "repository": {
+        "repository_id": REDACTED,
+        "connection_id": REDACTED,
         "id": REDACTED,
-        "account_id": REDACTED,
-        "project_id": REDACTED,
-        "full_name": "REDACTED",
-        "remote_url": "REDACTED",
-        "remote_backend": "github",
-        "git_clone_strategy": "github_app",
-        "deploy_key_id": REDACTED,
-        "repository_credentials_id": null,
-        "github_installation_id": REDACTED,
-        "pull_request_url_template": "REDACTED",
+        "created_at": "2021-04-14 20:23:00.395285+00:00",
+        "updated_at": "2021-11-16 16:32:43.960836+00:00",
+        "skipped_setup": false,
         "state": 1,
-        "created_at": "2021-11-16 16:26:24.412439+00:00",
-        "updated_at": "2021-11-16 16:26:24.412455+00:00",
-        "deploy_key": {
+        "dbt_project_subdirectory": null,
+        "connection": {
           "id": REDACTED,
           "account_id": REDACTED,
+          "project_id": REDACTED,
+          "name": "Bigquery",
+          "type": "bigquery",
+          "created_by_id": REDACTED,
+          "created_by_service_token_id": null,
+          "details": {
+            "project_id": "REDACTED",
+            "timeout_seconds": 300,
+            "private_key_id": "REDACTED",
+            "client_email": "REDACTED",
+            "client_id": "REDACTED",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "REDACTED",
+            "retries": 1,
+            "location": null,
+            "is_configured_for_oauth": false
+          },
           "state": 1,
-          "public_key": "REDACTED"
+          "created_at": "2021-11-16 16:26:01.571115+00:00",
+          "updated_at": "2021-11-16 16:37:42.500015+00:00"
         },
-        "github_repo": "REDACTED",
-        "name": "jaffle_shop",
-        "git_provider_id": REDACTED,
-        "gitlab": null,
-        "git_provider": null
+        "repository": {
+          "id": REDACTED,
+          "account_id": REDACTED,
+          "project_id": REDACTED,
+          "full_name": "REDACTED",
+          "remote_url": "REDACTED",
+          "remote_backend": "github",
+          "git_clone_strategy": "github_app",
+          "deploy_key_id": REDACTED,
+          "repository_credentials_id": null,
+          "github_installation_id": REDACTED,
+          "pull_request_url_template": "REDACTED",
+          "state": 1,
+          "created_at": "2021-11-16 16:26:24.412439+00:00",
+          "updated_at": "2021-11-16 16:26:24.412455+00:00",
+          "deploy_key": {
+            "id": REDACTED,
+            "account_id": REDACTED,
+            "state": 1,
+            "public_key": "REDACTED"
+          },
+          "github_repo": "REDACTED",
+          "name": "jaffle_shop",
+          "git_provider_id": REDACTED,
+          "gitlab": null,
+          "git_provider": null
+        },
+        "group_permissions": [],
+        "docs_job_id": null,
+        "freshness_job_id": null,
+        "docs_job": null,
+        "freshness_job": null
+      }
+    ],
+    "extra": {
+      "filters": {
+        "account_id": REDACTED,
+        "limit": 100,
+        "offset": 0
       },
-      "group_permissions": [],
-      "docs_job_id": null,
-      "freshness_job_id": null,
-      "docs_job": null,
-      "freshness_job": null
-    }
-  ],
-  "extra": {
-    "filters": {
-      "account_id": REDACTED,
-      "limit": 100,
-      "offset": 0
-    },
-    "order_by": "id",
-    "pagination": {
-      "count": 1,
-      "total_count": 1
+      "order_by": "id",
+      "pagination": {
+        "count": 1,
+        "total_count": 1
+      }
     }
   }
-}
-```
+  ```
 </details>
 
 ## dbt-cloud environment list
 This command retrieves environments for a given project. For more information on the command, run `dbt-cloud environment list --help`. This command uses the API v3 which has no official documentation yet.
 
-### Usage
+<details>
+  <summary>Usage</summary>
 ```bash
 >> dbt-cloud environment list
 {
@@ -359,6 +360,7 @@ This command retrieves environments for a given project. For more information on
   }
 }
 ```
+</details>
 
 ## dbt-cloud job run
 This command triggers a dbt Cloud job run and returns a run status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud job run --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun).
