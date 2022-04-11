@@ -107,6 +107,12 @@ jobs:
       - name: Test 'dbt-cloud run cancel'
         run: dbt-cloud run cancel --run-id  ${{ steps.job_run.outputs.run_id }}
 
+      - name: Test 'dbt-cloud run cancel-all'
+        run: |
+          dbt-cloud job run --job-id ${{ steps.job_create.outputs.job_id }}
+          dbt-cloud run cancel-all --status Queued
+          dbt-cloud run cancel-all --status Running
+
       - name: Test 'dbt-cloud run list-artifacts'
         run: dbt-cloud run list-artifacts --run-id ${{ steps.job_run.outputs.run_id }}
 
