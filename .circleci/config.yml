@@ -18,6 +18,13 @@ jobs:
           name: Lint Python
           command: black --check .
 
+      - run:
+          name: Run unit tests
+          command: pytest --cov=dbt_cloud --cov-report html:cov_html
+
+      - store_artifacts:
+          path: ./cov_html
+
   integration-tests:
     docker:
       - image: cimg/python:3.9.9
