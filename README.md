@@ -76,7 +76,7 @@ Group | API endpoint | Command | Description |
 This command retrieves all available dbt Cloud accounts. For more information on the API endpoint arguments and response, run `dbt-cloud account list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts).
 
 <details>
-  <summary>### Usage</summary>
+  <summary><h3>Usage</h3></summary>
   ```bash
 >> dbt-cloud account list
 {
