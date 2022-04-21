@@ -1383,6 +1383,25 @@ This command queries the dbt Cloud Metadata API using GraphQL. For more informat
   }
 }
 ```
+
+An alternative way of using the command without saving the GraphQL query to a file is to pipe it to `dbt-cloud metadata query`.
+```bash
+>> echo '{
+  model(jobId: 49663, uniqueId: "model.jaffle_shop.customers") {
+    parentsModels {
+      runId
+      uniqueId
+      executionTime
+    }
+    parentsSources {
+      runId
+      uniqueId
+      state
+    }
+  }
+}' | dbt-cloud metadata query
+```
+
 </details>
 
 # Demo utilities
