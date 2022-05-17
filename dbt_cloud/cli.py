@@ -19,6 +19,7 @@ from dbt_cloud.command import (
     DbtCloudProjectListCommand,
     DbtCloudEnvironmentListCommand,
     DbtCloudAccountListCommand,
+    DbtCloudAuditLogGetCommand,
 )
 from dbt_cloud.demo import data_catalog
 from dbt_cloud.serde import json_to_dict, dict_to_json
@@ -68,6 +69,11 @@ def environment():
 
 @dbt_cloud.group(help="Interact with dbt Cloud accounts.")
 def account():
+    pass
+
+
+@dbt_cloud.group(help="Interact with dbt Cloud audit logs (Enterprise only).")
+def audit_log():
     pass
 
 
@@ -329,6 +335,13 @@ def list(**kwargs):
 @DbtCloudAccountListCommand.click_options
 def list(**kwargs):
     command = DbtCloudAccountListCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@audit_log.command(help=DbtCloudAuditLogGetCommand.get_description())
+@DbtCloudAuditLogGetCommand.click_options
+def get(**kwargs):
+    command = DbtCloudAuditLogGetCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 
