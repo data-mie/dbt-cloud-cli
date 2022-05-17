@@ -18,6 +18,6 @@ class DbtCloudMetadataQueryCommand(DbtCloudAccountCommand):
 
     def execute(self) -> requests.Response:
         response = requests.post(
-            url=self.api_url, headers=self.request_headers, data={"query": self.query}
+            url=self.api_url, headers=self.request_headers, json={"query": self.query}
         )
         return response
