@@ -20,8 +20,8 @@ class DbtCloudRunListCommand(DbtCloudAccountCommand):
 
     limit: Optional[int] = Field(
         100,
-        gte=1,
-        lte=100,
+        ge=1,
+        le=100,
         description="A limit on the number of objects to be returned, between 1 and 100.",
     )
     environment_id: Optional[str] = Field(description="Filter runs by environment ID.")
