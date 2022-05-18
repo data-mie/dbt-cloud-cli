@@ -7,8 +7,12 @@ from dbt_cloud.command.command import DbtCloudAccountCommand
 class DbtCloudAuditLogGetCommand(DbtCloudAccountCommand):
     """Retrieves audit logs for the dbt Cloud account."""
 
-    logged_at_start: str = Field(description="Start date for the returned logs.")
-    logged_at_end: str = Field(description="End date for the returned logs.")
+    logged_at_start: Optional[str] = Field(
+        description="Start date (YYYY-MM-DD) for the returned logs."
+    )
+    logged_at_end: Optional[str] = Field(
+        description="End date (YYYY-MM-DD) for the returned logs."
+    )
     offset: Optional[int] = Field(
         0,
         ge=0,
