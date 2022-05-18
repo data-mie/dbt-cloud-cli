@@ -156,6 +156,14 @@ jobs:
             [[ $account_count > 0 ]] && exit 0 || exit 1
 
       - run:
+          name: Test 'dbt-cloud audit-log get'
+          command: |
+            dbt-cloud audit-log get > audit_logs.json
+            cat audit_logs.json | jq '.data[] | {id: .id}'
+            log_count=$(cat audit_logs.json | jq '.data | length')
+            [[ $log_count > 0 ]] && exit 0 || exit 1
+
+      - run:
           name: Test 'dbt-cloud metadata query'
           command: |
             dbt-cloud metadata query -f tests/data/metadata_query.graphql
