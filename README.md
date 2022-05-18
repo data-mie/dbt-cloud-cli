@@ -39,6 +39,7 @@ Group | API endpoint | Command | Description |
 | --- | --- | --- | --- |
 | Accounts | [https://cloud.getdbt.com/api/v2/accounts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts) | [dbt-cloud account list](#dbt-cloud-account-list) | Retrieves all available accounts |
 | Accounts | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getAccountById) | `dbt-cloud account get` | Not implemented yet |
+| Audit Logs | https://cloud.getdbt.com/api/v3/accounts/{accountId}/audit-logs/ | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get) | Retrieves audit logs for the dbt Cloud account |
 | Projects | https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | Returns a list of projects in the account |
 | Projects | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/{projectId}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getProjectById) | `dbt-cloud project get` | Not implemented yet |
 | Environments | https://cloud.getdbt.com/api/v3/accounts/{accountId}/projects/{projectId}/environments | [dbt-cloud environment list](#dbt-cloud-environment-list) | Retrieves environments for a given project |
@@ -59,6 +60,7 @@ Group | API endpoint | Command | Description |
 # Commands
 
 * [dbt-cloud account list](#dbt-cloud-account-list)
+* [dbt-cloud audit-log get](#dbt-cloud-audit-log-get)
 * [dbt-cloud project list](#dbt-cloud-project-list)
 * [dbt-cloud environment list](#dbt-cloud-environment-list)
 * [dbt-cloud job run](#dbt-cloud-job-run)
@@ -137,6 +139,72 @@ This command retrieves all available dbt Cloud accounts. For more information on
     "pagination": {
       "count": 1,
       "total_count": 1
+    }
+  }
+}
+```
+</details>
+
+## dbt-cloud audit-log get
+
+❗ **This command is available for Enterprise accounts only.**
+
+This command retrieves audit logs for the dbt Cloud account. For more information on the command, run `dbt-cloud audit-log get --help`. This command uses the API v3 which has no official documentation yet.
+
+<details>
+  <summary><b>Usage</b></summary>
+
+```bash
+>> dbt-cloud audit-log get --logged-at-start 2022-05-01 --logged-at-end 2022-05-07 --limit 1
+{
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": [
+    {
+      "account_id": 123456,
+      "service": "SERVICE_DBT_CLOUD",
+      "source": "SOURCE_CLOUD_UI",
+      "routing_key": "v1.events.auth.credentialsloginsucceeded",
+      "actor_type": "ACTOR_USER",
+      "actor_name": "REDACTED",
+      "actor_id": 123454,
+      "logged_at": "2022-05-05 06:51:10+00:00",
+      "uuid": "8868c439-8928-4e8c-924b-77558d65db0b",
+      "actor_ip": "REDACTED",
+      "metadata": {
+        "auth_credentials": {
+          "user": {
+            "id": "REDACTED",
+            "email": "REDACTED"
+          }
+        }
+      },
+      "internal": false,
+      "id": 1809583,
+      "state": 1,
+      "created_at": "2022-05-05 06:51:12.454677+00:00",
+      "updated_at": "2022-05-05 06:51:12.454677+00:00"
+    }
+  ],
+  "extra": {
+    "filters": {
+      "account_id": 123456,
+      "limit": 1,
+      "offset": 0,
+      "logged_at__range": [
+        "2022-05-01 00:00:00Z",
+        "2022-05-07 00:00:00Z"
+      ],
+      "internal": false
+    },
+    "order_by": "-logged_at",
+    "pagination": {
+      "count": 1,
+      "total_count": 4
     }
   }
 }
@@ -717,7 +785,7 @@ This command deletes a job in a dbt Cloud project. Note that this command uses a
 
 ## dbt-cloud job delete-all
 
-**This command is a composition of one or more base commands.**
+💡 **This command is a composition of one or more base commands.**
 
 This command fetches all jobs on the account, deletes them one-by-one after user confirmation via prompt and prints out the job delete responses. For more information on the command and its arguments, run `dbt-cloud job delete-all --help`.
 
@@ -848,7 +916,7 @@ Job 54659 was deleted.
 
 ## dbt-cloud job export
 
-**This command is a composition of one or more base commands.**
+💡 **This command is a composition of one or more base commands.**
 
 This command exports a dbt Cloud job as JSON to a file and can be used in conjunction with [dbt-cloud job import](#dbt-cloud-job-import) to copy jobs between dbt Cloud projects.
 
@@ -908,7 +976,7 @@ This command exports a dbt Cloud job as JSON to a file and can be used in conjun
 
 ## dbt-cloud job import
 
-**This command is a composition of one or more base commands.**
+💡 **This command is a composition of one or more base commands.**
 
 This command imports a dbt Cloud job from exported JSON. You can use JSON manipulation tools (e.g., [jq](https://stedolan.github.io/jq/)) to modify the job definition before importing it.
 
@@ -1215,7 +1283,7 @@ This command cancels a dbt Cloud run. For more information on the API endpoint a
 
 ## dbt-cloud run cancel-all
 
-**This command is a composition of one or more base commands.**
+💡 **This command is a composition of one or more base commands.**
 
 This command fetches all runs on the account, cancels them one-by-one after user confirmation via prompt and prints out the run cancellation responses. For more information on the command and its arguments, run `dbt-cloud run cancel-all --help`.
 

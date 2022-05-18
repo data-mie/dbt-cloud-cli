@@ -15,6 +15,7 @@ from dbt_cloud.command import (
     DbtCloudRunListCommand,
     DbtCloudEnvironmentListCommand,
     DbtCloudAccountListCommand,
+    DbtCloudAuditLogGetCommand,
 )
 
 
@@ -153,6 +154,17 @@ COMMAND_TEST_CASES = [
         load_response("account_list_response"),
         "get",
         marks=pytest.mark.account,
+    ),
+    pytest.param(
+        "audit_log_get",
+        DbtCloudAuditLogGetCommand(
+            api_token=API_TOKEN,
+            logged_at_start="2022-05-01",
+            logged_at_end="2022-05-07",
+        ),
+        load_response("audit_log_get_response"),
+        "get",
+        marks=pytest.mark.audit_log,
     ),
 ]
 
