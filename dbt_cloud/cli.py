@@ -19,6 +19,7 @@ from dbt_cloud.command import (
     DbtCloudProjectListCommand,
     DbtCloudEnvironmentListCommand,
     DbtCloudAccountListCommand,
+    DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
 )
 from dbt_cloud.demo import data_catalog
@@ -335,6 +336,13 @@ def list(**kwargs):
 @DbtCloudAccountListCommand.click_options
 def list(**kwargs):
     command = DbtCloudAccountListCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@account.command(help=DbtCloudAccountGetCommand.get_description())
+@DbtCloudAccountGetCommand.click_options
+def get(**kwargs):
+    command = DbtCloudAccountGetCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 
