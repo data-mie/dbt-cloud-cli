@@ -1,4 +1,5 @@
 import click
+from collections import OrderedDict
 from mergedeep import merge
 from pydantic import validator, BaseModel, PrivateAttr
 from dbt_cloud.serde import json_to_dict
@@ -21,7 +22,7 @@ def translate_click_options(**kwargs) -> dict:
 class ClickBaseModel(BaseModel):
     @classmethod
     def click_options(cls, function, key_prefix: str = ""):
-        for key, field in reversed(cls.__fields__.items()):
+        for key, field in reversed(OrderedDict(cls.__fields__).items()):
             try:
                 is_nested_object = issubclass(field.type_, BaseModel)
             except TypeError:
