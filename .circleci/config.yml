@@ -132,6 +132,11 @@ jobs:
             dbt-cloud run get-artifact --run-id $run_id --path manifest.json
 
       - run:
+          name: Test 'dbt-cloud project get'
+          command: |
+            dbt-cloud project get
+
+      - run:
           name: Test 'dbt-cloud project list'
           command: |
             dbt-cloud project list > projects.json
@@ -151,7 +156,7 @@ jobs:
           name: Test 'dbt-cloud account get'
           command: |
             dbt-cloud account get
-            
+
       - run:
           name: Test 'dbt-cloud account list'
           command: |

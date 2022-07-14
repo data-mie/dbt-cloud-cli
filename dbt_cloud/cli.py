@@ -16,6 +16,7 @@ from dbt_cloud.command import (
     DbtCloudRunListCommand,
     DbtCloudRunCancelCommand,
     DbtCloudJobListCommand,
+    DbtCloudProjectGetCommand,
     DbtCloudProjectListCommand,
     DbtCloudEnvironmentListCommand,
     DbtCloudAccountListCommand,
@@ -316,6 +317,13 @@ def get_artifact(file, **kwargs):
     response = command.execute()
     file.write(response.content)
     response.raise_for_status()
+
+
+@project.command(help=DbtCloudProjectGetCommand.get_description())
+@DbtCloudProjectGetCommand.click_options
+def get(**kwargs):
+    command = DbtCloudProjectGetCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
 
 
 @project.command(help=DbtCloudProjectListCommand.get_description())
