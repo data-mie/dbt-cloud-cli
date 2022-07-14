@@ -148,6 +148,11 @@ jobs:
             [[ $environment_count > 0 ]] && exit 0 || exit 1
 
       - run:
+          name: Test 'dbt-cloud account get'
+          command: |
+            dbt-cloud account get
+            
+      - run:
           name: Test 'dbt-cloud account list'
           command: |
             dbt-cloud account list > accounts.json
