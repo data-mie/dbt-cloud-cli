@@ -1,0 +1,41 @@
+{
+    "status": {
+        "code": 200,
+        "is_success": true,
+        "user_message": "Success!",
+        "developer_message": ""
+    },
+    "data": {
+        "docs_job_id": null,
+        "freshness_job_id": null,
+        "lock_reason": null,
+        "unlock_if_subscription_renewed": false,
+        "read_only_seats": 10,
+        "id": 1,
+        "name": "REDACTED",
+        "state": 1,
+        "plan": "enterprise",
+        "pending_cancel": false,
+        "run_slots": 15,
+        "developer_seats": 10,
+        "queue_limit": 50,
+        "pod_memory_request_mebibytes": 600,
+        "run_duration_limit_seconds": 86400,
+        "enterprise_authentication_method": null,
+        "enterprise_login_slug": null,
+        "enterprise_unique_identifier": null,
+        "billing_email_address": null,
+        "locked": false,
+        "develop_file_system": true,
+        "unlocked_at": null,
+        "created_at": "2021-04-14T20:23:00.305964+00:00",
+        "updated_at": "2022-05-17T16:45:23.288391+00:00",
+        "starter_repo_url": null,
+        "sso_reauth": false,
+        "git_auth_level": "personal",
+        "identifier": "REDACTED",
+        "docs_job": null,
+        "freshness_job": null,
+        "enterprise_login_url": "https://cloud.getdbt.com/enterprise-login/None/"
+    }
+}
