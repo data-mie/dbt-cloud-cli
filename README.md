@@ -281,7 +281,7 @@ This command retrieves dbt Cloud project information. For more information on th
 >> dbt-cloud project get
 ```
 
-[Response](tests/data/project_get_response.json)
+[Click to view sample response](tests/data/project_get_response.json)
 </details>
 
 
