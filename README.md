@@ -46,8 +46,8 @@ Group | API endpoint | Command | Description |
 | Accounts | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getAccountById) | [dbt-cloud account get](#dbt-cloud-account-get)  | Retrieves dbt Cloud account information |
 | Accounts | [https://cloud.getdbt.com/api/v2/accounts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts) | [dbt-cloud account list](#dbt-cloud-account-list) | Retrieves all available accounts |
 | Audit Logs | https://cloud.getdbt.com/api/v3/accounts/{accountId}/audit-logs/ | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get) | Retrieves audit logs for the dbt Cloud account |
+| Projects | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/{projectId}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getProjectById) | [dbt-cloud project get](#dbt-cloud-project-get) | Retrieves dbt Cloud project information |
 | Projects | https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | Returns a list of projects in the account |
-| Projects | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/{projectId}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getProjectById) | `dbt-cloud project get` | Not implemented yet |
 | Environments | https://cloud.getdbt.com/api/v3/accounts/{accountId}/projects/{projectId}/environments | [dbt-cloud environment list](#dbt-cloud-environment-list) | Retrieves environments for a given project |
 | Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listJobsForAccount) | [dbt-cloud job list](#dbt-cloud-job-list) | Returns a list of jobs in the account |
 | Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getJobById) | [dbt-cloud job get](#dbt-cloud-job-get) | Returns the details of a dbt Cloud job |
@@ -68,6 +68,7 @@ Group | API endpoint | Command | Description |
 * [dbt-cloud account get](#dbt-cloud-account-get)
 * [dbt-cloud account list](#dbt-cloud-account-list)
 * [dbt-cloud audit-log get](#dbt-cloud-audit-log-get)
+* [dbt-cloud project get](#dbt-cloud-project-get)
 * [dbt-cloud project list](#dbt-cloud-project-list)
 * [dbt-cloud environment list](#dbt-cloud-environment-list)
 * [dbt-cloud job run](#dbt-cloud-job-run)
@@ -268,6 +269,19 @@ This command retrieves audit logs for the dbt Cloud account. For more informatio
   }
 }
 ```
+</details>
+
+## dbt-cloud project get
+This command retrieves dbt Cloud project information. For more information on the API endpoint arguments and response, run `dbt-cloud project get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#tag/Projects/operation/getProjectById).
+
+<details>
+  <summary><b>Usage</b></summary>
+
+```bash
+>> dbt-cloud project get
+```
+
+[Response](tests/data/project_get_response.json)
 </details>
 
 
