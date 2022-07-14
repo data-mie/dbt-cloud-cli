@@ -11,7 +11,13 @@
 
 ## Installation
 
-`dbt-cloud-cli` has been tested on Python 3.8 but it should work on Python>=3.6.
+`dbt-cloud-cli` has been tested with the following Python versions:
+
+* ✅ Python 3.6
+* ✅ Python 3.7
+* ✅ Python 3.8
+* ✅ Python 3.9
+* ✅ Python 3.10
 
 Installation from PyPI:
 

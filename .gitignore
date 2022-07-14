@@ -11,3 +11,6 @@ dist/
 # pytest-cov
 .coverage
 cov_html/
+
+# tox
+.tox/
