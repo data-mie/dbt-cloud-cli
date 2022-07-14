@@ -43,8 +43,8 @@ The following environment variables are used as argument defaults:
 
 Group | API endpoint | Command | Description |
 | --- | --- | --- | --- |
+| Accounts | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getAccountById) | [dbt-cloud account get](#dbt-cloud-account-get)  | Retrieves dbt Cloud account information |
 | Accounts | [https://cloud.getdbt.com/api/v2/accounts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts) | [dbt-cloud account list](#dbt-cloud-account-list) | Retrieves all available accounts |
-| Accounts | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getAccountById) | `dbt-cloud account get` | Not implemented yet |
 | Audit Logs | https://cloud.getdbt.com/api/v3/accounts/{accountId}/audit-logs/ | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get) | Retrieves audit logs for the dbt Cloud account |
 | Projects | https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | Returns a list of projects in the account |
 | Projects | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/{projectId}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getProjectById) | `dbt-cloud project get` | Not implemented yet |
@@ -65,6 +65,7 @@ Group | API endpoint | Command | Description |
 
 # Commands
 
+* [dbt-cloud account get](#dbt-cloud-account-get)
 * [dbt-cloud account list](#dbt-cloud-account-list)
 * [dbt-cloud audit-log get](#dbt-cloud-audit-log-get)
 * [dbt-cloud project list](#dbt-cloud-project-list)
@@ -84,6 +85,58 @@ Group | API endpoint | Command | Description |
 * [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts)
 * [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact)
 * [dbt-cloud metadata query](#dbt-cloud-metadata-query)
+
+## dbt-cloud account get
+This command retrieves dbt Cloud account information. For more information on the API endpoint arguments and response, run `dbt-cloud account get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#tag/Accounts/operation/getAccountById).
+
+<details>
+  <summary><b>Usage</b></summary>
+
+```bash
+>> dbt-cloud account get
+{
+    "status": {
+        "code": 200,
+        "is_success": true,
+        "user_message": "Success!",
+        "developer_message": ""
+    },
+    "data": {
+        "docs_job_id": null,
+        "freshness_job_id": null,
+        "lock_reason": null,
+        "unlock_if_subscription_renewed": false,
+        "read_only_seats": 10,
+        "id": 1,
+        "name": "REDACTED",
+        "state": 1,
+        "plan": "enterprise",
+        "pending_cancel": false,
+        "run_slots": 15,
+        "developer_seats": 10,
+        "queue_limit": 50,
+        "pod_memory_request_mebibytes": 600,
+        "run_duration_limit_seconds": 86400,
+        "enterprise_authentication_method": null,
+        "enterprise_login_slug": null,
+        "enterprise_unique_identifier": null,
+        "billing_email_address": null,
+        "locked": false,
+        "develop_file_system": true,
+        "unlocked_at": null,
+        "created_at": "2021-04-14T20:23:00.305964+00:00",
+        "updated_at": "2022-05-17T16:45:23.288391+00:00",
+        "starter_repo_url": null,
+        "sso_reauth": false,
+        "git_auth_level": "personal",
+        "identifier": "REDACTED",
+        "docs_job": null,
+        "freshness_job": null,
+        "enterprise_login_url": "https://cloud.getdbt.com/enterprise-login/None/"
+    }
+}
+```
+</details>
 
 ## dbt-cloud account list
 This command retrieves all available dbt Cloud accounts. For more information on the API endpoint arguments and response, run `dbt-cloud account list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts).
