@@ -21,11 +21,15 @@
 
 Installation from PyPI:
 
-    pip install dbt-cloud-cli
+```bash
+pip install dbt-cloud-cli
+```
 
-Installation from GitHub:
+Running in Docker:
 
-    pip install git+https://github.com/data-mie/dbt-cloud-cli.git
+```bash
+docker run datamie/dbt-cloud-cli:latest
+```
 
 ## Environment variables
 
