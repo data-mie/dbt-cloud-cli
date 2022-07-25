@@ -6,6 +6,6 @@ WORKDIR $APP_HOME
 COPY setup.py README.md ./
 COPY dbt_cloud ./dbt_cloud/
 
-RUN pip install .
+RUN pip install --no-cache-dir .
 
 ENTRYPOINT ["dbt-cloud"]
