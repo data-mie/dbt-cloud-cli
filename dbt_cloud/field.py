@@ -13,7 +13,7 @@ class PythonLiteralOption(click.Option):
 
 
 def get_env(name: str, default=None, allow_none: bool = False):
-    value = os.getenv("DBT_CLOUD_API_TOKEN", default=default)
+    value = os.getenv(name, default=default)
     if not allow_none and value is None:
         raise ValueError(f"{name} is not defined")
     return value
