@@ -6,6 +6,8 @@ from pydantic import Field
 
 class PythonLiteralOption(click.Option):
     def type_cast_value(self, ctx, value):
+        if value is None:
+            return value
         try:
             return ast.literal_eval(value)
         except:
