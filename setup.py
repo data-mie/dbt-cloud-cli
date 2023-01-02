@@ -6,7 +6,7 @@ README = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name="dbt-cloud-cli",
-    version="0.7.2",
+    version="0.7.3",
     description="dbt Cloud command line interface (CLI)",
     long_description=README,
     long_description_content_type="text/markdown",
