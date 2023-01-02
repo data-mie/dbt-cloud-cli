@@ -1,9 +1,8 @@
-import os
 import requests
 from typing import Optional, List
 from pydantic import Field, validator
 from dbt_cloud.command.command import DbtCloudAccountCommand
-from dbt_cloud.field import JOB_ID_FIELD
+from dbt_cloud.field import JOB_ID_FIELD, PythonLiteralOption
 
 
 class DbtCloudJobRunCommand(DbtCloudAccountCommand):
@@ -39,7 +38,8 @@ class DbtCloudJobRunCommand(DbtCloudAccountCommand):
         description="Override the timeout in seconds for this job"
     )
     steps_override: Optional[List[str]] = Field(
-        description="Override the list of steps for this job"
+        click_cls=PythonLiteralOption,
+        description="Override the list of steps for this job",
     )
 
     @validator("steps_override")
