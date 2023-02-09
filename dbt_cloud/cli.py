@@ -298,17 +298,16 @@ def list(**kwargs):
     if not command.paginate:
         execute_and_print(command)
     else:
-        count = 0
-        total_count = count + 1
+        command.offset = 0
         command.limit = 100
         responses = []
-        while count < total_count:
-            command.offset = count
+        while True:
             response = command.execute()
             response.raise_for_status()
             responses.append(response)
-            count += response.json()["extra"]["pagination"]["count"]
-            total_count = response.json()["extra"]["pagination"]["total_count"]
+            command.offset += response.json()["extra"]["pagination"]["count"]
+            if command.offset >= response.json()["extra"]["pagination"]["total_count"]:
+                break
 
         # Use last response and append all data to it
         last_response_dict = responses[-1].json()
