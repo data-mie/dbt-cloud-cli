@@ -293,14 +293,38 @@ def list_artifacts(**kwargs):
 
 @job_run.command(help=DbtCloudRunListCommand.get_description())
 @DbtCloudRunListCommand.click_options
+@click.option(
+    "--paginate",
+    default=False,
+    is_flag=True,
+    help="Return all runs using pagination (ignores limit and offset).",
+)
 def list(**kwargs):
+    paginate = kwargs.pop("paginate")
     command = DbtCloudRunListCommand.from_click_options(**kwargs)
-    response = execute_and_print(command)
-    if command.paginate:
-        pagination_token = response.headers.get("X-Dbt-Continuation-Token")
-        while pagination_token is not None:
-            response = execute_and_print(command, pagination_token=pagination_token)
-            pagination_token = response.headers.get("X-Dbt-Continuation-Token")
+    if not paginate:
+        execute_and_print(command)
+    else:
+        command.offset = 0
+        command.limit = 100
+        responses = []
+        while True:
+            response = command.execute()
+            response.raise_for_status()
+            responses.append(response)
+            command.offset += response.json()["extra"]["pagination"]["count"]
+            if command.offset >= response.json()["extra"]["pagination"]["total_count"]:
+                break
+
+        # Use last response and append all data to it
+        last_response_dict = responses[-1].json()
+        last_response_dict["data"] = []
+        for response in responses:
+            last_response_dict["data"].extend(response.json()["data"])
+        last_response_dict["extra"]["pagination"]["count"] = len(
+            last_response_dict["data"]
+        )
+        click.echo(dict_to_json(last_response_dict))
 
 
 @job_run.command(help=DbtCloudRunGetArtifactCommand.get_description())
