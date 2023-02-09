@@ -22,7 +22,7 @@
           "thread_count_with": null,
           "timeout_after_with": null
         },
-        "href": "https://cloud.getdbt.com/api/v4/accounts/123456/runs/40650768",
+        "href": "https://cloud.getdbt.com/api/v2/accounts/123456/runs/40650768",
         "status": "Succeeded",
         "status_message": null,
         "dbt_version": "0.21.0",
@@ -62,7 +62,7 @@
           "thread_count_with": null,
           "timeout_after_with": null
         },
-        "href": "https://cloud.getdbt.com/api/v4/accounts/123456/runs/40538548",
+        "href": "https://cloud.getdbt.com/api/v2/accounts/123456/runs/40538548",
         "status": "Succeeded",
         "status_message": null,
         "dbt_version": "0.21.0",

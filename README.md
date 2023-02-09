@@ -59,7 +59,7 @@ Group | API endpoint | Command | Description |
 | Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/updateJobById) | `dbt-cloud job update` | Not implemented yet |
 | Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/run/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun) | [dbt-cloud job run](#dbt-cloud-job-run) | Triggers a dbt Cloud job run and returns a run status JSON response |
 | Jobs | https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/ | [dbt-cloud job delete](#dbt-cloud-job-delete) | Deletes a job in a dbt Cloud project |
-| Runs | [https://cloud.getdbt.com/api/v4/accounts/{accountID}/runs](https://docs.getdbt.com/dbt-cloud/api-v4#operation/list-account-runs) | [dbt-cloud run list](#dbt-cloud-run-list) | Returns a list of runs in the account |
+| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountID}/runs](https://docs.getdbt.com/dbt-cloud/api-v2#tag/Runs/operation/listRunsForAccount) | [dbt-cloud run list](#dbt-cloud-run-list) | Returns a list of runs in the account |
 | Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById) | [dbt-cloud run get](#dbt-cloud-run-get) | Returns the details of a dbt Cloud run |
 | Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/artifacts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listArtifactsByRunId) | [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts) | Fetches a list of artifact files generated for a completed run |
 | Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/artifacts/{path}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getArtifactsByRunId) | [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) | Fetches an artifact file from a completed run |
@@ -1191,7 +1191,7 @@ This command returns the details of a dbt Cloud run. For more information on the
 </details>
 
 ## dbt-cloud run list
-This command returns a list of runs in the account. For more information on the API endpoint arguments and response, run `dbt-cloud run list --help` and check out the [dbt Cloud API v4 docs](https://docs.getdbt.com/dbt-cloud/api-v4#operation/list-account-runs).
+This command returns a list of runs in the account. For more information on the API endpoint arguments and response, run `dbt-cloud run list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#tag/Runs/operation/listRunsForAccount).
 
 <details>
   <summary><b>Usage</b></summary>
@@ -1222,7 +1222,7 @@ This command returns a list of runs in the account. For more information on the 
         "thread_count_with": null,
         "timeout_after_with": null
       },
-      "href": "https://cloud.getdbt.com/api/v4/accounts/REDACTED/runs/40650768",
+      "href": "https://cloud.getdbt.com/api/v2/accounts/REDACTED/runs/40650768",
       "status": "Succeeded",
       "status_message": null,
       "dbt_version": "0.21.0",
@@ -1262,7 +1262,7 @@ This command returns a list of runs in the account. For more information on the 
         "thread_count_with": null,
         "timeout_after_with": null
       },
-      "href": "https://cloud.getdbt.com/api/v4/accounts/REDACTED/runs/40538548",
+      "href": "https://cloud.getdbt.com/api/v2/accounts/REDACTED/runs/40538548",
       "status": "Succeeded",
       "status_message": null,
       "dbt_version": "0.21.0",

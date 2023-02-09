@@ -295,12 +295,30 @@ def list_artifacts(**kwargs):
 @DbtCloudRunListCommand.click_options
 def list(**kwargs):
     command = DbtCloudRunListCommand.from_click_options(**kwargs)
-    response = execute_and_print(command)
-    if command.paginate:
-        pagination_token = response.headers.get("X-Dbt-Continuation-Token")
-        while pagination_token is not None:
-            response = execute_and_print(command, pagination_token=pagination_token)
-            pagination_token = response.headers.get("X-Dbt-Continuation-Token")
+    if not command.paginate:
+        execute_and_print(command)
+    else:
+        count = 0
+        total_count = count + 1
+        command.limit = 100
+        responses = []
+        while count < total_count:
+            command.offset = count
+            response = command.execute()
+            response.raise_for_status()
+            responses.append(response)
+            count += response.json()["extra"]["pagination"]["count"]
+            total_count = response.json()["extra"]["pagination"]["total_count"]
+
+        # Use last response and append all data to it
+        last_response_dict = responses[-1].json()
+        last_response_dict["data"] = []
+        for response in responses:
+            last_response_dict["data"].extend(response.json()["data"])
+        last_response_dict["extra"]["pagination"]["count"] = len(
+            last_response_dict["data"]
+        )
+        click.echo(dict_to_json(last_response_dict))
 
 
 @job_run.command(help=DbtCloudRunGetArtifactCommand.get_description())
