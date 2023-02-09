@@ -45,11 +45,6 @@ class DbtCloudRunListCommand(DbtCloudAccountCommand):
         le=100,
         description="A limit on the number of objects to be returned, between 1 and 100.",
     )
-    paginate: Optional[bool] = Field(
-        False,
-        is_flag=True,
-        description="Return all runs using pagination (ignores limit and offset).",
-    )
     _api_version: str = PrivateAttr("v2")
 
     @property

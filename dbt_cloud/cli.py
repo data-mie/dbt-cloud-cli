@@ -293,9 +293,16 @@ def list_artifacts(**kwargs):
 
 @job_run.command(help=DbtCloudRunListCommand.get_description())
 @DbtCloudRunListCommand.click_options
+@click.option(
+    "--paginate",
+    default=False,
+    is_flag=True,
+    help="Return all runs using pagination (ignores limit and offset).",
+)
 def list(**kwargs):
+    paginate = kwargs.pop("paginate")
     command = DbtCloudRunListCommand.from_click_options(**kwargs)
-    if not command.paginate:
+    if not paginate:
         execute_and_print(command)
     else:
         command.offset = 0
