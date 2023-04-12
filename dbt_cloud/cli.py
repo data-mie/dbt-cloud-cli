@@ -408,6 +408,3 @@ def demo():
 
 
 demo.add_command(data_catalog)
-
-if __name__ == "__main__":
-    dbt_cloud()
