@@ -108,6 +108,7 @@ def run(wait, file, **kwargs):
             run_get_command = DbtCloudRunGetCommand(
                 api_token=command.api_token,
                 account_id=command.account_id,
+                dbt_cloud_host=command.dbt_cloud_host,
                 run_id=run_id,
             )
             response = run_get_command.execute()
