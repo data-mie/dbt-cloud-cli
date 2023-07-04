@@ -21,7 +21,7 @@ setup(
     ],
     python_requires=">=3.6",
     packages=find_packages(exclude=("tests",)),
-    install_requires=["requests", "click", "pydantic", "mergedeep"],
+    install_requires=["requests", "click", "pydantic==1.10.10", "mergedeep"],
     extras_require={
         "test": ["pytest", "pytest-cov", "pytest-datadir", "requests-mock"],
         "lint": ["black"],
