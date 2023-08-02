@@ -18,6 +18,7 @@ from dbt_cloud.command import (
     DbtCloudRunListCommand,
     DbtCloudEnvironmentListCommand,
     DbtCloudEnvironmentGetCommand,
+    DbtCloudEnvironmentDeleteCommand,
     DbtCloudAccountListCommand,
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
@@ -191,6 +192,15 @@ COMMAND_TEST_CASES = [
         ),
         load_response("environment_get_response"),
         "get",
+        marks=pytest.mark.environment,
+    ),
+    pytest.param(
+        "environment_delete",
+        DbtCloudEnvironmentDeleteCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, environment_id=222062
+        ),
+        load_response("environment_delete_response"),
+        "delete",
         marks=pytest.mark.environment,
     ),
     pytest.param(
