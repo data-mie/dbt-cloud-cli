@@ -1,0 +1,23 @@
+{
+    "status": {
+      "code": 200,
+      "is_success": true,
+      "user_message": "Success!",
+      "developer_message": ""
+    },
+    "data": {
+      "created_by_id": 10862,
+      "created_by_service_token_id": null,
+      "id": 135092,
+      "state": 1,
+      "account_id": 123456,
+      "dbt_project_id": 12356,
+      "name": "Snowflake",
+      "type": "snowflake",
+      "account": "snowflake_account",
+      "database": "snowflake_database",
+      "warehouse": "transforming",
+      "role": "transformer",
+      "allow_sso": false
+    }
+  }

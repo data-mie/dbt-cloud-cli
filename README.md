@@ -62,8 +62,8 @@ For more information on a command, run `dbt-cloud <command> --help`. For more in
 | Environment  | [dbt-cloud environment update](#dbt-cloud-environment-update) | POST api/v2/accounts/{account_id}/environments/{id}/ | ❌ | 
 | Connection  | [dbt-cloud connection create](#dbt-cloud-connection-create) | POST api/v2/accounts/{account_id}/connections/ | ❌ |
 | Connection  | [dbt-cloud connection delete](#dbt-cloud-connection-delete) | DELETE api/v2/accounts/{account_id}/connections/{id}/ | ❌ |
-| Connection  | [dbt-cloud connection get](#dbt-cloud-connection-get) | GET api/v2/accounts/{account_id}/connections/{id}/ | ❌ |
-| Connection  | [dbt-cloud connection list](#dbt-cloud-connection-list) | GET api/v2/accounts/{account_id}/connections/ | ❌ |
+| Connection  | [dbt-cloud connection get](#dbt-cloud-connection-get) | GET api/v2/accounts/{account_id}/connections/{id}/ | ✅ |
+| Connection  | [dbt-cloud connection list](#dbt-cloud-connection-list) | GET api/v2/accounts/{account_id}/connections/ | ✅ |
 | Connection  | [dbt-cloud connection update](#dbt-cloud-connection-update) | POST api/v2/accounts/{account_id}/connections/{id}/ | ❌ |
 | Repository  | [dbt-cloud repository create](#dbt-cloud-repository-create) | POST api/v2/accounts/{account_id}/repositories/ | ❌ |
 | Repository  | [dbt-cloud repository delete](#dbt-cloud-repository-delete) | DELETE api/v2/accounts/{account_id}/repositories/{id}/ | ❌ |
@@ -185,6 +185,27 @@ dbt-cloud environment get --account-id 54321 --environment-id 67890
 ```
 
 [Click to view sample response](tests/data/environment_get_response.json)
+
+
+## dbt-cloud connection list
+This command retrievies details of dbt Cloud database connections in a given account.
+
+### Usage
+```bash
+dbt-cloud connection list --account-id 54321 --limit 1
+```
+
+[Click to view sample response](tests/data/connection_list_response.json)
+
+## dbt-cloud connection get
+This command retrievies the details of a dbt Cloud database connection.
+
+### Usage
+```bash
+dbt-cloud connection get --account-id 54321 --connection-id 56901
+```
+
+[Click to view sample response](tests/data/connection_get_response.json)
 
 ## dbt-cloud job run
 This command triggers a dbt Cloud job run and returns a run status JSON response.

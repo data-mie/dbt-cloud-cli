@@ -27,3 +27,4 @@ from .account import DbtCloudAccountListCommand, DbtCloudAccountGetCommand
 from .audit_log import DbtCloudAuditLogGetCommand
 from .metadata import DbtCloudMetadataQueryCommand
 from .command import DbtCloudAccountCommand
+from .connection import DbtCloudConnectionGetCommand, DbtCloudConnectionListCommand
