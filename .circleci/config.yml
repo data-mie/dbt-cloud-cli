@@ -194,7 +194,9 @@ workflows:
     jobs:
       - approve:
           type: approval
-      - unit-tests
+      - unit-tests:
+          requires:
+            - approve
       - integration-tests:
           requires:
             - approve
