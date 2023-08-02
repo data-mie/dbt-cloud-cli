@@ -5,7 +5,7 @@ from dbt_cloud.field import ACCOUNT_ID_FIELD, ENVIRONMENT_ID_FIELD
 
 
 class DbtCloudEnvironmentGetCommand(DbtCloudAccountCommand):
-    """Retrieves information about an environment in a given account. """
+    """Retrieves information about an environment in a given account."""
 
     environment_id: int = ENVIRONMENT_ID_FIELD
     account_id: int = ACCOUNT_ID_FIELD

@@ -15,6 +15,7 @@ from dbt_cloud.command import (
     DbtCloudRunListArtifactsCommand,
     DbtCloudRunListCommand,
     DbtCloudEnvironmentListCommand,
+    DbtCloudEnvironmentGetCommand,
     DbtCloudAccountListCommand,
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
@@ -156,6 +157,15 @@ COMMAND_TEST_CASES = [
             api_token=API_TOKEN, account_id=ACCOUNT_ID, project_id=PROJECT_ID
         ),
         load_response("environment_list_response"),
+        "get",
+        marks=pytest.mark.environment,
+    ),
+    pytest.param(
+        "environment_get",
+        DbtCloudEnvironmentGetCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, environment_id=ENVIRONMENT_ID
+        ),
+        load_response("environment_get_response"),
         "get",
         marks=pytest.mark.environment,
     ),
