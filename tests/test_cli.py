@@ -38,3 +38,18 @@ def test_cli_environment_list(account_id):
     assert len(response["data"]) == 1
     for environment in response["data"]:
         assert environment["account_id"] == account_id
+
+
+@pytest.mark.integration
+def test_cli_project_create(account_id):
+    project_name = "pytest project"
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        ["project", "create", "--account-id", account_id, "--name", project_name],
+    )
+
+    assert result.exit_code == 0
+    response = json.loads(result.output)
+    assert response["data"]["name"] == project_name
+    assert response["data"]["account_id"] == account_id
