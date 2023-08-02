@@ -19,6 +19,7 @@ from dbt_cloud.command import (
     DbtCloudProjectGetCommand,
     DbtCloudProjectListCommand,
     DbtCloudEnvironmentListCommand,
+    DbtCloudEnvironmentGetCommand,
     DbtCloudAccountListCommand,
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
@@ -362,6 +363,13 @@ def list(**kwargs):
 @DbtCloudEnvironmentListCommand.click_options
 def list(**kwargs):
     command = DbtCloudEnvironmentListCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@environment.command(help=DbtCloudEnvironmentGetCommand.get_description())
+@DbtCloudEnvironmentGetCommand.click_options
+def get(**kwargs):
+    command = DbtCloudEnvironmentGetCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 

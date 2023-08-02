@@ -14,7 +14,7 @@ from .run import (
     DbtCloudRunCancelCommand,
 )
 from .project import DbtCloudProjectListCommand, DbtCloudProjectGetCommand
-from .environment import DbtCloudEnvironmentListCommand
+from .environment import DbtCloudEnvironmentListCommand, DbtCloudEnvironmentGetCommand
 from .account import DbtCloudAccountListCommand, DbtCloudAccountGetCommand
 from .audit_log import DbtCloudAuditLogGetCommand
 from .metadata import DbtCloudMetadataQueryCommand
