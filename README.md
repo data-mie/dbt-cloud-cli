@@ -40,62 +40,41 @@ The following environment variables are used as argument defaults:
 * `DBT_CLOUD_ACCOUNT_ID` (`--account-id`): Numeric ID of the dbt Cloud account
 * `DBT_CLOUD_JOB_ID` (`--job-id`): Numeric ID of a dbt Cloud job
 
-# API coverage
-
-<details>
-  <summary><b>Coverage matrix</b></summary>
-
-Group | API endpoint | Command | Description |
-| --- | --- | --- | --- |
-| Accounts | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getAccountById) | [dbt-cloud account get](#dbt-cloud-account-get)  | Retrieves dbt Cloud account information |
-| Accounts | [https://cloud.getdbt.com/api/v2/accounts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts) | [dbt-cloud account list](#dbt-cloud-account-list) | Retrieves all available accounts |
-| Audit Logs | https://cloud.getdbt.com/api/v3/accounts/{accountId}/audit-logs/ | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get) | Retrieves audit logs for the dbt Cloud account |
-| Projects | [https://cloud.getdbt.com
-/api/v2/accounts/{account_id}/projects/](https://docs.getdbt.com/dbt-cloud/api-v2#/operations/Create%20Project) | [dbt-cloud project create](#dbt-cloud-project-create) | Creates a new dbt Cloud project in a given account |
-| Projects | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/{projectId}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getProjectById) | [dbt-cloud project get](#dbt-cloud-project-get) | Retrieves dbt Cloud project information |
-| Projects | https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | Returns a list of projects in the account |
-| Environments | https://cloud.getdbt.com
-/api/v2/accounts/{account_id}/environments/{id}/ | [dbt-cloud environment get](#dbt-cloud-environment-get) | Retrieves information about an environment in a given account |
-| Environments | https://cloud.getdbt.com/api/v3/accounts/{accountId}/projects/{projectId}/environments | [dbt-cloud environment list](#dbt-cloud-environment-list) | Retrieves environments in a given account |
-| Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listJobsForAccount) | [dbt-cloud job list](#dbt-cloud-job-list) | Returns a list of jobs in the account |
-| Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getJobById) | [dbt-cloud job get](#dbt-cloud-job-get) | Returns the details of a dbt Cloud job |
-| Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/createJob) | [dbt-cloud job create](#dbt-cloud-job-create) | Creates a job in a dbt Cloud project |
-| Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/updateJobById) | `dbt-cloud job update` | Not implemented yet |
-| Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/run/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun) | [dbt-cloud job run](#dbt-cloud-job-run) | Triggers a dbt Cloud job run and returns a run status JSON response |
-| Jobs | https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/ | [dbt-cloud job delete](#dbt-cloud-job-delete) | Deletes a job in a dbt Cloud project |
-| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountID}/runs](https://docs.getdbt.com/dbt-cloud/api-v2#tag/Runs/operation/listRunsForAccount) | [dbt-cloud run list](#dbt-cloud-run-list) | Returns a list of runs in the account |
-| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById) | [dbt-cloud run get](#dbt-cloud-run-get) | Returns the details of a dbt Cloud run |
-| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/artifacts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listArtifactsByRunId) | [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts) | Fetches a list of artifact files generated for a completed run |
-| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/artifacts/{path}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getArtifactsByRunId) | [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) | Fetches an artifact file from a completed run |
-| Runs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/runs/{runId}/cancel/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/cancelRunById) | [dbt-cloud run cancel](#dbt-cloud-run-cancel) | Cancels a dbt Cloud run |
-| Metadata | [https://metadata.cloud.getdbt.com/graphql](https://docs.getdbt.com/docs/dbt-cloud/dbt-cloud-api/metadata/metadata-overview) | [dbt-cloud metadata query](#dbt-cloud-metadata-query) | Queries the dbt Cloud Metadata API using GraphQL |
-</details>
-
 # Commands
 
-* [dbt-cloud account get](#dbt-cloud-account-get)
-* [dbt-cloud account list](#dbt-cloud-account-list)
-* [dbt-cloud audit-log get](#dbt-cloud-audit-log-get)
-* [dbt-cloud project create](#dbt-cloud-project-create)
-* [dbt-cloud project get](#dbt-cloud-project-get)
-* [dbt-cloud project list](#dbt-cloud-project-list)
-* [dbt-cloud environment get](#dbt-cloud-environment-get)
-* [dbt-cloud environment list](#dbt-cloud-environment-list)
-* [dbt-cloud job run](#dbt-cloud-job-run)
-* [dbt-cloud job get](#dbt-cloud-job-get)
-* [dbt-cloud job list](#dbt-cloud-job-list)
-* [dbt-cloud job create](#dbt-cloud-job-create)
-* [dbt-cloud job delete](#dbt-cloud-job-delete)
-* [dbt-cloud job delete-all](#dbt-cloud-job-delete-all)
-* [dbt-cloud job export](#dbt-cloud-job-export)
-* [dbt-cloud job import](#dbt-cloud-job-import)
-* [dbt-cloud run get](#dbt-cloud-run-get)
-* [dbt-cloud run cancel](#dbt-cloud-run-cancel)
-* [dbt-cloud run cancel-all](#dbt-cloud-run-cancel-all)
-* [dbt-cloud run list](#dbt-cloud-run-list)
-* [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts)
-* [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact)
-* [dbt-cloud metadata query](#dbt-cloud-metadata-query)
+Group | API endpoint | Command | Implemented |
+| --- | --- | --- | --- |
+| Account | | [dbt-cloud account get](#dbt-cloud-account-get) | ✅ |
+| Account | | [dbt-cloud account list](#dbt-cloud-account-list) | ✅ |
+| Audit log | | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get) | ✅ |
+| Project | POST api/v2/accounts/{account_id}/projects/ | [dbt-cloud project create](#dbt-cloud-project-create) | ✅ |
+| Project | DELETE api/v2/accounts/{account_id}/projects/{id}/ | [dbt-cloud project delete](#dbt-cloud-project-delete) | ❌ |
+| Project | GET api/v2/accounts/{account_id}/projects/{id}/ | [dbt-cloud project get](#dbt-cloud-project-get) | ✅ |
+| Project | GET api/v2/accounts/{account_id}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | ✅ |
+| Project | POST api/v2/accounts/{account_id}/projects/{id}/ | [dbt-cloud project update](#dbt-cloud-project-update) | ❌ |
+| Environment | POST api/v2/accounts/{account_id}/environments/ | [dbt-cloud environment create](#dbt-cloud-environment-create) | ❌ |
+| Environment | DELETE api/v2/accounts/{account_id}/environments/{id}/| [dbt-cloud environment delete](#dbt-cloud-environment-delete) | ✅ |
+| Environment | GET api/v2/accounts/{account_id}/environments/{id}/ | [dbt-cloud environment get](#dbt-cloud-environment-get) | ✅ |
+| Environment | GET api/v2/accounts/{account_id}/environments/ | [dbt-cloud environment list](#dbt-cloud-environment-list) | ✅ |
+| Environment | POST api/v2/accounts/{account_id}/environments/{id}/ | [dbt-cloud environment update](#dbt-cloud-environment-update) | ❌ |
+| Job | | [dbt-cloud job create](#dbt-cloud-job-create) | ✅ |
+| Job | | [dbt-cloud job delete](#dbt-cloud-job-delete) | ✅ |
+| Job | N/A | [dbt-cloud job delete-all](#dbt-cloud-job-delete-all) | ✅ |
+| Job | | [dbt-cloud job get](#dbt-cloud-job-get) | ✅ |
+| Job | | [dbt-cloud job list](#dbt-cloud-job-list) | ✅ |
+| Job | | [dbt-cloud job run](#dbt-cloud-job-run) | ✅ |
+| Job | | [dbt-cloud job update](#dbt-cloud-job-update) | ❌ |
+| Job | | [dbt-cloud job get-artifact](#dbt-cloud-job-get-artifact) | ❌ |
+| Job | N/A | [dbt-cloud job export](#dbt-cloud-job-export) | ✅ |
+| Job | N/A | [dbt-cloud job import](#dbt-cloud-job-import) | ✅ |
+| Run | | [dbt-cloud run get](#dbt-cloud-run-get) | ✅ |
+| Run | | [dbt-cloud run list](#dbt-cloud-run-list) | ✅ |
+| Run | | [dbt-cloud run cancel](#dbt-cloud-run-cancel) | ✅ |
+| Run | | [dbt-cloud run cancel-all](#dbt-cloud-run-cancel-all) | ✅ |
+| Run | | [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts) | ✅ |
+| Run | | [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) | ✅ |
+| Run | | [dbt-cloud run get-step](#dbt-cloud-run-get-step) | ❌ |
+| Metadata | POST graphql/ | [dbt-cloud metadata query](#dbt-cloud-metadata-query) | ✅ |
 
 ## dbt-cloud account get
 This command retrieves dbt Cloud account information. For more information on the API endpoint arguments and response, run `dbt-cloud account get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#tag/Accounts/operation/getAccountById).
@@ -409,6 +388,19 @@ This command returns a list of projects in the account. For more information on 
   }
 }
 ```
+</details>
+
+
+## dbt-cloud environment delete
+This command deletes a dbt Cloud environment in a given account. For more information on the API endpoint arguments and response, run `dbt-cloud environment delete --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#/operations/Destroy%20Environment).
+
+<details>
+  <summary><b>Usage</b></summary>
+
+```bash
+>> dbt-cloud environment delete --environment-id 222062
+```
+[Click to view sample response](tests/data/environment_delete_response.json)
 </details>
 
 ## dbt-cloud environment list
