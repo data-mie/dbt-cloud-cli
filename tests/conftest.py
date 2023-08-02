@@ -30,6 +30,11 @@ JOB_ID = 43167
 RUN_ID = 36053848
 
 
+@pytest.fixture
+def environment_id():
+    return ENVIRONMENT_ID
+
+
 def load_response(response_name):
     shared_datadir = Path(__file__).parent / "data"
     response_file = shared_datadir / f"{response_name}.json"
