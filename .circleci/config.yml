@@ -192,9 +192,9 @@ workflows:
   version: 2
   continuous-integration:
     jobs:
-      - unit-tests
       - approve:
           type: approval
+      - unit-tests
       - integration-tests:
           requires:
             - approve
