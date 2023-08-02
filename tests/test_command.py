@@ -65,4 +65,4 @@ class PayloadCommand(DbtCloudCommand):
 )
 def test_dbt_cloud_command_get_payload(kwargs, expected):
     command = PayloadCommand(**kwargs)
-    assert command.get_payload(exclude=[]) == expected
+    assert command.get_payload(exclude=[], exclude_empty=True) == expected

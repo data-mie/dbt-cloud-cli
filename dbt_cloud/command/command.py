@@ -105,7 +105,7 @@ class DbtCloudCommand(ClickBaseModel):
         return f"https://{self.dbt_cloud_host}/api/{self._api_version}"
 
     def get_payload(
-        self, exclude=["api_token", "dbt_cloud_host"], exclude_empty: bool = True
+        self, exclude=["api_token", "dbt_cloud_host"], exclude_empty: bool = False
     ) -> dict:
         payload = self.json(exclude=set(exclude))
         payload_dict = json_to_dict(payload)

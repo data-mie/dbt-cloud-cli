@@ -31,6 +31,6 @@ class DbtCloudProjectCreateCommand(DbtCloudAccountCommand):
         response = requests.post(
             url=self.api_url,
             headers=self.request_headers,
-            json=self.get_payload(),
+            json=self.get_payload(exclude_empty=True),
         )
         return response
