@@ -60,5 +60,5 @@ OFFSET_FIELD = Field(
     description="Offset for the returned rows. Must be a positive integer.",
 )
 DBT_VERSION_FIELD = Field(
-    description="Filter by dbt version (e.g., '1.4.0-latest')",
+    description="dbt version (e.g., '1.4.0-latest')",
 )

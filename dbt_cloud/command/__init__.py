@@ -18,7 +18,11 @@ from .project import (
     DbtCloudProjectGetCommand,
     DbtCloudProjectCreateCommand,
 )
-from .environment import DbtCloudEnvironmentListCommand, DbtCloudEnvironmentGetCommand
+from .environment import (
+    DbtCloudEnvironmentListCommand,
+    DbtCloudEnvironmentGetCommand,
+    DbtCloudEnvironmentCreateCommand,
+)
 from .account import DbtCloudAccountListCommand, DbtCloudAccountGetCommand
 from .audit_log import DbtCloudAuditLogGetCommand
 from .metadata import DbtCloudMetadataQueryCommand

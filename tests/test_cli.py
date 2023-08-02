@@ -53,3 +53,27 @@ def test_cli_project_create(account_id):
     response = json.loads(result.output)
     assert response["data"]["name"] == project_name
     assert response["data"]["account_id"] == account_id
+
+
+@pytest.mark.integration
+def test_cli_environment_create(account_id):
+    environment_name = "pytest environment"
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        [
+            "environment",
+            "create",
+            "--account-id",
+            account_id,
+            "--name",
+            environment_name,
+            "--dbt-version",
+            "1.4.0-latest",
+        ],
+    )
+
+    assert result.exit_code == 0
+    response = json.loads(result.output)
+    assert response["data"]["name"] == environment_name
+    assert response["data"]["account_id"] == account_id
