@@ -2,8 +2,8 @@ import os
 import logging
 import time
 import click
-from dbt_cloud import DbtCloudRunStatus
 from dbt_cloud.command import (
+    DbtCloudRunStatus,
     DbtCloudJobGetCommand,
     DbtCloudJobCreateCommand,
     DbtCloudJobDeleteCommand,
@@ -25,6 +25,7 @@ from dbt_cloud.command import (
     DbtCloudAccountListCommand,
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
+    DbtCloudConnectionCreateCommand,
 )
 from dbt_cloud.demo import data_catalog
 from dbt_cloud.serde import json_to_dict, dict_to_json
@@ -69,6 +70,11 @@ def project():
 
 @dbt_cloud.group(help="Interact with dbt Cloud environments.")
 def environment():
+    pass
+
+
+@dbt_cloud.group(help="Interact with dbt Cloud database connections.")
+def connection():
     pass
 
 
@@ -386,6 +392,22 @@ def get(**kwargs):
 @DbtCloudEnvironmentDeleteCommand.click_options
 def delete(**kwargs):
     command = DbtCloudEnvironmentDeleteCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@connection.command(
+    help=DbtCloudConnectionCreateCommand.get_description(),
+    context_settings={"ignore_unknown_options": True, "allow_extra_args": True},
+)
+@click.pass_context
+@DbtCloudConnectionCreateCommand.click_options
+def create(ctx, **kwargs):
+    keys = ctx.args[::2]  # Every even element is a key
+    values = ctx.args[1::2]  # Every odd element is a value
+    kwargs["connection_parameters"] = {
+        key.lstrip("-").replace("-", "_"): value for key, value in zip(keys, values)
+    }
+    command = DbtCloudConnectionCreateCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 

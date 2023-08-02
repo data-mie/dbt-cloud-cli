@@ -19,7 +19,7 @@ def test_cli_environment_get(account_id, environment_id):
         ],
     )
 
-    assert result.exit_code == 0
+    assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == environment_id
     assert response["data"]["account_id"] == account_id
@@ -33,7 +33,7 @@ def test_cli_environment_list(account_id):
         ["environment", "list", "--account-id", account_id, "--limit", 1],
     )
 
-    assert result.exit_code == 0
+    assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert len(response["data"]) == 1
     for environment in response["data"]:
@@ -49,7 +49,43 @@ def test_cli_project_create(account_id):
         ["project", "create", "--account-id", account_id, "--name", project_name],
     )
 
-    assert result.exit_code == 0
+    assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["name"] == project_name
+    assert response["data"]["account_id"] == account_id
+
+
+@pytest.mark.integration
+def test_cli_connection_create(account_id):
+    connection_name = "pytest connection"
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        [
+            "connection",
+            "create",
+            "--account-id",
+            account_id,
+            "--name",
+            connection_name,
+            "--type",
+            "snowflake",
+            "--state",
+            1,
+            "--account",
+            "snowflake_account",
+            "--database",
+            "snowflake_database",
+            "--warehouse",
+            "snowflake_warehouse",
+            "--allow-sso",
+            "False",
+            "--created-by-id",
+            1,
+        ],
+    )
+    assert result.exit_code == 0, result.output
+
+    response = json.loads(result.output)
+    assert response["data"]["name"] == connection_name
     assert response["data"]["account_id"] == account_id
