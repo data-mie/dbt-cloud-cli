@@ -22,6 +22,8 @@ from dbt_cloud.command import (
     DbtCloudAccountListCommand,
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
+    DbtCloudConnectionListCommand,
+    DbtCloudConnectionGetCommand
 )
 
 
@@ -216,6 +218,20 @@ COMMAND_TEST_CASES = [
         load_response("account_get_response"),
         "get",
         marks=pytest.mark.account,
+    ),
+    pytest.param(
+        "connection_get",
+        DbtCloudConnectionGetCommand(api_token=API_TOKEN, connection_id=123),
+        load_response("connection_get_response"),
+        "get",
+        marks=pytest.mark.connection,
+    ),
+    pytest.param(
+        "connection_list",
+        DbtCloudConnectionListCommand(api_token=API_TOKEN),
+        load_response("connection_list_response"),
+        "get",
+        marks=pytest.mark.connection,
     ),
     pytest.param(
         "audit_log_get",
