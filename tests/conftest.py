@@ -10,6 +10,7 @@ from dbt_cloud.command import (
     DbtCloudJobRunCommand,
     DbtCloudProjectGetCommand,
     DbtCloudProjectListCommand,
+    DbtCloudProjectCreateCommand,
     DbtCloudRunCancelCommand,
     DbtCloudRunGetArtifactCommand,
     DbtCloudRunGetCommand,
@@ -160,6 +161,18 @@ COMMAND_TEST_CASES = [
         DbtCloudProjectListCommand(api_token=API_TOKEN, account_id=ACCOUNT_ID),
         load_response("project_list_response"),
         "get",
+        marks=pytest.mark.project,
+    ),
+    pytest.param(
+        "project_create",
+        DbtCloudProjectCreateCommand(
+            api_token=API_TOKEN,
+            account_id=ACCOUNT_ID,
+            name="My test project",
+            dbt_project_subdirectory="dbt/",
+        ),
+        load_response("project_get_response"),
+        "post",
         marks=pytest.mark.project,
     ),
     pytest.param(
