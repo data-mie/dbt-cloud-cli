@@ -47,8 +47,8 @@ For more information on a command, run `dbt-cloud <command> --help`. For more in
 
 | Group        | Command                                               | API endpoint                                        | Implemented | 
 | ------------ | ----------------------------------------------------- | -------------------------------------------------- | ----------- | 
-| Account      | [dbt-cloud account get](#dbt-cloud-account-get)       |                                                     | ✅          | 
-| Account      | [dbt-cloud account list](#dbt-cloud-account-list)     |                                                     | ✅          | 
+| Account      | [dbt-cloud account get](#dbt-cloud-account-get)       | GET api/v2/accounts/{account_id}/                   | ✅          | 
+| Account      | [dbt-cloud account list](#dbt-cloud-account-list)     | GET api/v2/accounts/                                | ✅          | 
 | Audit log    | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get)   | GET api/v3/audit-logs/                              | ✅          | 
 | Project      | [dbt-cloud project create](#dbt-cloud-project-create) | POST api/v2/accounts/{account_id}/projects/         | ✅          | 
 | Project      | [dbt-cloud project delete](#dbt-cloud-project-delete) | DELETE api/v2/accounts/{account_id}/projects/{id}/  | ❌          | 
@@ -60,23 +60,35 @@ For more information on a command, run `dbt-cloud <command> --help`. For more in
 | Environment  | [dbt-cloud environment get](#dbt-cloud-environment-get) | GET api/v2/accounts/{account_id}/environments/{id}/ | ✅ | 
 | Environment  | [dbt-cloud environment list](#dbt-cloud-environment-list) | GET api/v2/accounts/{account_id}/environments/ | ✅ | 
 | Environment  | [dbt-cloud environment update](#dbt-cloud-environment-update) | POST api/v2/accounts/{account_id}/environments/{id}/ | ❌ | 
-| Job          | [dbt-cloud job create](#dbt-cloud-job-create)         |                                                     | ✅          | 
-| Job          | [dbt-cloud job delete](#dbt-cloud-job-delete)         |                                                     | ✅          | 
-| Job          | [dbt-cloud job delete-all](#dbt-cloud-job-delete-all) | N/A                                                 | ✅          | 
-| Job          | [dbt-cloud job get](#dbt-cloud-job-get)               |                                                     | ✅          | 
-| Job          | [dbt-cloud job list](#dbt-cloud-job-list)             |                                                     | ✅          | 
-| Job          | [dbt-cloud job run](#dbt-cloud-job-run)               |                                                     | ✅          | 
-| Job          | [dbt-cloud job update](#dbt-cloud-job-update)         |                                                     | ❌          | 
-| Job          | [dbt-cloud job get-artifact](#dbt-cloud-job-get-artifact) |                                                     | ❌      | 
-| Job          | [dbt-cloud job export](#dbt-cloud-job-export)         | N/A                                                 | ✅          | 
-| Job          | [dbt-cloud job import](#dbt-cloud-job-import)         | N/A                                                 | ✅          | 
-| Run          | [dbt-cloud run get](#dbt-cloud-run-get)               |                                                     | ✅          | 
-| Run          | [dbt-cloud run list](#dbt-cloud-run-list)             |                                                     | ✅          | 
-| Run          | [dbt-cloud run cancel](#dbt-cloud-run-cancel)         |                                                     | ✅          | 
-| Run          | [dbt-cloud run cancel-all](#dbt-cloud-run-cancel-all) |                                                     | ✅          | 
-| Run          | [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts) |                                                 | ✅          | 
-| Run          | [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) |                                                 | ✅          | 
-| Run          | [dbt-cloud run get-step](#dbt-cloud-run-get-step)     |                                                     | ❌          | 
+| Connection  | [dbt-cloud connection create](#dbt-cloud-connection-create) | POST api/v2/accounts/{account_id}/connections/ | ❌ |
+| Connection  | [dbt-cloud connection delete](#dbt-cloud-connection-delete) | DELETE api/v2/accounts/{account_id}/connections/{id}/ | ❌ |
+| Connection  | [dbt-cloud connection get](#dbt-cloud-connection-get) | GET api/v2/accounts/{account_id}/connections/{id}/ | ❌ |
+| Connection  | [dbt-cloud connection list](#dbt-cloud-connection-list) | GET api/v2/accounts/{account_id}/connections/ | ❌ |
+| Connection  | [dbt-cloud connection update](#dbt-cloud-connection-update) | POST api/v2/accounts/{account_id}/connections/{id}/ | ❌ |
+| Repository  | [dbt-cloud repository create](#dbt-cloud-repository-create) | POST api/v2/accounts/{account_id}/repositories/ | ❌ |
+| Repository  | [dbt-cloud repository delete](#dbt-cloud-repository-delete) | DELETE api/v2/accounts/{account_id}/repositories/{id}/ | ❌ |
+| Repository  | [dbt-cloud repository get](#dbt-cloud-repository-get) | GET api/v2/accounts/{account_id}/repositories/{id}/ | ❌ |
+| Repository  | [dbt-cloud repository list](#dbt-cloud-repository-list) | GET api/v2/accounts/{account_id}/repositories/ | ❌ |
+| Job          | [dbt-cloud job create](#dbt-cloud-job-create)         | POST api/v2/accounts/{account_id}/jobs/                                                    | ✅          | 
+| Job          | [dbt-cloud job delete](#dbt-cloud-job-delete)         | DELETE api/v2/accounts/{account_id}/jobs/{id}/                                                    | ✅          | 
+| Job          | [dbt-cloud job delete-all](#dbt-cloud-job-delete-all) | Uses a composition of one or more endpoints                                                 | ✅          | 
+| Job          | [dbt-cloud job get](#dbt-cloud-job-get)               | GET api/v2/accounts/{account_id}/jobs/{id}/                                                    | ✅          | 
+| Job          | [dbt-cloud job list](#dbt-cloud-job-list)             | GET api/v2/accounts/{account_id}/jobs/                                                    | ✅          | 
+| Job          | [dbt-cloud job run](#dbt-cloud-job-run)               | POST api/v2/accounts/{account_id}/jobs/{job_id}/run/                                                    | ✅          | 
+| Job          | [dbt-cloud job update](#dbt-cloud-job-update)         | POST api/v2/accounts/{account_id}/jobs/{id}/        | ❌          | 
+| Job          | [dbt-cloud job get-artifact](#dbt-cloud-job-get-artifact) | GET api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}                                                    | ❌      | 
+| Job          | [dbt-cloud job export](#dbt-cloud-job-export)         | Uses a composition of one or more endpoints         | ✅          | 
+| Job          | [dbt-cloud job import](#dbt-cloud-job-import)         | Uses a composition of one or more endpoints         | ✅          | 
+| Run          | [dbt-cloud run get](#dbt-cloud-run-get)               | GET api/v2/accounts/{account_id}/runs/{id}/         | ✅          | 
+| Run          | [dbt-cloud run list](#dbt-cloud-run-list)             | GET api/v2/accounts/{account_id}/runs/              | ✅          | 
+| Run          | [dbt-cloud run cancel](#dbt-cloud-run-cancel)         | POST api/v2/accounts/{account_id}/runs/{run_id}/cancel/                                                    | ✅          | 
+| Run          | [dbt-cloud run cancel-all](#dbt-cloud-run-cancel-all) | Uses a composition of one or more endpoints         | ✅          | 
+| Run          | [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts) | GET api/v2/accounts/{account_id}/runs/{run_id}/artifacts/                                                | ✅          | 
+| Run          | [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) | GET api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}                                                | ✅          | 
+| Run          | [dbt-cloud run get-step](#dbt-cloud-run-get-step)     | GET api/v2/accounts/{account_id}/steps/{id}/       | ❌          |
+| User         | [dbt-cloud user get](#dbt-cloud-user-get)             | GET api/v2/accounts/{account_id}/users/{id}/       | ❌          |
+| User         | [dbt-cloud user list](#dbt-cloud-user-list)           | GET api/v2/accounts/{account_id}/users/            | ❌          |
+| User         | [dbt-cloud user update](#dbt-cloud-user-update)       | POST api/v2/accounts/{account_id}/users/{id}/      | ❌          |
 | Metadata     | [dbt-cloud metadata query](#dbt-cloud-metadata-query) | POST graphql/                                      | ✅          |
 
 
