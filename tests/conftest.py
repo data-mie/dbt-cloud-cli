@@ -1,5 +1,6 @@
 import json
 import pytest
+import os
 from pathlib import Path
 from dbt_cloud.command import (
     DbtCloudJobCreateCommand,
@@ -15,6 +16,7 @@ from dbt_cloud.command import (
     DbtCloudRunListArtifactsCommand,
     DbtCloudRunListCommand,
     DbtCloudEnvironmentListCommand,
+    DbtCloudEnvironmentGetCommand,
     DbtCloudAccountListCommand,
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
@@ -27,6 +29,16 @@ PROJECT_ID = 123457
 ENVIRONMENT_ID = 49819
 JOB_ID = 43167
 RUN_ID = 36053848
+
+
+@pytest.fixture
+def account_id():
+    return int(os.environ.get("DBT_CLOUD_ACCOUNT_ID", ACCOUNT_ID))
+
+
+@pytest.fixture
+def environment_id():
+    return int(os.environ.get("DBT_CLOUD_ENVIRONMENT_ID", ENVIRONMENT_ID))
 
 
 def load_response(response_name):
@@ -156,6 +168,15 @@ COMMAND_TEST_CASES = [
             api_token=API_TOKEN, account_id=ACCOUNT_ID, project_id=PROJECT_ID
         ),
         load_response("environment_list_response"),
+        "get",
+        marks=pytest.mark.environment,
+    ),
+    pytest.param(
+        "environment_get",
+        DbtCloudEnvironmentGetCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, environment_id=ENVIRONMENT_ID
+        ),
+        load_response("environment_get_response"),
         "get",
         marks=pytest.mark.environment,
     ),
