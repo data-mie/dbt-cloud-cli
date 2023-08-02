@@ -13,7 +13,11 @@ from .run import (
     DbtCloudRunListCommand,
     DbtCloudRunCancelCommand,
 )
-from .project import DbtCloudProjectListCommand, DbtCloudProjectGetCommand
+from .project import (
+    DbtCloudProjectListCommand,
+    DbtCloudProjectGetCommand,
+    DbtCloudProjectCreateCommand,
+)
 from .environment import DbtCloudEnvironmentListCommand, DbtCloudEnvironmentGetCommand
 from .account import DbtCloudAccountListCommand, DbtCloudAccountGetCommand
 from .audit_log import DbtCloudAuditLogGetCommand

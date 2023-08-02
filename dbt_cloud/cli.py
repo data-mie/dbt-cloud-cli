@@ -18,6 +18,7 @@ from dbt_cloud.command import (
     DbtCloudJobListCommand,
     DbtCloudProjectGetCommand,
     DbtCloudProjectListCommand,
+    DbtCloudProjectCreateCommand,
     DbtCloudEnvironmentListCommand,
     DbtCloudEnvironmentGetCommand,
     DbtCloudAccountListCommand,
@@ -356,6 +357,13 @@ def get(**kwargs):
 @DbtCloudProjectListCommand.click_options
 def list(**kwargs):
     command = DbtCloudProjectListCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@project.command(help=DbtCloudProjectCreateCommand.get_description())
+@DbtCloudProjectCreateCommand.click_options
+def create(**kwargs):
+    command = DbtCloudProjectCreateCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 
