@@ -23,7 +23,7 @@ from dbt_cloud.command import (
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
     DbtCloudConnectionListCommand,
-    DbtCloudConnectionGetCommand
+    DbtCloudConnectionGetCommand,
 )
 
 

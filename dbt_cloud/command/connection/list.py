@@ -16,5 +16,9 @@ class DbtCloudConnectionListCommand(DbtCloudAccountCommand):
         return f"{super().api_url}/connections/"
 
     def execute(self) -> requests.Response:
-        response = requests.get(url=self.api_url, headers=self.request_headers, params={"limit": self.limit, "offset": self.offset})
+        response = requests.get(
+            url=self.api_url,
+            headers=self.request_headers,
+            params={"limit": self.limit, "offset": self.offset},
+        )
         return response

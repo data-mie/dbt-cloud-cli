@@ -26,7 +26,7 @@ from dbt_cloud.command import (
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
     DbtCloudConnectionGetCommand,
-    DbtCloudConnectionListCommand
+    DbtCloudConnectionListCommand,
 )
 from dbt_cloud.demo import data_catalog
 from dbt_cloud.serde import json_to_dict, dict_to_json
@@ -73,9 +73,11 @@ def project():
 def environment():
     pass
 
+
 @dbt_cloud.group(help="Interact with dbt Cloud database connections.")
 def connection():
     pass
+
 
 @dbt_cloud.group(help="Interact with dbt Cloud accounts.")
 def account():
@@ -394,18 +396,19 @@ def delete(**kwargs):
     response = execute_and_print(command)
 
 
-
 @connection.command(help=DbtCloudConnectionGetCommand.get_description())
 @DbtCloudConnectionGetCommand.click_options
 def get(**kwargs):
     command = DbtCloudConnectionGetCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
+
 @connection.command(help=DbtCloudConnectionListCommand.get_description())
 @DbtCloudConnectionListCommand.click_options
 def list(**kwargs):
     command = DbtCloudConnectionListCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
+
 
 @account.command(help=DbtCloudAccountListCommand.get_description())
 @DbtCloudAccountListCommand.click_options
