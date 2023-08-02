@@ -4,7 +4,7 @@ from click.testing import CliRunner
 from dbt_cloud.cli import dbt_cloud as cli
 
 
-@pytest.mark.online
+@pytest.mark.integration
 def test_cli_environment_get(account_id, environment_id):
     runner = CliRunner()
     result = runner.invoke(
