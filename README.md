@@ -52,6 +52,8 @@ Group | API endpoint | Command | Description |
 | Audit Logs | https://cloud.getdbt.com/api/v3/accounts/{accountId}/audit-logs/ | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get) | Retrieves audit logs for the dbt Cloud account |
 | Projects | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/{projectId}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getProjectById) | [dbt-cloud project get](#dbt-cloud-project-get) | Retrieves dbt Cloud project information |
 | Projects | https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | Returns a list of projects in the account |
+| Environments | https://cloud.getdbt.com
+/api/v2/accounts/{account_id}/environments/{id}/ | [dbt-cloud environment get](#dbt-cloud-environment-get) | Retrieves information about an environment in a given account |
 | Environments | https://cloud.getdbt.com/api/v3/accounts/{accountId}/projects/{projectId}/environments | [dbt-cloud environment list](#dbt-cloud-environment-list) | Retrieves environments for a given project |
 | Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listJobsForAccount) | [dbt-cloud job list](#dbt-cloud-job-list) | Returns a list of jobs in the account |
 | Jobs | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/jobs/{jobId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getJobById) | [dbt-cloud job get](#dbt-cloud-job-get) | Returns the details of a dbt Cloud job |
@@ -74,6 +76,7 @@ Group | API endpoint | Command | Description |
 * [dbt-cloud audit-log get](#dbt-cloud-audit-log-get)
 * [dbt-cloud project get](#dbt-cloud-project-get)
 * [dbt-cloud project list](#dbt-cloud-project-list)
+* [dbt-cloud environment get](#dbt-cloud-environment-get)
 * [dbt-cloud environment list](#dbt-cloud-environment-list)
 * [dbt-cloud job run](#dbt-cloud-job-run)
 * [dbt-cloud job get](#dbt-cloud-job-get)
@@ -512,6 +515,99 @@ This command retrieves environments for a given project. For more information on
     }
   }
 }
+```
+</details>
+
+## dbt-cloud environment get
+This command retrieves information about an environment in a given account. For more information on the API endpoint arguments and response, run `dbt-cloud environment get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#/operations/Retrieve%20Environment).
+
+<details>
+  <summary><b>Usage</b></summary>
+
+```bash
+>> dbt-cloud environment get --account-id 54321 --environment-id 67890
+{ 
+"status": { 
+    "code": 200, 
+    "is_success": true, 
+    "user_message": "Success!", 
+    "developer_message": "" 
+}, 
+"data": { 
+    "dbt_project_subdirectory": null, 
+    "project_id": 12345, 
+    "id": 67890, 
+    "account_id": 54321, 
+    "connection_id": 98765, 
+    "repository_id": 24680, 
+    "credentials_id": 13579, 
+    "created_by_id": null, 
+    "name": "Anonymized Project", 
+    "use_custom_branch": true, 
+    "custom_branch": "main", 
+    "dbt_version": "1.4.0-latest", 
+    "raw_dbt_version": "1.4.0-latest", 
+    "supports_docs": true, 
+    "state": 1, 
+    "updated_at": "2022-01-05T18:18:07.736635+00:00", 
+    "repository": { 
+    "id": 24680, 
+    "account_id": 54321, 
+    "project_id": 12345, 
+    "full_name": "anonymized-user/anonymized-repo", 
+    "remote_url": "git://github.com/anonymized-user/anonymized-repo.git", 
+    "remote_backend": "github", 
+    "git_clone_strategy": "github_app", 
+    "deploy_key_id": 13579, 
+    "repository_credentials_id": null, 
+    "github_installation_id": 98765432, 
+    "pull_request_url_template": "https://github.com/anonymized-user/anonymized-repo/compare/{{destination}}...{{source}}", 
+    "created_at": "2021-11-16T16:26:24.412439+00:00", 
+    "updated_at": "2021-11-16T16:26:24.412455+00:00", 
+    "state": 1, 
+    "git_provider_id": 9437, 
+    "deploy_key": { 
+        "id": 13579, 
+        "account_id": 54321, 
+        "state": 1, 
+        "public_key": "ssh-rsa ANONYMIZED_PUBLIC_KEY" 
+    }, 
+    "github_repo": "anonymized-user/anonymized-repo", 
+    "name": "Anonymized Repo" 
+    }, 
+    "connection": { 
+    "created_by_id": 18599, 
+    "created_by_service_token_id": null, 
+    "id": 98765, 
+    "state": 1, 
+    "account_id": 54321, 
+    "dbt_project_id": 12345, 
+    "name": "Anonymized Connection", 
+    "type": "bigquery", 
+    "project_id": "dbtprofiler", 
+    "location": null, 
+    "retries": 1, 
+    "maximum_bytes_billed": 0, 
+    "priority": null, 
+    "execution_project": null, 
+    "impersonate_service_account": null, 
+    "scopes": null, 
+    "timeout_seconds": 300, 
+    "job_retry_deadline_seconds": 0, 
+    "job_creation_timeout_seconds": 0, 
+    "private_key_id": "ANONYMIZED_PRIVATE_KEY_ID", 
+    "client_email": "anonymized-user@anonymized-project.iam.gserviceaccount.com", 
+    "client_id": "ANONYMIZED_CLIENT_ID", 
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth", 
+    "token_uri": "https://oauth2.googleapis.com/token", 
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", 
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/anonymized-user%40anonymized-project.iam.gserviceaccount.com", 
+    "gcs_bucket": null, 
+    "dataproc_region": null, 
+    "dataproc_cluster_name": null 
+    } 
+} 
+} 
 ```
 </details>
 
