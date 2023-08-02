@@ -42,573 +42,142 @@ The following environment variables are used as argument defaults:
 
 # Commands
 
-Group | API endpoint | Command | Implemented |
-| --- | --- | --- | --- |
-| Account | | [dbt-cloud account get](#dbt-cloud-account-get) | ✅ |
-| Account | | [dbt-cloud account list](#dbt-cloud-account-list) | ✅ |
-| Audit log | | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get) | ✅ |
-| Project | POST api/v2/accounts/{account_id}/projects/ | [dbt-cloud project create](#dbt-cloud-project-create) | ✅ |
-| Project | DELETE api/v2/accounts/{account_id}/projects/{id}/ | [dbt-cloud project delete](#dbt-cloud-project-delete) | ❌ |
-| Project | GET api/v2/accounts/{account_id}/projects/{id}/ | [dbt-cloud project get](#dbt-cloud-project-get) | ✅ |
-| Project | GET api/v2/accounts/{account_id}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | ✅ |
-| Project | POST api/v2/accounts/{account_id}/projects/{id}/ | [dbt-cloud project update](#dbt-cloud-project-update) | ❌ |
-| Environment | POST api/v2/accounts/{account_id}/environments/ | [dbt-cloud environment create](#dbt-cloud-environment-create) | ❌ |
-| Environment | DELETE api/v2/accounts/{account_id}/environments/{id}/| [dbt-cloud environment delete](#dbt-cloud-environment-delete) | ✅ |
-| Environment | GET api/v2/accounts/{account_id}/environments/{id}/ | [dbt-cloud environment get](#dbt-cloud-environment-get) | ✅ |
-| Environment | GET api/v2/accounts/{account_id}/environments/ | [dbt-cloud environment list](#dbt-cloud-environment-list) | ✅ |
-| Environment | POST api/v2/accounts/{account_id}/environments/{id}/ | [dbt-cloud environment update](#dbt-cloud-environment-update) | ❌ |
-| Job | | [dbt-cloud job create](#dbt-cloud-job-create) | ✅ |
-| Job | | [dbt-cloud job delete](#dbt-cloud-job-delete) | ✅ |
-| Job | N/A | [dbt-cloud job delete-all](#dbt-cloud-job-delete-all) | ✅ |
-| Job | | [dbt-cloud job get](#dbt-cloud-job-get) | ✅ |
-| Job | | [dbt-cloud job list](#dbt-cloud-job-list) | ✅ |
-| Job | | [dbt-cloud job run](#dbt-cloud-job-run) | ✅ |
-| Job | | [dbt-cloud job update](#dbt-cloud-job-update) | ❌ |
-| Job | | [dbt-cloud job get-artifact](#dbt-cloud-job-get-artifact) | ❌ |
-| Job | N/A | [dbt-cloud job export](#dbt-cloud-job-export) | ✅ |
-| Job | N/A | [dbt-cloud job import](#dbt-cloud-job-import) | ✅ |
-| Run | | [dbt-cloud run get](#dbt-cloud-run-get) | ✅ |
-| Run | | [dbt-cloud run list](#dbt-cloud-run-list) | ✅ |
-| Run | | [dbt-cloud run cancel](#dbt-cloud-run-cancel) | ✅ |
-| Run | | [dbt-cloud run cancel-all](#dbt-cloud-run-cancel-all) | ✅ |
-| Run | | [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts) | ✅ |
-| Run | | [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) | ✅ |
-| Run | | [dbt-cloud run get-step](#dbt-cloud-run-get-step) | ❌ |
-| Metadata | POST graphql/ | [dbt-cloud metadata query](#dbt-cloud-metadata-query) | ✅ |
+For more information on a command, run `dbt-cloud <command> --help`. For more information on the API endpoints, see [dbt Cloud API V2 docs](https://docs.getdbt.com/dbt-cloud/api-v2#/) and [dbt Cloud Metadata API docs](https://docs.getdbt.com/docs/dbt-cloud/dbt-cloud-api/metadata/metadata-overview).
+
+
+| Group        | Command                                               | API endpoint                                        | Implemented | 
+| ------------ | ----------------------------------------------------- | -------------------------------------------------- | ----------- | 
+| Account      | [dbt-cloud account get](#dbt-cloud-account-get)       |                                                     | ✅          | 
+| Account      | [dbt-cloud account list](#dbt-cloud-account-list)     |                                                     | ✅          | 
+| Audit log    | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get)   | GET api/v3/audit-logs/                              | ✅          | 
+| Project      | [dbt-cloud project create](#dbt-cloud-project-create) | POST api/v2/accounts/{account_id}/projects/         | ✅          | 
+| Project      | [dbt-cloud project delete](#dbt-cloud-project-delete) | DELETE api/v2/accounts/{account_id}/projects/{id}/  | ❌          | 
+| Project      | [dbt-cloud project get](#dbt-cloud-project-get)       | GET api/v2/accounts/{account_id}/projects/{id}/     | ✅          | 
+| Project      | [dbt-cloud project list](#dbt-cloud-project-list)     | GET api/v2/accounts/{account_id}/projects/          | ✅          | 
+| Project      | [dbt-cloud project update](#dbt-cloud-project-update) | POST api/v2/accounts/{account_id}/projects/{id}/     | ❌          | 
+| Environment  | [dbt-cloud environment create](#dbt-cloud-environment-create) | POST api/v2/accounts/{account_id}/environments/ | ❌          | 
+| Environment  | [dbt-cloud environment delete](#dbt-cloud-environment-delete) | DELETE api/v2/accounts/{account_id}/environments/{id}/ | ✅ | 
+| Environment  | [dbt-cloud environment get](#dbt-cloud-environment-get) | GET api/v2/accounts/{account_id}/environments/{id}/ | ✅ | 
+| Environment  | [dbt-cloud environment list](#dbt-cloud-environment-list) | GET api/v2/accounts/{account_id}/environments/ | ✅ | 
+| Environment  | [dbt-cloud environment update](#dbt-cloud-environment-update) | POST api/v2/accounts/{account_id}/environments/{id}/ | ❌ | 
+| Job          | [dbt-cloud job create](#dbt-cloud-job-create)         |                                                     | ✅          | 
+| Job          | [dbt-cloud job delete](#dbt-cloud-job-delete)         |                                                     | ✅          | 
+| Job          | [dbt-cloud job delete-all](#dbt-cloud-job-delete-all) | N/A                                                 | ✅          | 
+| Job          | [dbt-cloud job get](#dbt-cloud-job-get)               |                                                     | ✅          | 
+| Job          | [dbt-cloud job list](#dbt-cloud-job-list)             |                                                     | ✅          | 
+| Job          | [dbt-cloud job run](#dbt-cloud-job-run)               |                                                     | ✅          | 
+| Job          | [dbt-cloud job update](#dbt-cloud-job-update)         |                                                     | ❌          | 
+| Job          | [dbt-cloud job get-artifact](#dbt-cloud-job-get-artifact) |                                                     | ❌      | 
+| Job          | [dbt-cloud job export](#dbt-cloud-job-export)         | N/A                                                 | ✅          | 
+| Job          | [dbt-cloud job import](#dbt-cloud-job-import)         | N/A                                                 | ✅          | 
+| Run          | [dbt-cloud run get](#dbt-cloud-run-get)               |                                                     | ✅          | 
+| Run          | [dbt-cloud run list](#dbt-cloud-run-list)             |                                                     | ✅          | 
+| Run          | [dbt-cloud run cancel](#dbt-cloud-run-cancel)         |                                                     | ✅          | 
+| Run          | [dbt-cloud run cancel-all](#dbt-cloud-run-cancel-all) |                                                     | ✅          | 
+| Run          | [dbt-cloud run list-artifacts](#dbt-cloud-run-list-artifacts) |                                                 | ✅          | 
+| Run          | [dbt-cloud run get-artifact](#dbt-cloud-run-get-artifact) |                                                 | ✅          | 
+| Run          | [dbt-cloud run get-step](#dbt-cloud-run-get-step)     |                                                     | ❌          | 
+| Metadata     | [dbt-cloud metadata query](#dbt-cloud-metadata-query) | POST graphql/                                      | ✅          |
+
+
 
 ## dbt-cloud account get
-This command retrieves dbt Cloud account information. For more information on the API endpoint arguments and response, run `dbt-cloud account get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#tag/Accounts/operation/getAccountById).
+This command retrieves dbt Cloud account information.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud account get
-{
-    "status": {
-        "code": 200,
-        "is_success": true,
-        "user_message": "Success!",
-        "developer_message": ""
-    },
-    "data": {
-        "docs_job_id": null,
-        "freshness_job_id": null,
-        "lock_reason": null,
-        "unlock_if_subscription_renewed": false,
-        "read_only_seats": 10,
-        "id": 1,
-        "name": "REDACTED",
-        "state": 1,
-        "plan": "enterprise",
-        "pending_cancel": false,
-        "run_slots": 15,
-        "developer_seats": 10,
-        "queue_limit": 50,
-        "pod_memory_request_mebibytes": 600,
-        "run_duration_limit_seconds": 86400,
-        "enterprise_authentication_method": null,
-        "enterprise_login_slug": null,
-        "enterprise_unique_identifier": null,
-        "billing_email_address": null,
-        "locked": false,
-        "develop_file_system": true,
-        "unlocked_at": null,
-        "created_at": "2021-04-14T20:23:00.305964+00:00",
-        "updated_at": "2022-05-17T16:45:23.288391+00:00",
-        "starter_repo_url": null,
-        "sso_reauth": false,
-        "git_auth_level": "personal",
-        "identifier": "REDACTED",
-        "docs_job": null,
-        "freshness_job": null,
-        "enterprise_login_url": "https://cloud.getdbt.com/enterprise-login/None/"
-    }
-}
+dbt-cloud account get --account-id 123456
 ```
-</details>
+
+[Click to view sample response](tests/data/account_get_response.json)
 
 ## dbt-cloud account list
-This command retrieves all available dbt Cloud accounts. For more information on the API endpoint arguments and response, run `dbt-cloud account list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts).
+This command retrieves all available dbt Cloud accounts.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud account list
-{
-  "status": {
-    "code": 200,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": [
-    {
-      "docs_job_id": null,
-      "freshness_job_id": null,
-      "lock_reason": null,
-      "unlock_if_subscription_renewed": false,
-      "read_only_seats": 50,
-      "id": REDACTED,
-      "name": "Jaffle Shop",
-      "state": 1,
-      "plan": "team",
-      "pending_cancel": false,
-      "run_slots": 5,
-      "developer_seats": 4,
-      "queue_limit": 50,
-      "pod_memory_request_mebibytes": 600,
-      "run_duration_limit_seconds": 86400,
-      "enterprise_authentication_method": null,
-      "enterprise_login_slug": null,
-      "enterprise_unique_identifier": null,
-      "billing_email_address": "REDACTED",
-      "locked": false,
-      "develop_file_system": true,
-      "unlocked_at": null,
-      "created_at": "2021-09-06T07:41:12.146234+00:00",
-      "updated_at": "2022-03-07T06:05:33.350381+00:00",
-      "starter_repo_url": null,
-      "sso_reauth": false,
-      "git_auth_level": "team",
-      "identifier": "REDACTED",
-      "docs_job": null,
-      "freshness_job": null,
-      "enterprise_login_url": "https://cloud.getdbt.com/enterprise-login/None/"
-    }
-  ],
-  "extra": {
-    "filters": {
-      "pk__in": [
-        REDACTED
-      ]
-    },
-    "order_by": null,
-    "pagination": {
-      "count": 1,
-      "total_count": 1
-    }
-  }
-}
+dbt-cloud account list
 ```
-</details>
+[Click to view sample response](tests/data/account_list_response.json)
 
 ## dbt-cloud audit-log get
 
-❗ **This command is available for Enterprise accounts only.**
+❗ **Available for Enterprise accounts only.**
 
-This command retrieves audit logs for the dbt Cloud account. For more information on the command, run `dbt-cloud audit-log get --help`. This command uses the API v3 which has no official documentation yet.
+This command retrieves audit logs for the dbt Cloud account.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud audit-log get --logged-at-start 2022-05-01 --logged-at-end 2022-05-07 --limit 1
-{
-  "status": {
-    "code": 200,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": [
-    {
-      "account_id": 123456,
-      "service": "SERVICE_DBT_CLOUD",
-      "source": "SOURCE_CLOUD_UI",
-      "routing_key": "v1.events.auth.credentialsloginsucceeded",
-      "actor_type": "ACTOR_USER",
-      "actor_name": "REDACTED",
-      "actor_id": 123454,
-      "logged_at": "2022-05-05 06:51:10+00:00",
-      "uuid": "8868c439-8928-4e8c-924b-77558d65db0b",
-      "actor_ip": "REDACTED",
-      "metadata": {
-        "auth_credentials": {
-          "user": {
-            "id": "REDACTED",
-            "email": "REDACTED"
-          }
-        }
-      },
-      "internal": false,
-      "id": 1809583,
-      "state": 1,
-      "created_at": "2022-05-05 06:51:12.454677+00:00",
-      "updated_at": "2022-05-05 06:51:12.454677+00:00"
-    }
-  ],
-  "extra": {
-    "filters": {
-      "account_id": 123456,
-      "limit": 1,
-      "offset": 0,
-      "logged_at__range": [
-        "2022-05-01 00:00:00Z",
-        "2022-05-07 00:00:00Z"
-      ],
-      "internal": false
-    },
-    "order_by": "-logged_at",
-    "pagination": {
-      "count": 1,
-      "total_count": 4
-    }
-  }
-}
+dbt-cloud audit-log get --logged-at-start 2022-05-01 --logged-at-end 2022-05-07 --limit 1
 ```
-</details>
+[Click to view sample response](tests/data/audit_log_get_response.json)
 
 ## dbt-cloud project create
-This command creates a new dbt Cloud project in a given account. For more information on the API endpoint arguments and response, run `dbt-cloud project create --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#/operations/Create%20Project).
+This command creates a new dbt Cloud project in a given account.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
 >> dbt-cloud project create --name "My project"
 ```
 
 [Click to view sample response](tests/data/project_create_response.json)
-</details>
 
 ## dbt-cloud project get
-This command retrieves dbt Cloud project information. For more information on the API endpoint arguments and response, run `dbt-cloud project get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#tag/Projects/operation/getProjectById).
+This command retrieves dbt Cloud project information.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud project get
+dbt-cloud project get --project-id 123457
 ```
 
 [Click to view sample response](tests/data/project_get_response.json)
-</details>
 
 
 ## dbt-cloud project list
-This command returns a list of projects in the account. For more information on the API endpoint arguments and response, run `dbt-cloud project list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listProjects).
+This command returns a list of projects in the account.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud project list
-{
-  "status": {
-    "code": 200,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": [
-    {
-      "name": "jaffle_shop",
-      "account_id": REDACTED,
-      "repository_id": REDACTED,
-      "connection_id": REDACTED,
-      "id": REDACTED,
-      "created_at": "2021-04-14 20:23:00.395285+00:00",
-      "updated_at": "2021-11-16 16:32:43.960836+00:00",
-      "skipped_setup": false,
-      "state": 1,
-      "dbt_project_subdirectory": null,
-      "connection": {
-        "id": REDACTED,
-        "account_id": REDACTED,
-        "project_id": REDACTED,
-        "name": "Bigquery",
-        "type": "bigquery",
-        "created_by_id": REDACTED,
-        "created_by_service_token_id": null,
-        "details": {
-          "project_id": "REDACTED",
-          "timeout_seconds": 300,
-          "private_key_id": "REDACTED",
-          "client_email": "REDACTED",
-          "client_id": "REDACTED",
-          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-          "token_uri": "https://oauth2.googleapis.com/token",
-          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-          "client_x509_cert_url": "REDACTED",
-          "retries": 1,
-          "location": null,
-          "is_configured_for_oauth": false
-        },
-        "state": 1,
-        "created_at": "2021-11-16 16:26:01.571115+00:00",
-        "updated_at": "2021-11-16 16:37:42.500015+00:00"
-      },
-      "repository": {
-        "id": REDACTED,
-        "account_id": REDACTED,
-        "project_id": REDACTED,
-        "full_name": "REDACTED",
-        "remote_url": "REDACTED",
-        "remote_backend": "github",
-        "git_clone_strategy": "github_app",
-        "deploy_key_id": REDACTED,
-        "repository_credentials_id": null,
-        "github_installation_id": REDACTED,
-        "pull_request_url_template": "REDACTED",
-        "state": 1,
-        "created_at": "2021-11-16 16:26:24.412439+00:00",
-        "updated_at": "2021-11-16 16:26:24.412455+00:00",
-        "deploy_key": {
-          "id": REDACTED,
-          "account_id": REDACTED,
-          "state": 1,
-          "public_key": "REDACTED"
-        },
-        "github_repo": "REDACTED",
-        "name": "jaffle_shop",
-        "git_provider_id": REDACTED,
-        "gitlab": null,
-        "git_provider": null
-      },
-      "group_permissions": [],
-      "docs_job_id": null,
-      "freshness_job_id": null,
-      "docs_job": null,
-      "freshness_job": null
-    }
-  ],
-  "extra": {
-    "filters": {
-      "account_id": REDACTED,
-      "limit": 100,
-      "offset": 0
-    },
-    "order_by": "id",
-    "pagination": {
-      "count": 1,
-      "total_count": 1
-    }
-  }
-}
+dbt-cloud project list
 ```
-</details>
 
+[Click to view sample response](tests/data/project_list_response.json)
 
 ## dbt-cloud environment delete
-This command deletes a dbt Cloud environment in a given account. For more information on the API endpoint arguments and response, run `dbt-cloud environment delete --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#/operations/Destroy%20Environment).
+This command deletes a dbt Cloud environment in a given account.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud environment delete --environment-id 222062
+dbt-cloud environment delete --environment-id 222062
 ```
+
 [Click to view sample response](tests/data/environment_delete_response.json)
-</details>
+
 
 ## dbt-cloud environment list
-This command retrieves environments in a given account. For more information on the API endpoint arguments and response, run `dbt-cloud environment list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#/operations/List%20Environments).
+This command retrieves environments in a given account.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud environment list --account-id 16182 --limit 1
- { 
-  "status": { 
-    "code": 200, 
-    "is_success": true, 
-    "user_message": "Success!", 
-    "developer_message": "" 
-  }, 
-  "data": [ 
-    { 
-      "dbt_project_subdirectory": null, 
-      "project_id": 26597, 
-      "id": 49818, 
-      "account_id": 16182, 
-      "connection_id": 32544, 
-      "repository_id": 40480, 
-      "credentials_id": null, 
-      "created_by_id": null, 
-      "name": "Development", 
-      "use_custom_branch": false, 
-      "custom_branch": null, 
-      "dbt_version": "1.4.0-latest", 
-      "raw_dbt_version": "1.4.0-latest", 
-      "supports_docs": false, 
-      "state": 1, 
-      "updated_at": "2021-11-16T16:26:02.542525+00:00", 
-      "repository": { 
-        "id": 40480, 
-        "account_id": 16182, 
-        "project_id": 26597, 
-        "full_name": "data-mie/jaffle_shop", 
-        "remote_url": "git://github.com/data-mie/jaffle_shop.git", 
-        "remote_backend": "github", 
-        "git_clone_strategy": "github_app", 
-        "deploy_key_id": 39445, 
-        "repository_credentials_id": null, 
-        "github_installation_id": 19320059, 
-        "pull_request_url_template": "https://github.com/data-mie/jaffle_shop/compare/{{destination}}...{{source}}", 
-        "created_at": "2021-11-16T16:26:24.412439+00:00", 
-        "updated_at": "2021-11-16T16:26:24.412455+00:00", 
-        "state": 1, 
-        "git_provider_id": 9437, 
-        "deploy_key": { 
-          "id": 39445, 
-          "account_id": 16182, 
-          "state": 1, 
-          "public_key": "<ANONYMIZED_SSH_KEY>" 
-        }, 
-        "github_repo": "data-mie/jaffle_shop", 
-        "name": "jaffle_shop" 
-      }, 
-      "connection": { 
-        "created_by_id": 18599, 
-        "created_by_service_token_id": null, 
-        "id": 32544, 
-        "state": 1, 
-        "account_id": 16182, 
-        "dbt_project_id": 26597, 
-        "name": "Bigquery", 
-        "type": "bigquery", 
-        "project_id": "dbtprofiler", 
-        "location": null, 
-        "retries": 1, 
-        "maximum_bytes_billed": 0, 
-        "priority": null, 
-        "execution_project": null, 
-        "impersonate_service_account": null, 
-        "scopes": null, 
-        "timeout_seconds": 300, 
-        "job_retry_deadline_seconds": 0, 
-        "job_creation_timeout_seconds": 0, 
-        "private_key_id": "<ANONYMIZED_PRIVATE_KEY_ID>", 
-        "client_email": "<ANONYMIZED_CLIENT_EMAIL>", 
-        "client_id": "<ANONYMIZED_CLIENT_ID>", 
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth", 
-        "token_uri": "https://oauth2.googleapis.com/token", 
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", 
-        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dbt-user%40dbtprofiler.iam.gserviceaccount.com", 
-        "gcs_bucket": null, 
-        "dataproc_region": null, 
-        "dataproc_cluster_name": null 
-      } 
-    } 
-  ], 
-  "extra": { 
-    "filters": { 
-      "limit": 1, 
-      "offset": 0, 
-      "account_id": 16182 
-    }, 
-    "order_by": "id", 
-    "pagination": { 
-      "count": 1, 
-      "total_count": 43 
-    } 
-  }
-}
+dbt-cloud environment list --account-id 16182 --limit 1
 ```
-</details>
+
+[Click to view sample response](tests/data/environment_list_response.json)
 
 ## dbt-cloud environment get
-This command retrieves information about an environment in a given account. For more information on the API endpoint arguments and response, run `dbt-cloud environment get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#/operations/Retrieve%20Environment).
+This command retrieves information about an environment in a given account.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud environment get --account-id 54321 --environment-id 67890
-{ 
-"status": { 
-    "code": 200, 
-    "is_success": true, 
-    "user_message": "Success!", 
-    "developer_message": "" 
-}, 
-"data": { 
-    "dbt_project_subdirectory": null, 
-    "project_id": 12345, 
-    "id": 67890, 
-    "account_id": 54321, 
-    "connection_id": 98765, 
-    "repository_id": 24680, 
-    "credentials_id": 13579, 
-    "created_by_id": null, 
-    "name": "Anonymized Project", 
-    "use_custom_branch": true, 
-    "custom_branch": "main", 
-    "dbt_version": "1.4.0-latest", 
-    "raw_dbt_version": "1.4.0-latest", 
-    "supports_docs": true, 
-    "state": 1, 
-    "updated_at": "2022-01-05T18:18:07.736635+00:00", 
-    "repository": { 
-    "id": 24680, 
-    "account_id": 54321, 
-    "project_id": 12345, 
-    "full_name": "anonymized-user/anonymized-repo", 
-    "remote_url": "git://github.com/anonymized-user/anonymized-repo.git", 
-    "remote_backend": "github", 
-    "git_clone_strategy": "github_app", 
-    "deploy_key_id": 13579, 
-    "repository_credentials_id": null, 
-    "github_installation_id": 98765432, 
-    "pull_request_url_template": "https://github.com/anonymized-user/anonymized-repo/compare/{{destination}}...{{source}}", 
-    "created_at": "2021-11-16T16:26:24.412439+00:00", 
-    "updated_at": "2021-11-16T16:26:24.412455+00:00", 
-    "state": 1, 
-    "git_provider_id": 9437, 
-    "deploy_key": { 
-        "id": 13579, 
-        "account_id": 54321, 
-        "state": 1, 
-        "public_key": "ssh-rsa ANONYMIZED_PUBLIC_KEY" 
-    }, 
-    "github_repo": "anonymized-user/anonymized-repo", 
-    "name": "Anonymized Repo" 
-    }, 
-    "connection": { 
-    "created_by_id": 18599, 
-    "created_by_service_token_id": null, 
-    "id": 98765, 
-    "state": 1, 
-    "account_id": 54321, 
-    "dbt_project_id": 12345, 
-    "name": "Anonymized Connection", 
-    "type": "bigquery", 
-    "project_id": "dbtprofiler", 
-    "location": null, 
-    "retries": 1, 
-    "maximum_bytes_billed": 0, 
-    "priority": null, 
-    "execution_project": null, 
-    "impersonate_service_account": null, 
-    "scopes": null, 
-    "timeout_seconds": 300, 
-    "job_retry_deadline_seconds": 0, 
-    "job_creation_timeout_seconds": 0, 
-    "private_key_id": "ANONYMIZED_PRIVATE_KEY_ID", 
-    "client_email": "anonymized-user@anonymized-project.iam.gserviceaccount.com", 
-    "client_id": "ANONYMIZED_CLIENT_ID", 
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth", 
-    "token_uri": "https://oauth2.googleapis.com/token", 
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", 
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/anonymized-user%40anonymized-project.iam.gserviceaccount.com", 
-    "gcs_bucket": null, 
-    "dataproc_region": null, 
-    "dataproc_cluster_name": null 
-    } 
-} 
-} 
+dbt-cloud environment get --account-id 54321 --environment-id 67890
 ```
-</details>
+
+[Click to view sample response](tests/data/environment_get_response.json)
 
 ## dbt-cloud job run
-This command triggers a dbt Cloud job run and returns a run status JSON response. For more information on the API endpoint arguments and response, run `dbt-cloud job run --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/triggerRun).
+This command triggers a dbt Cloud job run and returns a run status JSON response.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
 >> dbt-cloud job run --job-id 43167 --cause "My first run!" --steps-override '["dbt seed", "dbt run"]' --wait
 Job 43167 run 34929305: QUEUED ...
@@ -617,346 +186,62 @@ Job 43167 run 34929305: QUEUED ...
 Job 43167 run 34929305: STARTING ...
 Job 43167 run 34929305: RUNNING ...
 Job 43167 run 34929305: SUCCESS ...
-{
-  "status": {
-    "code": 200,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": {
-    "id": 34929305,
-    "trigger_id": 35644346,
-    "account_id": REDACTED,
-    "environment_id": 49819,
-    "project_id": REDACTED,
-    "job_definition_id": 43167,
-    "status": 10,
-    "dbt_version": "0.21.0",
-    "git_branch": "main",
-    "git_sha": "981c5cf1ba299e942c6c277c38c8dec9b0738dd0",
-    "status_message": null,
-    "owner_thread_id": null,
-    "executed_by_thread_id": "dbt-run-34929305-dcmbq",
-    "deferring_run_id": null,
-    "artifacts_saved": true,
-    "artifact_s3_path": "prod/runs/34929305/artifacts/target",
-    "has_docs_generated": false,
-    "has_sources_generated": false,
-    "notifications_sent": true,
-    "blocked_by": [],
-    "scribe_enabled": true,
-    "created_at": "2021-11-26 16:48:41.431645+00:00",
-    "updated_at": "2021-11-26 16:49:33.078918+00:00",
-    "dequeued_at": "2021-11-26 16:49:15.670558+00:00",
-    "started_at": "2021-11-26 16:49:20.535987+00:00",
-    "finished_at": "2021-11-26 16:49:32.996703+00:00",
-    "last_checked_at": null,
-    "last_heartbeat_at": null,
-    "should_start_at": null,
-    "trigger": null,
-    "job": null,
-    "environment": null,
-    "run_steps": [],
-    "status_humanized": "Success",
-    "in_progress": false,
-    "is_complete": true,
-    "is_success": true,
-    "is_error": false,
-    "is_cancelled": false,
-    "href": REDACTED,
-    "duration": "00:00:51",
-    "queued_duration": "00:00:39",
-    "run_duration": "00:00:12",
-    "duration_humanized": "51 seconds",
-    "queued_duration_humanized": "39 seconds",
-    "run_duration_humanized": "12 seconds",
-    "created_at_humanized": "1 minute ago",
-    "finished_at_humanized": "9 seconds ago",
-    "job_id": 43167
-  }
-}
 ```
-</details>
+
+[Click to view sample response](tests/data/job_run_response.json)
+
 
 ## dbt-cloud job get
-This command returns the details of a dbt Cloud job. For more information on the API endpoint arguments and response, run `dbt-cloud job get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getJobById).
+This command returns the details of a dbt Cloud job.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud job get --job-id 43167
-{
-  "status": {
-    "code": 200,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": {
-    "execution": {
-      "timeout_seconds": 0
-    },
-    "generate_docs": false,
-    "run_generate_sources": false,
-    "id": 43167,
-    "account_id": REDACTED,
-    "project_id": REDACTED,
-    "environment_id": 49819,
-    "name": "Do nothing!",
-    "dbt_version": null,
-    "created_at": "2021-11-18T15:19:03.185668+00:00",
-    "updated_at": "2021-11-18T15:19:03.185687+00:00",
-    "execute_steps": [
-      "dbt run -s not_a_model"
-    ],
-    "state": 1,
-    "deferring_job_definition_id": null,
-    "lifecycle_webhooks": false,
-    "lifecycle_webhooks_url": null,
-    "triggers": {
-      "github_webhook": false,
-      "git_provider_webhook": false,
-      "custom_branch_only": true,
-      "schedule": false
-    },
-    "settings": {
-      "threads": 4,
-      "target_name": "default"
-    },
-    "schedule": {
-      "cron": "0 * * * *",
-      "date": {
-        "type": "every_day"
-      },
-      "time": {
-        "type": "every_hour",
-        "interval": 1
-      }
-    },
-    "is_deferrable": false,
-    "generate_sources": false,
-    "cron_humanized": "Every hour",
-    "next_run": null,
-    "next_run_humanized": null
-  }
-}
+dbt-cloud job get --job-id 43167
 ```
-</details>
+
+[Click to view sample response](tests/data/job_get_response.json)
+
 
 ## dbt-cloud job list
-This command returns a list of jobs in the account. For more information on the API endpoint arguments and response, run `dbt-cloud job list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listJobsForAccount).
+This command returns a list of jobs in the account.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud job list
-{
-  "status": {
-    "code": 200,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": [
-    {
-      "execution": {
-        "timeout_seconds": 0
-      },
-      "generate_docs": false,
-      "run_generate_sources": false,
-      "id": 43167,
-      "account_id": REDACTED,
-      "project_id": REDACTED,
-      "environment_id": 49819,
-      "name": "Do nothing!",
-      "dbt_version": null,
-      "created_at": "2021-11-18T15:19:03.185668+00:00",
-      "updated_at": "2021-12-25T09:17:12.788186+00:00",
-      "execute_steps": [
-        "dbt run -s not_a_model"
-      ],
-      "state": 1,
-      "deferring_job_definition_id": null,
-      "lifecycle_webhooks": false,
-      "lifecycle_webhooks_url": null,
-      "triggers": {
-        "github_webhook": false,
-        "git_provider_webhook": null,
-        "custom_branch_only": true,
-        "schedule": false
-      },
-      "settings": {
-        "threads": 4,
-        "target_name": "default"
-      },
-      "schedule": {
-        "cron": "0 * * * *",
-        "date": {
-          "type": "every_day"
-        },
-        "time": {
-          "type": "every_hour",
-          "interval": 1
-        }
-      },
-      "is_deferrable": false,
-      "generate_sources": false,
-      "cron_humanized": "Every hour",
-      "next_run": null,
-      "next_run_humanized": null
-    }
-  ]
-}
+dbt-cloud job list --account-id 123456 --project-id 123457
 ```
-</details>
+
+[Click to view sample response](tests/data/job_list_response.json)
 
 ## dbt-cloud job create
 
-This command creates a job in a dbt Cloud project. For more information on the API endpoint arguments and response, run `dbt-cloud job create --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/createJob).
+This command creates a job in a dbt Cloud project.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
 dbt-cloud job create --project-id 12345 --environment-id 49819 --name "Create job" --execute-steps '["dbt seed", "dbt run"]'
-{
-  "status": {
-    "code": 201,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": {
-    "execution": {
-      "timeout_seconds": 0
-    },
-    "generate_docs": false,
-    "run_generate_sources": false,
-    "id": 48180,
-    "account_id": REDACTED,
-    "project_id": 12345,
-    "environment_id": 49819,
-    "name": "Create job",
-    "dbt_version": null,
-    "created_at": "2021-12-22T11:23:26.968076+00:00",
-    "updated_at": "2021-12-22T11:23:26.968094+00:00",
-    "execute_steps": [
-      "dbt seed",
-      "dbt run"
-    ],
-    "state": 1,
-    "deferring_job_definition_id": null,
-    "lifecycle_webhooks": false,
-    "lifecycle_webhooks_url": null,
-    "triggers": {
-      "github_webhook": false,
-      "git_provider_webhook": null,
-      "custom_branch_only": false,
-      "schedule": false
-    },
-    "settings": {
-      "threads": 1,
-      "target_name": "default"
-    },
-    "schedule": {
-      "cron": "0 * * * *",
-      "date": {
-        "type": "every_day"
-      },
-      "time": {
-        "type": "every_hour",
-        "interval": 1
-      }
-    },
-    "is_deferrable": false,
-    "generate_sources": false,
-    "cron_humanized": "Every hour",
-    "next_run": null,
-    "next_run_humanized": null
-  }
-}
 ```
-</details>
+
+[Click to view sample response](tests/data/job_create_response.json)
 
 ## dbt-cloud job delete
 
-This command deletes a job in a dbt Cloud project. Note that this command uses an undocumented v3 API endpoint. For more information on the command and its arguments, run `dbt-cloud job delete --help`.
+This command deletes a job in a dbt Cloud project.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud job delete --job-id 48474
-{
-  "status": {
-    "code": 200,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": {
-    "execution": {
-      "timeout_seconds": 0
-    },
-    "generate_docs": false,
-    "run_generate_sources": false,
-    "id": 48474,
-    "account_id": REDACTED,
-    "project_id": REDACTED,
-    "environment_id": 49819,
-    "name": "Do nothing!",
-    "dbt_version": null,
-    "created_at": "2021-12-25T10:12:29.114456+00:00",
-    "updated_at": "2021-12-25T10:12:29.814383+00:00",
-    "execute_steps": [
-      "dbt run -s not_a_model"
-    ],
-    "state": 2,
-    "deferring_job_definition_id": null,
-    "lifecycle_webhooks": false,
-    "lifecycle_webhooks_url": null,
-    "triggers": {
-      "github_webhook": false,
-      "git_provider_webhook": null,
-      "custom_branch_only": true,
-      "schedule": false
-    },
-    "settings": {
-      "threads": 4,
-      "target_name": "default"
-    },
-    "schedule": {
-      "cron": "0 * * * *",
-      "date": {
-        "type": "every_day"
-      },
-      "time": {
-        "type": "every_hour",
-        "interval": 1
-      }
-    },
-    "is_deferrable": false,
-    "generate_sources": false,
-    "cron_humanized": "Every hour",
-    "next_run": null,
-    "next_run_humanized": null
-  }
-}
+dbt-cloud job delete --job-id 48474
 ```
-</details>
+
+[Click to view sample response](tests/data/job_delete_response.json)
+
 
 ## dbt-cloud job delete-all
 
-💡 **This command is a composition of one or more base commands.**
+💡 **This is a composition of one or more base commands.**
 
-This command fetches all jobs on the account, deletes them one-by-one after user confirmation via prompt and prints out the job delete responses. For more information on the command and its arguments, run `dbt-cloud job delete-all --help`.
+This command fetches all jobs on the account, deletes them one-by-one after user confirmation via prompt and prints out the job delete responses.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
 >> dbt-cloud job delete-all --keep-jobs "[43167, 49663]"
 Jobs to delete: [54658, 54659]
@@ -964,658 +249,105 @@ Delete job 54658? [y/N]: yes
 Job 54658 was deleted.
 Delete job 54659? [y/N]: yes
 Job 54659 was deleted.
-[
-  {
-    "status": {
-      "code": 200,
-      "is_success": true,
-      "user_message": "Success!",
-      "developer_message": ""
-    },
-    "data": {
-      "execution": {
-        "timeout_seconds": 0
-      },
-      "generate_docs": false,
-      "run_generate_sources": false,
-      "id": 54658,
-      "account_id": REDACTED,
-      "project_id": REDACTED,
-      "environment_id": 49819,
-      "name": "Do nothing!",
-      "dbt_version": null,
-      "created_at": "2022-01-27T09:04:26.080595+00:00",
-      "updated_at": "2022-01-27T09:05:10.527583+00:00",
-      "execute_steps": [
-        "dbt run -s not_a_model"
-      ],
-      "state": 2,
-      "deferring_job_definition_id": null,
-      "lifecycle_webhooks": false,
-      "lifecycle_webhooks_url": null,
-      "triggers": {
-        "github_webhook": false,
-        "git_provider_webhook": null,
-        "custom_branch_only": true,
-        "schedule": false
-      },
-      "settings": {
-        "threads": 4,
-        "target_name": "default"
-      },
-      "schedule": {
-        "cron": "0 * * * *",
-        "date": {
-          "type": "every_day"
-        },
-        "time": {
-          "type": "every_hour",
-          "interval": 1
-        }
-      },
-      "is_deferrable": false,
-      "generate_sources": false,
-      "cron_humanized": "Every hour",
-      "next_run": null,
-      "next_run_humanized": null
-    }
-  },
-  {
-    "status": {
-      "code": 200,
-      "is_success": true,
-      "user_message": "Success!",
-      "developer_message": ""
-    },
-    "data": {
-      "execution": {
-        "timeout_seconds": 0
-      },
-      "generate_docs": false,
-      "run_generate_sources": false,
-      "id": 54659,
-      "account_id": REDACTED,
-      "project_id": REDACTED,
-      "environment_id": 49819,
-      "name": "Do nothing!",
-      "dbt_version": null,
-      "created_at": "2022-01-27T09:04:43.231873+00:00",
-      "updated_at": "2022-01-27T09:05:19.533456+00:00",
-      "execute_steps": [
-        "dbt run -s not_a_model"
-      ],
-      "state": 2,
-      "deferring_job_definition_id": null,
-      "lifecycle_webhooks": false,
-      "lifecycle_webhooks_url": null,
-      "triggers": {
-        "github_webhook": false,
-        "git_provider_webhook": null,
-        "custom_branch_only": true,
-        "schedule": false
-      },
-      "settings": {
-        "threads": 4,
-        "target_name": "default"
-      },
-      "schedule": {
-        "cron": "0 * * * *",
-        "date": {
-          "type": "every_day"
-        },
-        "time": {
-          "type": "every_hour",
-          "interval": 1
-        }
-      },
-      "is_deferrable": false,
-      "generate_sources": false,
-      "cron_humanized": "Every hour",
-      "next_run": null,
-      "next_run_humanized": null
-    }
-  }
-]
 ```
-</details>
 
 ## dbt-cloud job export
 
-💡 **This command is a composition of one or more base commands.**
+💡 **This is a composition of one or more base commands.**
 
 This command exports a dbt Cloud job as JSON to a file and can be used in conjunction with [dbt-cloud job import](#dbt-cloud-job-import) to copy jobs between dbt Cloud projects.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud job export | tee job.json
-{
-  "execution": {
-    "timeout_seconds": 0
-  },
-  "generate_docs": false,
-  "run_generate_sources": false,
-  "account_id": REDACTED,
-  "project_id": REDACTED,
-  "environment_id": 49819,
-  "name": "Do nothing!",
-  "dbt_version": null,
-  "created_at": "2021-11-18T15:19:03.185668+00:00",
-  "updated_at": "2021-12-25T09:17:12.788186+00:00",
-  "execute_steps": [
-    "dbt run -s not_a_model"
-  ],
-  "state": 1,
-  "deferring_job_definition_id": null,
-  "lifecycle_webhooks": false,
-  "lifecycle_webhooks_url": null,
-  "triggers": {
-    "github_webhook": false,
-    "git_provider_webhook": null,
-    "custom_branch_only": true,
-    "schedule": false
-  },
-  "settings": {
-    "threads": 4,
-    "target_name": "default"
-  },
-  "schedule": {
-    "cron": "0 * * * *",
-    "date": {
-      "type": "every_day"
-    },
-    "time": {
-      "type": "every_hour",
-      "interval": 1
-    }
-  },
-  "is_deferrable": false,
-  "generate_sources": false,
-  "cron_humanized": "Every hour",
-  "next_run": null,
-  "next_run_humanized": null
-}
+dbt-cloud job export > job.json
 ```
-</details>
 
 ## dbt-cloud job import
 
-💡 **This command is a composition of one or more base commands.**
+💡 **This is a composition of one or more base commands.**
 
 This command imports a dbt Cloud job from exported JSON. You can use JSON manipulation tools (e.g., [jq](https://stedolan.github.io/jq/)) to modify the job definition before importing it.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> cat job.json | jq '.environment_id = 49819 | .name = "Imported job"' | dbt-cloud job import
-{
-  "status": {
-    "code": 201,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": {
-    "execution": {
-      "timeout_seconds": 0
-    },
-    "generate_docs": false,
-    "run_generate_sources": false,
-    "id": 48475,
-    "account_id": REDACTED,
-    "project_id": REDACTED,
-    "environment_id": 49819,
-    "name": "Imported job",
-    "dbt_version": null,
-    "created_at": "2021-12-25T10:40:13.193129+00:00",
-    "updated_at": "2021-12-25T10:40:13.193149+00:00",
-    "execute_steps": [
-      "dbt run -s not_a_model"
-    ],
-    "state": 1,
-    "deferring_job_definition_id": null,
-    "lifecycle_webhooks": false,
-    "lifecycle_webhooks_url": null,
-    "triggers": {
-      "github_webhook": false,
-      "git_provider_webhook": null,
-      "custom_branch_only": true,
-      "schedule": false
-    },
-    "settings": {
-      "threads": 4,
-      "target_name": "default"
-    },
-    "schedule": {
-      "cron": "0 * * * *",
-      "date": {
-        "type": "every_day"
-      },
-      "time": {
-        "type": "every_hour",
-        "interval": 1
-      }
-    },
-    "is_deferrable": false,
-    "generate_sources": false,
-    "cron_humanized": "Every hour",
-    "next_run": null,
-    "next_run_humanized": null
-  }
-}
+dbt-cloud job export > job.json
+cat job.json | jq '.environment_id = 49819 | .name = "Imported job"' | dbt-cloud job import
 ```
-</details>
 
 ## dbt-cloud run get
-This command returns the details of a dbt Cloud run. For more information on the API endpoint arguments and response, run `dbt-cloud run get --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getRunById).
+This command returns the details of a dbt Cloud run.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud run get --run-id 36053848
-{
-  "status": {
-    "code": 200,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": {
-    "id": 36053848,
-    "trigger_id": 36768889,
-    "account_id": REDACTED,
-    "environment_id": 49819,
-    "project_id": REDACTED,
-    "job_definition_id": 43167,
-    "status": 10,
-    "dbt_version": "0.21.0",
-    "git_branch": "main",
-    "git_sha": "981c5cf1ba299e942c6c277c38c8dec9b0738dd0",
-    "status_message": null,
-    "owner_thread_id": null,
-    "executed_by_thread_id": "dbt-run-36053848-84vsp",
-    "deferring_run_id": null,
-    "artifacts_saved": true,
-    "artifact_s3_path": "prod/runs/36053848/artifacts/target",
-    "has_docs_generated": false,
-    "has_sources_generated": false,
-    "notifications_sent": true,
-    "blocked_by": [],
-    "scribe_enabled": true,
-    "created_at": "2021-12-07 10:32:24.326116+00:00",
-    "updated_at": "2021-12-07 10:34:14.507280+00:00",
-    "dequeued_at": "2021-12-07 10:33:54.599925+00:00",
-    "started_at": "2021-12-07 10:34:01.982824+00:00",
-    "finished_at": "2021-12-07 10:34:14.435474+00:00",
-    "last_checked_at": null,
-    "last_heartbeat_at": null,
-    "should_start_at": null,
-    "trigger": null,
-    "job": null,
-    "environment": null,
-    "run_steps": [],
-    "status_humanized": "Success",
-    "in_progress": false,
-    "is_complete": true,
-    "is_success": true,
-    "is_error": false,
-    "is_cancelled": false,
-    "href": REDACTED,
-    "duration": "00:01:50",
-    "queued_duration": "00:01:37",
-    "run_duration": "00:00:12",
-    "duration_humanized": "1 minute, 50 seconds",
-    "queued_duration_humanized": "1 minute, 37 seconds",
-    "run_duration_humanized": "12 seconds",
-    "created_at_humanized": "2 weeks, 1 day ago",
-    "finished_at_humanized": "2 weeks, 1 day ago",
-    "job_id": 43167
-  }
-}
+dbt-cloud run get --run-id 36053848
 ```
-</details>
+
+[Click to view sample response](tests/data/run_get_response.json)
 
 ## dbt-cloud run list
-This command returns a list of runs in the account. For more information on the API endpoint arguments and response, run `dbt-cloud run list --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#tag/Runs/operation/listRunsForAccount).
+This command returns a list of runs in the account.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud run list --limit 2
-{
-  "data": [
-    {
-      "id": "40650768",
-      "environment_id": "49819",
-      "account_id": REDACTED,
-      "project_id": REDACTED,
-      "job_id": "49663",
-      "trigger": {
-        "cause": "scheduled",
-        "git_provider": null,
-        "pull_request_id": null,
-        "git_branch": "main",
-        "git_sha": "981c5cf1ba299e942c6c277c38c8dec9b0738dd0"
-      },
-      "replace": {
-        "schema_with": null,
-        "target_name_with": null,
-        "dbt_version_with": null,
-        "generate_docs_with": null,
-        "run_steps_with": null,
-        "thread_count_with": null,
-        "timeout_after_with": null
-      },
-      "href": "https://cloud.getdbt.com/api/v2/accounts/REDACTED/runs/40650768",
-      "status": "Succeeded",
-      "status_message": null,
-      "dbt_version": "0.21.0",
-      "waiting_on": [],
-      "triggered_at": 1642377765,
-      "created_at": 1642377765,
-      "updated_at": 1642378181,
-      "dequeued_at": 1642377904,
-      "started_at": 1642378141,
-      "finished_at": 1642378181,
-      "duration": 416,
-      "queued_duration": 376,
-      "run_duration": 40,
-      "artifacts_saved": true,
-      "has_docs_generated": true,
-      "has_sources_generated": false
-    },
-    {
-      "id": "40538548",
-      "environment_id": "49819",
-      "account_id": REDACTED,
-      "project_id": REDACTED,
-      "job_id": "49663",
-      "trigger": {
-        "cause": "scheduled",
-        "git_provider": null,
-        "pull_request_id": null,
-        "git_branch": "main",
-        "git_sha": "981c5cf1ba299e942c6c277c38c8dec9b0738dd0"
-      },
-      "replace": {
-        "schema_with": null,
-        "target_name_with": null,
-        "dbt_version_with": null,
-        "generate_docs_with": null,
-        "run_steps_with": null,
-        "thread_count_with": null,
-        "timeout_after_with": null
-      },
-      "href": "https://cloud.getdbt.com/api/v2/accounts/REDACTED/runs/40538548",
-      "status": "Succeeded",
-      "status_message": null,
-      "dbt_version": "0.21.0",
-      "waiting_on": [],
-      "triggered_at": 1642291308,
-      "created_at": 1642291308,
-      "updated_at": 1642291725,
-      "dequeued_at": 1642291455,
-      "started_at": 1642291683,
-      "finished_at": 1642291725,
-      "duration": 417,
-      "queued_duration": 375,
-      "run_duration": 42,
-      "artifacts_saved": true,
-      "has_docs_generated": true,
-      "has_sources_generated": false
-    }
-  ]
-}
+dbt-cloud run list --limit 2
 ```
-</details>
+
+[Click to view sample response](tests/data/run_list_response.json)
 
 ## dbt-cloud run cancel
-This command cancels a dbt Cloud run. For more information on the API endpoint arguments and response, run `dbt-cloud run cancel --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/cancelRunById).
+This command cancels a dbt Cloud run. A run can be 'cancelled' irregardless of it's previous status. This means that you can send a request to cancel a previously successful / errored run (and nothing happens practically) and the response status would be similar to cancelling a currently queued or running run.
 
-> A run can be to be 'cancelled' irregardless of it's previous status. This means that you can send a request to cancel a previously successful / errored run (and nothing happens practically) and the response status would be similar to
-> cancelling a currently queued or running run.
-
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud run cancel --run-id 36053848
-{
-  "status": {
-    "code": 200,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": {
-    "id": 36053848,
-    "trigger_id": 48392125,
-    "account_id": 123456,
-    "environment_id": 49819,
-    "project_id": 123457,
-    "job_definition_id": 37119,
-    "status": 30,
-    "dbt_version": "0.19.1",
-    "git_branch": null,
-    "git_sha": null,
-    "status_message": "Cancelled by user.",
-    "owner_thread_id": null,
-    "executed_by_thread_id": null,
-    "deferring_run_id": null,
-    "artifacts_saved": false,
-    "artifact_s3_path": null,
-    "has_docs_generated": false,
-    "has_sources_generated": false,
-    "notifications_sent": false,
-    "blocked_by": [],
-    "scribe_enabled": true,
-    "created_at": "2022-03-14 09:58:13.138036+00:00",
-    "updated_at": "2022-03-14 09:58:22.869828+00:00",
-    "dequeued_at": null,
-    "started_at": null,
-    "finished_at": "2022-03-14 09:58:22.867735+00:00",
-    "last_checked_at": null,
-    "last_heartbeat_at": null,
-    "should_start_at": null,
-    "trigger": null,
-    "job": null,
-    "environment": null,
-    "run_steps": [],
-    "status_humanized": "Cancelled",
-    "in_progress": false,
-    "is_complete": true,
-    "is_success": false,
-    "is_error": false,
-    "is_cancelled": true,
-    "href": "REDACTED",
-    "duration": "00:00:09",
-    "queued_duration": "00:00:09",
-    "run_duration": "00:00:00",
-    "duration_humanized": "9 seconds",
-    "queued_duration_humanized": "9 seconds",
-    "run_duration_humanized": "0 minutes",
-    "created_at_humanized": "9 seconds ago",
-    "finished_at_humanized": "0 minutes ago",
-    "job_id": 43167
-  }
-}
+dbt-cloud run cancel --run-id 36053848
 ```
-</details>
+
+[Click to view sample response](tests/data/run_cancel_response.json)
 
 ## dbt-cloud run cancel-all
 
-💡 **This command is a composition of one or more base commands.**
+💡 **This is a composition of one or more base commands.**
 
-This command fetches all runs on the account, cancels them one-by-one after user confirmation via prompt and prints out the run cancellation responses. For more information on the command and its arguments, run `dbt-cloud run cancel-all --help`.
+This command fetches all runs on the account, cancels them one-by-one after user confirmation via prompt and prints out the run cancellation responses. 
 
-> You should typically use this with a `--status` arg of either `Running` or `Queued` as cancellations can be requested against all runs. Without this, you will effectively be trying to cancel all runs that had ever been scheduled in the project irregardless of its' current status (which could take a long time if your project has had a lot of previous runs).
+You should typically use this with a `--status` arg of either `Running` or `Queued` as cancellations can be requested against all runs. Without this, you will effectively be trying to cancel all runs that had ever been scheduled in the project irregardless of its' current status (which could take a long time if your project has had a lot of previous runs).
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
 >> dbt-cloud run cancel-all --status Running
 Runs to cancel: [36053848]
 Cancel run 36053848? [y/N]: yes
 Run 36053848 has been cancelled.
-[
-  {
-    "status": {
-      "code": 200,
-      "is_success": true,
-      "user_message": "Success!",
-      "developer_message": ""
-    },
-    "data": {
-      "id": 36053848,
-      "trigger_id": 48392125,
-      "account_id": 123456,
-      "environment_id": 49819,
-      "project_id": 123457,
-      "job_definition_id": 37119,
-      "status": 30,
-      "dbt_version": "0.19.1",
-      "git_branch": null,
-      "git_sha": null,
-      "status_message": "Cancelled by user.",
-      "owner_thread_id": null,
-      "executed_by_thread_id": null,
-      "deferring_run_id": null,
-      "artifacts_saved": false,
-      "artifact_s3_path": null,
-      "has_docs_generated": false,
-      "has_sources_generated": false,
-      "notifications_sent": false,
-      "blocked_by": [],
-      "scribe_enabled": true,
-      "created_at": "2022-03-14 09:58:13.138036+00:00",
-      "updated_at": "2022-03-14 09:58:22.869828+00:00",
-      "dequeued_at": null,
-      "started_at": null,
-      "finished_at": "2022-03-14 09:58:22.867735+00:00",
-      "last_checked_at": null,
-      "last_heartbeat_at": null,
-      "should_start_at": null,
-      "trigger": null,
-      "job": null,
-      "environment": null,
-      "run_steps": [],
-      "status_humanized": "Cancelled",
-      "in_progress": false,
-      "is_complete": true,
-      "is_success": false,
-      "is_error": false,
-      "is_cancelled": true,
-      "href": "REDACTED",
-      "duration": "00:00:09",
-      "queued_duration": "00:00:09",
-      "run_duration": "00:00:00",
-      "duration_humanized": "9 seconds",
-      "queued_duration_humanized": "9 seconds",
-      "run_duration_humanized": "0 minutes",
-      "created_at_humanized": "9 seconds ago",
-      "finished_at_humanized": "0 minutes ago",
-      "job_id": 43167
-    }
-  }
-]
 ```
-</details>
 
 ## dbt-cloud run list-artifacts
-This command fetches a list of artifact files generated for a completed run. For more information on the API endpoint arguments and response, run `dbt-cloud run list-artifacts --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listArtifactsByRunId).
+This command fetches a list of artifact files generated for a completed run.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud run list-artifacts --run-id 36053848
-{
-  "status": {
-    "code": 200,
-    "is_success": true,
-    "user_message": "Success!",
-    "developer_message": ""
-  },
-  "data": [
-    "manifest.json",
-    "run/jaffle_shop/data/raw_customers.csv",
-    "run/jaffle_shop/data/raw_orders.csv",
-    "run/jaffle_shop/data/raw_payments.csv",
-    "run_results.json"
-  ]
-}
+dbt-cloud run list-artifacts --run-id 36053848
 ```
-</details>
+
+[Click to view sample response](tests/data/run_list_artifacts_response.json)
 
 ## dbt-cloud run get-artifact
 This command fetches an artifact file from a completed run. Once a run has completed, you can use this command to download the manifest.json, run_results.json or catalog.json files from dbt Cloud. These artifacts contain information about the models in your dbt project, timing information around their execution, and a status message indicating the result of the model build.
 
-For more information on the API endpoint arguments and response, run `dbt-cloud run get-artifact --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getArtifactsByRunId).
-
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud run get-artifact --run-id 36053848 --path manifest.json > manifest.json
+dbt-cloud run get-artifact --run-id 36053848 --path manifest.json > manifest.json
 ```
-</details>
 
 ## dbt-cloud metadata query
-This command queries the dbt Cloud Metadata API using GraphQL. For more information on the Metadata API, see [the docs](https://docs.getdbt.com/docs/dbt-cloud/dbt-cloud-api/metadata/metadata-overview).
+This command queries the dbt Cloud Metadata API using GraphQL.
 
-<details>
-  <summary><b>Usage</b></summary>
-
+### Usage
 ```bash
->> dbt-cloud metadata query -f query.graphql
-{
-  "data": {
-    "model": {
-      "parentsModels": [
-        {
-          "runId": 39352464,
-          "uniqueId": "model.jaffle_shop.stg_orders",
-          "executionTime": 0.870538949966431
-        },
-        {
-          "runId": 39352464,
-          "uniqueId": "model.jaffle_shop.stg_payments",
-          "executionTime": 0.635890483856201
-        },
-        {
-          "runId": 39352464,
-          "uniqueId": "model.jaffle_shop.stg_customers",
-          "executionTime": 0.697099924087524
-        }
-      ],
-      "parentsSources": []
-    }
-  }
-}
+dbt-cloud metadata query -f query.graphql
 ```
 
-```graphql
-""" query.graphql """
-{
-  model(jobId: 49663, uniqueId: "model.jaffle_shop.customers") {
-    parentsModels {
-      runId
-      uniqueId
-      executionTime
-    }
-    parentsSources {
-      runId
-      uniqueId
-      state
-    }
-  }
-}
-```
+[Click to view sample query](tests/data/metadata_query.graphql)
+
 
 An alternative way of using the command without saving the GraphQL query to a file is to pipe it to `dbt-cloud metadata query`.
 ```bash
