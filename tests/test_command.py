@@ -1,5 +1,6 @@
 import pytest
-from dbt_cloud.command.command import translate_click_options
+from typing import Optional
+from dbt_cloud.command.command import translate_click_options, DbtCloudCommand
 from .conftest import COMMAND_TEST_CASES
 
 
@@ -28,3 +29,40 @@ def test_translate_nested_click_options():
         "settings": {"threads": 4},
         "foo": {"baz": "orange", "bar": {"baz": "apple"}},
     }
+
+
+class PayloadCommand(DbtCloudCommand):
+    id: Optional[int]
+
+
+@pytest.mark.parametrize(
+    "kwargs,expected",
+    [
+        (
+            {
+                "api_token": "123",
+                "dbt_cloud_host": "https://cloud.getdbt.com",
+                "id": 12345,
+            },
+            {
+                "api_token": "123",
+                "dbt_cloud_host": "https://cloud.getdbt.com",
+                "id": 12345,
+            },
+        ),
+        (
+            {
+                "api_token": "123",
+                "dbt_cloud_host": "https://cloud.getdbt.com",
+                "id": None,
+            },
+            {
+                "api_token": "123",
+                "dbt_cloud_host": "https://cloud.getdbt.com",
+            },
+        ),
+    ],
+)
+def test_dbt_cloud_command_get_payload(kwargs, expected):
+    command = PayloadCommand(**kwargs)
+    assert command.get_payload(exclude=[]) == expected
