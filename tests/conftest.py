@@ -1,5 +1,6 @@
 import json
 import pytest
+import os
 from pathlib import Path
 from dbt_cloud.command import (
     DbtCloudJobCreateCommand,
@@ -31,8 +32,13 @@ RUN_ID = 36053848
 
 
 @pytest.fixture
+def account_id():
+    return int(os.environ.get("DBT_CLOUD_ACCOUNT_ID", ACCOUNT_ID))
+
+
+@pytest.fixture
 def environment_id():
-    return ENVIRONMENT_ID
+    return int(os.environ.get("DBT_CLOUD_ENVIRONMENT_ID", ENVIRONMENT_ID))
 
 
 def load_response(response_name):

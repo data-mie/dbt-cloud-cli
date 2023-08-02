@@ -6,6 +6,11 @@ jobs:
       - image: cimg/python:3.9.9
 
     resource_class: small
+
+    environment:
+      DBT_CLOUD_PROJECT_ID: 26597
+      DBT_CLOUD_ENVIRONMENT_ID: 49819
+      DBT_CLOUD_JOB_ID: 43167
     
     steps:
       - checkout

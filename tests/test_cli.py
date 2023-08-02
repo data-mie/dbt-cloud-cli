@@ -5,11 +5,18 @@ from dbt_cloud.cli import dbt_cloud as cli
 
 
 @pytest.mark.online
-def test_cli_environment_get(environment_id):
+def test_cli_environment_get(account_id, environment_id):
     runner = CliRunner()
     result = runner.invoke(
         cli,
-        ["environment", "get"],
+        [
+            "environment",
+            "get",
+            "--account-id",
+            account_id,
+            "--environment-id",
+            environment_id,
+        ],
     )
 
     assert result.exit_code == 0
