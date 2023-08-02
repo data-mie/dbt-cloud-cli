@@ -50,3 +50,15 @@ RUN_ID_FIELD = Field(
     ...,
     description="Numeric ID of a dbt Cloud run",
 )
+
+LIMIT_FIELD = Field(
+    ge=0,
+    description="A limit on the number of rows to be returned. Must be a positive integer.",
+)
+OFFSET_FIELD = Field(
+    ge=0,
+    description="Offset for the returned rows. Must be a positive integer.",
+)
+DBT_VERSION_FIELD = Field(
+    description="Filter by dbt version (e.g., '1.4.0-latest')",
+)

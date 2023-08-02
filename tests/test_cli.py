@@ -22,3 +22,19 @@ def test_cli_environment_get(account_id, environment_id):
     assert result.exit_code == 0
     response = json.loads(result.output)
     assert response["data"]["id"] == environment_id
+    assert response["data"]["account_id"] == account_id
+
+
+@pytest.mark.integration
+def test_cli_environment_list(account_id):
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        ["environment", "list", "--account-id", account_id, "--limit", 1],
+    )
+
+    assert result.exit_code == 0
+    response = json.loads(result.output)
+    assert len(response["data"]) == 1
+    for environment in response["data"]:
+        assert environment["account_id"] == account_id

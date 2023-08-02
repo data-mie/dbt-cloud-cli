@@ -1,19 +1,33 @@
 import requests
-from pydantic import Field, PrivateAttr
+from typing import Optional
+from pydantic import Field
 from dbt_cloud.command.command import DbtCloudAccountCommand
-from dbt_cloud.field import PROJECT_ID_FIELD
+from dbt_cloud.field import LIMIT_FIELD, OFFSET_FIELD, DBT_VERSION_FIELD
 
 
 class DbtCloudEnvironmentListCommand(DbtCloudAccountCommand):
-    """Retrieves environments for a given project."""
+    """Retrieves environments in a given account."""
 
-    project_id: int = PROJECT_ID_FIELD
-    _api_version: str = PrivateAttr("v3")
+    limit: Optional[int] = LIMIT_FIELD
+    dbt_version: Optional[str] = DBT_VERSION_FIELD
+    offset: Optional[int] = OFFSET_FIELD
+    state: Optional[int] = Field(
+        description="State of the environment. 1 = Active.",
+    )
 
     @property
     def api_url(self) -> str:
-        return f"{super().api_url}/projects/{self.project_id}/environments"
+        return f"{super().api_url}/environments"
 
     def execute(self) -> requests.Response:
-        response = requests.get(url=self.api_url, headers=self.request_headers)
+        response = requests.get(
+            url=self.api_url,
+            headers=self.request_headers,
+            params={
+                "limit": self.limit,
+                "offset": self.offset,
+                "dbt_version": self.dbt_version,
+                "state": self.state,
+            },
+        )
         return response
