@@ -1,5 +1,5 @@
 import requests
-from typing import Optional, Literal
+from typing import Optional, Literal, Union
 from pydantic import Field, BaseModel
 from dbt_cloud.command.command import DbtCloudAccountCommand
 
@@ -10,6 +10,21 @@ class DbtCloudSnowflakeConnection(BaseModel):
     database: str = Field(description="Snowflake database name.")
     warehouse: str = Field(description="Snowflake warehouse name.")
     allow_sso: bool = Field(description="Allow SSO.")
+
+
+class DbtCloudBigQueryConnection(BaseModel):
+    type: str = Literal["bigquery"]
+    client_id: str = Field(description="BigQuery client ID.")
+    project_id: str = Field(description="BigQuery project ID.")
+    timeout_seconds: int = Field(description="BigQuery timeout in seconds.")
+    client_x509_cert_url: str = Field(description="BigQuery client x509 cert URL.")
+    private_key_id: str = Field(description="BigQuery private key ID.")
+    token_uri: str = Field(description="BigQuery token URI.")
+    auth_provider_x509_cert_url: str = Field(
+        description="BigQuery auth provider x509 cert URL."
+    )
+    auth_uri: str = Field(description="BigQuery auth URI.")
+    client_email: str = Field(description="BigQuery client email.")
 
 
 class DbtCloudConnectionCreateCommand(DbtCloudAccountCommand):
@@ -28,7 +43,9 @@ class DbtCloudConnectionCreateCommand(DbtCloudAccountCommand):
     )
     state: int = Field(description="State of the connection. 1 = Active.")
 
-    connection_parameters: DbtCloudSnowflakeConnection
+    connection_parameters: Union[
+        DbtCloudSnowflakeConnection, DbtCloudBigQueryConnection
+    ] = Field(exclude_from_click_options=True)
 
     @property
     def api_url(self) -> str:
