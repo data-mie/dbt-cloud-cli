@@ -407,6 +407,7 @@ def create(ctx, **kwargs):
     kwargs["connection_parameters"] = {
         key.lstrip("-").replace("-", "_"): value for key, value in zip(keys, values)
     }
+    kwargs["connection_parameters"]["type"] = kwargs["type"]
     command = DbtCloudConnectionCreateCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 

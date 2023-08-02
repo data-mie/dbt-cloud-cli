@@ -1,10 +1,11 @@
 import requests
-from typing import Optional
+from typing import Optional, Literal
 from pydantic import Field, BaseModel
 from dbt_cloud.command.command import DbtCloudAccountCommand
 
 
 class DbtCloudSnowflakeConnection(BaseModel):
+    type: str = Literal["snowflake"]
     account: str = Field(description="Snowflake account name.")
     database: str = Field(description="Snowflake database name.")
     warehouse: str = Field(description="Snowflake warehouse name.")
@@ -33,13 +34,18 @@ class DbtCloudConnectionCreateCommand(DbtCloudAccountCommand):
     def api_url(self) -> str:
         return f"{super().api_url}/connections/"
 
-    def execute(self, **kwargs) -> requests.Response:
+    def execute(self) -> requests.Response:
         response = requests.post(
             url=self.api_url,
             headers=self.request_headers,
             json={
                 **self.get_payload(
-                    exclude=["api_token", "dbt_cloud_host", "connection_parameters"]
+                    exclude=[
+                        "api_token",
+                        "dbt_cloud_host",
+                        "connection_parameters",
+                        "type",
+                    ]
                 ),
                 **self.connection_parameters.dict(),
             },
