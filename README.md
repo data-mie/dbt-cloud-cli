@@ -50,6 +50,8 @@ Group | API endpoint | Command | Description |
 | Accounts | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getAccountById) | [dbt-cloud account get](#dbt-cloud-account-get)  | Retrieves dbt Cloud account information |
 | Accounts | [https://cloud.getdbt.com/api/v2/accounts/](https://docs.getdbt.com/dbt-cloud/api-v2#operation/listAccounts) | [dbt-cloud account list](#dbt-cloud-account-list) | Retrieves all available accounts |
 | Audit Logs | https://cloud.getdbt.com/api/v3/accounts/{accountId}/audit-logs/ | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get) | Retrieves audit logs for the dbt Cloud account |
+| Projects | [https://cloud.getdbt.com
+/api/v2/accounts/{account_id}/projects/](https://docs.getdbt.com/dbt-cloud/api-v2#/operations/Create%20Project) | [dbt-cloud project create](#dbt-cloud-project-create) | Creates a new dbt Cloud project in a given account |
 | Projects | [https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/{projectId}](https://docs.getdbt.com/dbt-cloud/api-v2#operation/getProjectById) | [dbt-cloud project get](#dbt-cloud-project-get) | Retrieves dbt Cloud project information |
 | Projects | https://cloud.getdbt.com/api/v2/accounts/{accountId}/projects/ | [dbt-cloud project list](#dbt-cloud-project-list) | Returns a list of projects in the account |
 | Environments | https://cloud.getdbt.com
@@ -74,6 +76,7 @@ Group | API endpoint | Command | Description |
 * [dbt-cloud account get](#dbt-cloud-account-get)
 * [dbt-cloud account list](#dbt-cloud-account-list)
 * [dbt-cloud audit-log get](#dbt-cloud-audit-log-get)
+* [dbt-cloud project create](#dbt-cloud-project-create)
 * [dbt-cloud project get](#dbt-cloud-project-get)
 * [dbt-cloud project list](#dbt-cloud-project-list)
 * [dbt-cloud environment get](#dbt-cloud-environment-get)
@@ -276,6 +279,19 @@ This command retrieves audit logs for the dbt Cloud account. For more informatio
   }
 }
 ```
+</details>
+
+## dbt-cloud project create
+This command creates a new dbt Cloud project in a given account. For more information on the API endpoint arguments and response, run `dbt-cloud project create --help` and check out the [dbt Cloud API docs](https://docs.getdbt.com/dbt-cloud/api-v2#/operations/Create%20Project).
+
+<details>
+  <summary><b>Usage</b></summary>
+
+```bash
+>> dbt-cloud project create --name "My project"
+```
+
+[Click to view sample response](tests/data/project_create_response.json)
 </details>
 
 ## dbt-cloud project get
