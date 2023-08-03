@@ -23,6 +23,10 @@ class DbtCloudJobListCommand(DbtCloudAccountCommand):
         response = requests.get(
             url=self.api_url,
             headers=self.request_headers,
-            params={"order_by": self.order_by, "project_id": self.project_id},
+            params={
+                "order_by": self.order_by,
+                "project_id": self.project_id,
+                "limit": self.limit,
+            },
         )
         return response
