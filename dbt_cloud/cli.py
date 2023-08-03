@@ -402,6 +402,9 @@ def get(**kwargs):
 @DbtCloudEnvironmentCreateCommand.click_options
 def create(**kwargs):
     command = DbtCloudEnvironmentCreateCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
 @environment.command(help=DbtCloudEnvironmentDeleteCommand.get_description())
 @DbtCloudEnvironmentDeleteCommand.click_options
 def delete(**kwargs):

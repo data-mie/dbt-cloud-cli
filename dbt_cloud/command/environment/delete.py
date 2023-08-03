@@ -1,9 +1,9 @@
 import requests
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudAccountCommand
+from dbt_cloud.command.command import DbtCloudProjectCommand
 
 
-class DbtCloudEnvironmentDeleteCommand(DbtCloudAccountCommand):
+class DbtCloudEnvironmentDeleteCommand(DbtCloudProjectCommand):
     """Deletes a dbt Cloud environment in a given account."""
 
     environment_id: int = Field(

@@ -1,11 +1,11 @@
 import requests
 from typing import Optional
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudAccountCommand
+from dbt_cloud.command.command import DbtCloudProjectCommand
 from dbt_cloud.field import DBT_VERSION_FIELD
 
 
-class DbtCloudEnvironmentCreateCommand(DbtCloudAccountCommand):
+class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
     """Creates a new dbt Cloud environment in a given account."""
 
     name: str = Field(
@@ -14,9 +14,6 @@ class DbtCloudEnvironmentCreateCommand(DbtCloudAccountCommand):
     id: Optional[int]
     connection_id: Optional[int] = Field(
         description="Connection ID to use for this environment.",
-    )
-    project_id: Optional[int] = Field(
-        description="Project ID to use for this environment.",
     )
     credentials_id: Optional[int] = Field(
         description="Credentials ID to use for this environment.",
@@ -61,6 +58,6 @@ class DbtCloudEnvironmentCreateCommand(DbtCloudAccountCommand):
         response = requests.post(
             url=self.api_url,
             headers=self.request_headers,
-            json=self.get_payload(),
+            json=self.get_payload(exclude_empty=True),
         )
         return response
