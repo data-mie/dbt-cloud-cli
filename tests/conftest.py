@@ -42,6 +42,11 @@ def account_id():
 
 
 @pytest.fixture
+def project_id():
+    return int(os.environ.get("DBT_CLOUD_PROJECT_ID", PROJECT_ID))
+
+
+@pytest.fixture
 def environment_id():
     return int(os.environ.get("DBT_CLOUD_ENVIRONMENT_ID", ENVIRONMENT_ID))
 

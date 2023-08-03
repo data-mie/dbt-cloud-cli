@@ -70,12 +70,21 @@ def test_cli_project_create_and_delete(account_id):
 
 
 @pytest.mark.integration
-def test_cli_connection_list_and_get(account_id):
+def test_cli_connection_list_and_get(account_id, project_id):
     # Connection list
     runner = CliRunner()
     result = runner.invoke(
         cli,
-        ["connection", "list", "--account-id", account_id, "--limit", 2],
+        [
+            "connection",
+            "list",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--limit",
+            2,
+        ],
     )
 
     assert result.exit_code == 0, result.output
