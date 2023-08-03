@@ -20,6 +20,7 @@ from dbt_cloud.command import (
     DbtCloudEnvironmentListCommand,
     DbtCloudEnvironmentGetCommand,
     DbtCloudEnvironmentDeleteCommand,
+    DbtCloudEnvironmentCreateCommand,
     DbtCloudAccountListCommand,
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
@@ -219,10 +220,25 @@ COMMAND_TEST_CASES = [
     pytest.param(
         "environment_delete",
         DbtCloudEnvironmentDeleteCommand(
-            api_token=API_TOKEN, account_id=ACCOUNT_ID, environment_id=222062
+            api_token=API_TOKEN,
+            account_id=ACCOUNT_ID,
+            project_id=PROJECT_ID,
+            environment_id=222062,
         ),
         load_response("environment_delete_response"),
         "delete",
+        marks=pytest.mark.environment,
+    ),
+    pytest.param(
+        "environment_create",
+        DbtCloudEnvironmentCreateCommand(
+            api_token=API_TOKEN,
+            account_id=ACCOUNT_ID,
+            project_id=PROJECT_ID,
+            name="pytest environment",
+        ),
+        load_response("environment_create_response"),
+        "post",
         marks=pytest.mark.environment,
     ),
     pytest.param(
