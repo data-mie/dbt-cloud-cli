@@ -236,14 +236,21 @@ COMMAND_TEST_CASES = [
     ),
     pytest.param(
         "connection_get",
-        DbtCloudConnectionGetCommand(api_token=API_TOKEN, connection_id=123),
+        DbtCloudConnectionGetCommand(
+            api_token=API_TOKEN,
+            account_id=ACCOUNT_ID,
+            project_id=PROJECT_ID,
+            connection_id=123,
+        ),
         load_response("connection_get_response"),
         "get",
         marks=pytest.mark.connection,
     ),
     pytest.param(
         "connection_list",
-        DbtCloudConnectionListCommand(api_token=API_TOKEN),
+        DbtCloudConnectionListCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, project_id=PROJECT_ID
+        ),
         load_response("connection_list_response"),
         "get",
         marks=pytest.mark.connection,
