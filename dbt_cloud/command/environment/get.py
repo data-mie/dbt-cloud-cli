@@ -1,11 +1,10 @@
 import requests
-from pydantic import PrivateAttr
-from dbt_cloud.command.command import DbtCloudAccountCommand
+from dbt_cloud.command.command import DbtCloudProjectCommand
 from dbt_cloud.field import ACCOUNT_ID_FIELD, ENVIRONMENT_ID_FIELD
 
 
-class DbtCloudEnvironmentGetCommand(DbtCloudAccountCommand):
-    """Retrieves information about an environment in a given account."""
+class DbtCloudEnvironmentGetCommand(DbtCloudProjectCommand):
+    """Retrieves information about an environment in a given project."""
 
     environment_id: int = ENVIRONMENT_ID_FIELD
     account_id: int = ACCOUNT_ID_FIELD

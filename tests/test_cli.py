@@ -37,14 +37,23 @@ def test_cli_account_list_and_get(runner):
 
 @pytest.mark.environment
 @pytest.mark.integration
-def test_cli_environment_list_and_get(runner, account_id):
+def test_cli_environment_list_and_get(runner, account_id, project_id):
     # Environment list
     result = runner.invoke(
         cli,
-        ["environment", "list", "--account-id", account_id, "--limit", 2],
+        [
+            "environment",
+            "list",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--limit",
+            2,
+        ],
     )
 
-    assert result.exit_code == 0
+    assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     environment_id = response["data"][0]["id"]
     assert len(response["data"]) > 0
@@ -56,6 +65,56 @@ def test_cli_environment_list_and_get(runner, account_id):
         [
             "environment",
             "get",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--environment-id",
+            environment_id,
+        ],
+    )
+
+    assert result.exit_code == 0
+    response = json.loads(result.output)
+    assert response["data"]["id"] == environment_id
+    assert response["data"]["account_id"] == account_id
+
+
+@pytest.mark.environment
+@pytest.mark.integration
+def test_cli_environment_create_and_delete(runner, account_id, project_id):
+    environment_name = "pytest environment"
+
+    # Environment create
+    result = runner.invoke(
+        cli,
+        [
+            "environment",
+            "create",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--name",
+            environment_name,
+            "--dbt-version",
+            "1.5.0-latest",
+        ],
+    )
+
+    assert result.exit_code == 0
+    response = json.loads(result.output)
+
+    assert response["data"]["name"] == environment_name
+    assert response["data"]["account_id"] == account_id
+
+    # Environment delete
+    environment_id = response["data"]["id"]
+    result = runner.invoke(
+        cli,
+        [
+            "environment",
+            "delete",
             "--account-id",
             account_id,
             "--environment-id",
