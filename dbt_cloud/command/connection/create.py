@@ -27,7 +27,7 @@ class DbtCloudConnectionCreateCommand(DbtCloudProjectCommand):
     created_by_service_token_id: Optional[int] = Field(
         description="ID of the service token that created the connection."
     )
-    state: int = Field(description="State of the connection. 1 = Active.")
+    state: int = Field(1, description="State of the connection. 1 = Active.")
 
     details: Union[DbtCloudSnowflakeConnection, dict] = Field(
         description="Connection details specific to the connection type.",
