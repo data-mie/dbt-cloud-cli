@@ -11,6 +11,7 @@ from dbt_cloud.command import (
     DbtCloudProjectGetCommand,
     DbtCloudProjectListCommand,
     DbtCloudProjectCreateCommand,
+    DbtCloudProjectDeleteCommand,
     DbtCloudRunCancelCommand,
     DbtCloudRunGetArtifactCommand,
     DbtCloudRunGetCommand,
@@ -18,9 +19,12 @@ from dbt_cloud.command import (
     DbtCloudRunListCommand,
     DbtCloudEnvironmentListCommand,
     DbtCloudEnvironmentGetCommand,
+    DbtCloudEnvironmentDeleteCommand,
     DbtCloudAccountListCommand,
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
+    DbtCloudConnectionListCommand,
+    DbtCloudConnectionGetCommand,
 )
 
 
@@ -38,8 +42,18 @@ def account_id():
 
 
 @pytest.fixture
+def project_id():
+    return int(os.environ.get("DBT_CLOUD_PROJECT_ID", PROJECT_ID))
+
+
+@pytest.fixture
 def environment_id():
     return int(os.environ.get("DBT_CLOUD_ENVIRONMENT_ID", ENVIRONMENT_ID))
+
+
+@pytest.fixture
+def job_id():
+    return int(os.environ.get("DBT_CLOUD_JOB_ID", JOB_ID))
 
 
 def load_response(response_name):
@@ -176,6 +190,15 @@ COMMAND_TEST_CASES = [
         marks=pytest.mark.project,
     ),
     pytest.param(
+        "project_delete",
+        DbtCloudProjectDeleteCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, project_id=273731
+        ),
+        load_response("project_delete_response"),
+        "delete",
+        marks=pytest.mark.project,
+    ),
+    pytest.param(
         "environment_list",
         DbtCloudEnvironmentListCommand(
             api_token=API_TOKEN, account_id=ACCOUNT_ID, project_id=PROJECT_ID
@@ -194,6 +217,15 @@ COMMAND_TEST_CASES = [
         marks=pytest.mark.environment,
     ),
     pytest.param(
+        "environment_delete",
+        DbtCloudEnvironmentDeleteCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, environment_id=222062
+        ),
+        load_response("environment_delete_response"),
+        "delete",
+        marks=pytest.mark.environment,
+    ),
+    pytest.param(
         "account_list",
         DbtCloudAccountListCommand(api_token=API_TOKEN),
         load_response("account_list_response"),
@@ -206,6 +238,27 @@ COMMAND_TEST_CASES = [
         load_response("account_get_response"),
         "get",
         marks=pytest.mark.account,
+    ),
+    pytest.param(
+        "connection_get",
+        DbtCloudConnectionGetCommand(
+            api_token=API_TOKEN,
+            account_id=ACCOUNT_ID,
+            project_id=PROJECT_ID,
+            connection_id=123,
+        ),
+        load_response("connection_get_response"),
+        "get",
+        marks=pytest.mark.connection,
+    ),
+    pytest.param(
+        "connection_list",
+        DbtCloudConnectionListCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, project_id=PROJECT_ID
+        ),
+        load_response("connection_list_response"),
+        "get",
+        marks=pytest.mark.connection,
     ),
     pytest.param(
         "audit_log_get",
