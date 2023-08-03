@@ -3,7 +3,12 @@ from collections import OrderedDict
 from mergedeep import merge
 from pydantic import validator, BaseModel, PrivateAttr
 from dbt_cloud.serde import json_to_dict
-from dbt_cloud.field import API_TOKEN_FIELD, ACCOUNT_ID_FIELD, DBT_CLOUD_HOST_FIELD
+from dbt_cloud.field import (
+    API_TOKEN_FIELD,
+    ACCOUNT_ID_FIELD,
+    PROJECT_ID_FIELD,
+    DBT_CLOUD_HOST_FIELD,
+)
 
 
 def translate_click_options(**kwargs) -> dict:
@@ -122,3 +127,11 @@ class DbtCloudAccountCommand(DbtCloudCommand):
     @property
     def api_url(self) -> str:
         return f"{super().api_url}/accounts/{self.account_id}"
+
+
+class DbtCloudProjectCommand(DbtCloudAccountCommand):
+    project_id: int = PROJECT_ID_FIELD
+
+    @property
+    def api_url(self) -> str:
+        return f"{super().api_url}/projects/{self.project_id}"
