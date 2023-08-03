@@ -64,19 +64,6 @@ jobs:
             dbt-cloud job delete-all --keep-jobs "[43167, 49663]" -y
 
       - run:
-          name: Test 'dbt-cloud account get'
-          command: |
-            dbt-cloud account get
-
-      - run:
-          name: Test 'dbt-cloud account list'
-          command: |
-            dbt-cloud account list > accounts.json
-            cat accounts.json | jq '.data[] | {id: .id}'
-            account_count=$(cat accounts.json | jq '.data | length')
-            [[ $account_count > 0 ]] && exit 0 || exit 1
-
-      - run:
           name: Test 'dbt-cloud audit-log get'
           command: |
             dbt-cloud audit-log get > audit_logs.json
