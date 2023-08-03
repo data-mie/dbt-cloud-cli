@@ -1,5 +1,6 @@
 import requests
 from enum import IntEnum
+from pydantic import PrivateAttr
 from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import RUN_ID_FIELD
 
@@ -16,6 +17,7 @@ class DbtCloudRunStatus(IntEnum):
 class DbtCloudRunCancelCommand(DbtCloudAccountCommand):
     """Cancels a dbt Cloud run."""
 
+    _api_version: str = PrivateAttr("v2")
     run_id: int = RUN_ID_FIELD
 
     @property

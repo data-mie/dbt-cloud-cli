@@ -1,5 +1,5 @@
 import requests
-from pydantic import Field
+from pydantic import Field, PrivateAttr
 from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import RUN_ID_FIELD
 
@@ -7,6 +7,7 @@ from dbt_cloud.field import RUN_ID_FIELD
 class DbtCloudRunGetArtifactCommand(DbtCloudAccountCommand):
     """Fetches an artifact file from a completed run."""
 
+    _api_version: str = PrivateAttr("v2")
     run_id: int = RUN_ID_FIELD
     step: int = Field(
         None,
