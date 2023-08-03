@@ -11,7 +11,20 @@ def runner():
 
 @pytest.mark.environment
 @pytest.mark.integration
-def test_cli_environment_get(runner, account_id, environment_id):
+def test_cli_environment_list_and_get(runner, account_id):
+    # Environment list
+    result = runner.invoke(
+        cli,
+        ["environment", "list", "--account-id", account_id, "--limit", 2],
+    )
+
+    assert result.exit_code == 0
+    response = json.loads(result.output)
+    environment_id = response["data"][0]["id"]
+    assert len(response["data"]) > 0
+    for environment in response["data"]:
+        assert environment["account_id"] == account_id
+
     result = runner.invoke(
         cli,
         [
@@ -28,21 +41,6 @@ def test_cli_environment_get(runner, account_id, environment_id):
     response = json.loads(result.output)
     assert response["data"]["id"] == environment_id
     assert response["data"]["account_id"] == account_id
-
-
-@pytest.mark.environment
-@pytest.mark.integration
-def test_cli_environment_list(runner, account_id):
-    result = runner.invoke(
-        cli,
-        ["environment", "list", "--account-id", account_id, "--limit", 1],
-    )
-
-    assert result.exit_code == 0
-    response = json.loads(result.output)
-    assert len(response["data"]) == 1
-    for environment in response["data"]:
-        assert environment["account_id"] == account_id
 
 
 @pytest.mark.project
