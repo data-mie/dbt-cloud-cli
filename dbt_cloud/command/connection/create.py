@@ -1,7 +1,16 @@
 import requests
-from typing import Optional
-from pydantic import Field, validator
+from typing import Optional, Union
+from pydantic import Field, validator, BaseModel
 from dbt_cloud.command.command import DbtCloudProjectCommand
+
+
+class DbtCloudSnowflakeConnection(BaseModel):
+    account: str = Field(description="Snowflake account name.")
+    database: str = Field(description="Snowflake database name.")
+    warehouse: str = Field(description="Snowflake warehouse name.")
+    role: str = Field(description="Snowflake role name.")
+    allow_sso: bool = Field(description="Allow SSO.")
+    client_session_keep_alive: bool = Field(description="Keep client session alive.")
 
 
 class DbtCloudConnectionCreateCommand(DbtCloudProjectCommand):
@@ -20,7 +29,7 @@ class DbtCloudConnectionCreateCommand(DbtCloudProjectCommand):
     )
     state: int = Field(description="State of the connection. 1 = Active.")
 
-    details: dict = Field(
+    details: Union[DbtCloudSnowflakeConnection, dict] = Field(
         description="Connection details specific to the connection type.",
         exclude_from_click_options=True,
     )

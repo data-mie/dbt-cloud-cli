@@ -1,60 +1,44 @@
 {
-    "status": {
-      "code": 200,
-      "is_success": true,
-      "user_message": "Success!",
-      "developer_message": ""
-    },
-    "data": [
-      {
-        "id": 32544,
-        "account_id": 54321,
-        "project_id": 123467,
-        "name": "Bigquery",
-        "type": "bigquery",
-        "created_by_id": 12357854,
-        "created_by_service_token_id": null,
-        "details": {
-          "project_id": "dbtprofiler",
-          "timeout_seconds": 300,
-          "private_key_id": "ANONYMIZED",
-          "client_email": "ANONYMIZED",
-          "client_id": "102248882984230964567",
-          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-          "token_uri": "https://oauth2.googleapis.com/token",
-          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-          "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dbt-user%40dbtprofiler.iam.gserviceaccount.com",
-          "priority": null,
-          "retries": 1,
-          "scopes": null,
-          "location": null,
-          "maximum_bytes_billed": 0,
-          "execution_project": null,
-          "impersonate_service_account": null,
-          "job_retry_deadline_seconds": 0,
-          "job_creation_timeout_seconds": 0,
-          "is_configured_for_oauth": false,
-          "gcs_bucket": null,
-          "dataproc_region": null,
-          "dataproc_cluster_name": null
-        },
-        "state": 1,
-        "created_at": "2021-11-16 16:26:01.571115+00:00",
-        "updated_at": "2022-05-18 06:27:34.729528+00:00",
-        "private_link_endpoint_id": null
-      }
-    ],
-    "extra": {
-      "filters": {
-        "account_id": 16182,
-        "project_id": 26597,
-        "limit": 1,
-        "offset": 0
+  "status": {
+    "code": 200,
+    "is_success": true,
+    "user_message": "Success!",
+    "developer_message": ""
+  },
+  "data": [
+    {
+      "id": 32544,
+      "account_id": 54321,
+      "project_id": 123467,
+      "name": "Snowflake",
+      "type": "snowflake",
+      "created_by_id": 12357854,
+      "created_by_service_token_id": null,
+      "details": {
+        "account": "ANONYMIZED",
+        "database": "analytics",
+        "warehouse": "transforming",
+        "allow_sso": false,
+        "client_session_keep_alive": false,
+        "role": "transformer"
       },
-      "order_by": "id",
-      "pagination": {
-        "count": 1,
-        "total_count": 1
-      }
+      "state": 1,
+      "created_at": "2021-01-21 06:46:19.890786+00:00",
+      "updated_at": "2021-03-04 23:39:42.316667+00:00",
+      "private_link_endpoint_id": null
+    }
+  ],
+  "extra": {
+    "filters": {
+      "account_id": 54321,
+      "project_id": 123467,
+      "limit": 1,
+      "offset": 0
+    },
+    "order_by": "id",
+    "pagination": {
+      "count": 1,
+      "total_count": 1
     }
   }
+}
