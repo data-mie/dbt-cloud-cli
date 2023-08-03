@@ -47,6 +47,33 @@ def test_cli_environment_list(runner, account_id):
 
 @pytest.mark.project
 @pytest.mark.integration
+def test_cli_project_list_and_get(runner, account_id):
+    # Project list
+    result = runner.invoke(
+        cli,
+        ["project", "list", "--account-id", account_id, "--limit", 2],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert len(response["data"]) > 0
+    for project in response["data"]:
+        assert project["account_id"] == account_id
+
+    # Project get
+    project_id = response["data"][0]["id"]
+    result = runner.invoke(
+        cli,
+        ["project", "get", "--account-id", account_id, "--project-id", project_id],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == project_id
+
+
+@pytest.mark.project
+@pytest.mark.integration
 def test_cli_project_create_and_delete(runner, account_id):
     project_name = "pytest project"
 

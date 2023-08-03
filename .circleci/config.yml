@@ -84,19 +84,6 @@ jobs:
             dbt-cloud run get-artifact --run-id $run_id --path manifest.json
 
       - run:
-          name: Test 'dbt-cloud project get'
-          command: |
-            dbt-cloud project get
-
-      - run:
-          name: Test 'dbt-cloud project list'
-          command: |
-            dbt-cloud project list > projects.json
-            cat projects.json | jq '.data[] | {id: .id, name: .name}'
-            project_count=$(cat projects.json | jq '.data | length')
-            [[ $project_count > 0 ]] && exit 0 || exit 1
-
-      - run:
           name: Test 'dbt-cloud environment list'
           command: |
             dbt-cloud environment list > environments.json
