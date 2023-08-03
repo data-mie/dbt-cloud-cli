@@ -1,12 +1,13 @@
 import requests
 from typing import Optional
-from pydantic import Field
+from pydantic import Field, PrivateAttr
 from dbt_cloud.command.command import DbtCloudAccountCommand
 
 
 class DbtCloudJobListCommand(DbtCloudAccountCommand):
     """Returns a list of jobs in the account."""
 
+    _api_version: str = PrivateAttr("v2")
     order_by: Optional[str] = Field(
         description="Field to order the result by. Use - to indicate reverse order."
     )

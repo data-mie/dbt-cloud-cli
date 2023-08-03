@@ -1,6 +1,6 @@
 import requests
 from typing import Optional, List
-from pydantic import Field, validator
+from pydantic import Field, validator, PrivateAttr
 from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import JOB_ID_FIELD, PythonLiteralOption
 
@@ -8,6 +8,7 @@ from dbt_cloud.field import JOB_ID_FIELD, PythonLiteralOption
 class DbtCloudJobRunCommand(DbtCloudAccountCommand):
     """Triggers a dbt Cloud job run and returns a status JSON response."""
 
+    _api_version: str = PrivateAttr("v2")
     job_id: int = JOB_ID_FIELD
     cause: str = Field(
         default="Triggered via API",
