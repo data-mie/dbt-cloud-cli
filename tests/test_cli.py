@@ -4,10 +4,14 @@ from click.testing import CliRunner
 from dbt_cloud.cli import dbt_cloud as cli
 
 
+@pytest.fixture
+def runner():
+    return CliRunner()
+
+
 @pytest.mark.environment
 @pytest.mark.integration
-def test_cli_environment_get(account_id, environment_id):
-    runner = CliRunner()
+def test_cli_environment_get(runner, account_id, environment_id):
     result = runner.invoke(
         cli,
         [
@@ -28,8 +32,7 @@ def test_cli_environment_get(account_id, environment_id):
 
 @pytest.mark.environment
 @pytest.mark.integration
-def test_cli_environment_list(account_id):
-    runner = CliRunner()
+def test_cli_environment_list(runner, account_id):
     result = runner.invoke(
         cli,
         ["environment", "list", "--account-id", account_id, "--limit", 1],
@@ -44,9 +47,8 @@ def test_cli_environment_list(account_id):
 
 @pytest.mark.project
 @pytest.mark.integration
-def test_cli_project_create_and_delete(account_id):
+def test_cli_project_create_and_delete(runner, account_id):
     project_name = "pytest project"
-    runner = CliRunner()
 
     # Project create
     result = runner.invoke(
@@ -74,9 +76,8 @@ def test_cli_project_create_and_delete(account_id):
 
 @pytest.mark.connection
 @pytest.mark.integration
-def test_cli_connection_list_and_get(account_id, project_id):
+def test_cli_connection_list_and_get(runner, account_id, project_id):
     # Connection list
-    runner = CliRunner()
     result = runner.invoke(
         cli,
         [
@@ -118,9 +119,7 @@ def test_cli_connection_list_and_get(account_id, project_id):
 
 @pytest.mark.job
 @pytest.mark.integration
-def test_cli_job_list_and_get(account_id, project_id):
-    runner = CliRunner()
-
+def test_cli_job_list_and_get(runner, account_id, project_id):
     # Job list
     result = runner.invoke(
         cli,
@@ -164,9 +163,7 @@ def test_cli_job_list_and_get(account_id, project_id):
 
 @pytest.mark.job
 @pytest.mark.integration
-def test_cli_job_create_and_delete(account_id, project_id, environment_id):
-    runner = CliRunner()
-
+def test_cli_job_create_and_delete(runner, account_id, project_id, environment_id):
     # Job create
     result = runner.invoke(
         cli,
@@ -216,13 +213,56 @@ def test_cli_job_create_and_delete(account_id, project_id, environment_id):
 
 @pytest.mark.job
 @pytest.mark.integration
-def test_cli_job_run(account_id, job_id):
-    runner = CliRunner()
-
+def test_cli_job_run(runner, account_id, job_id):
     result = runner.invoke(
         cli,
         ["job", "run", "--account-id", account_id, "--job-id", job_id, "--wait"],
     )
 
     assert result.exit_code == 0, result.output
+
+
+@pytest.mark.run
+@pytest.mark.integration
+def test_cli_run_list_and_get(runner, account_id, job_id):
+    # Run list
+    result = runner.invoke(
+        cli,
+        [
+            "run",
+            "list",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
+            "--paginate",
+            "--status",
+            "Succeeded",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert len(response["data"]) > 0
+    for run in response["data"]:
+        assert run["account_id"] == account_id
+        assert run["job_id"] == job_id
+
+    # Run get
+    run_id = response["data"][0]["id"]
+    result = runner.invoke(
+        cli,
+        [
+            "run",
+            "get",
+            "--account-id",
+            account_id,
+            "--run-id",
+            run_id,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == run_id
 
