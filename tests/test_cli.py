@@ -264,6 +264,58 @@ def test_cli_job_create_and_delete(runner, account_id, project_id, environment_i
 
 @pytest.mark.job
 @pytest.mark.integration
+def test_cli_job_export_and_import(runner, account_id, job_id):
+    # Job export
+    result = runner.invoke(
+        cli,
+        [
+            "job",
+            "export",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+
+    # Job import
+    result = runner.invoke(
+        cli,
+        [
+            "job",
+            "import",
+        ],
+        input=result.output,
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] != job_id
+    job_id = response["data"]["id"]
+
+    # Job delete
+    result = runner.invoke(
+        cli,
+        [
+            "job",
+            "delete",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == job_id
+
+
+@pytest.mark.job
+@pytest.mark.integration
 def test_cli_job_run_wait(runner, account_id, job_id):
     result = runner.invoke(
         cli,

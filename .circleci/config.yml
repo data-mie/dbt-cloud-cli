@@ -49,16 +49,6 @@ jobs:
           command: pytest -m integration
 
       - run:
-          name: Test 'dbt-cloud job export'
-          command: |
-            dbt-cloud job export | tee job.json
-
-      - run:
-          name: Test 'dbt-cloud job import'
-          command: |
-            cat job.json | dbt-cloud job import | tee job_imported.json
-
-      - run:
           name: Test 'dbt-cloud job delete-all'
           command: |
             dbt-cloud job delete-all --keep-jobs "[43167, 49663]" -y
