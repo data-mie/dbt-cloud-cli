@@ -1,9 +1,9 @@
 import requests
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudAccountCommand
+from dbt_cloud.command.command import DbtCloudProjectCommand
 
 
-class DbtCloudConnectionGetCommand(DbtCloudAccountCommand):
+class DbtCloudConnectionGetCommand(DbtCloudProjectCommand):
     """Retrievies the details of a dbt Cloud database connection."""
 
     connection_id: int = Field(description="ID of the connection.")

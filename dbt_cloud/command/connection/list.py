@@ -1,12 +1,11 @@
 import requests
 from typing import Optional
-from pydantic import Field
-from dbt_cloud.command.command import DbtCloudAccountCommand
-from dbt_cloud.field import LIMIT_FIELD, OFFSET_FIELD
+from dbt_cloud.command.command import DbtCloudProjectCommand
+from dbt_cloud.field import LIMIT_FIELD, OFFSET_FIELD, PROJECT_ID_FIELD
 
 
-class DbtCloudConnectionListCommand(DbtCloudAccountCommand):
-    """Retrievies details of dbt Cloud database connections in a given account."""
+class DbtCloudConnectionListCommand(DbtCloudProjectCommand):
+    """Retrievies details of dbt Cloud database connections in a given project."""
 
     limit: Optional[int] = LIMIT_FIELD
     offset: Optional[int] = OFFSET_FIELD
