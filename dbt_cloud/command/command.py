@@ -94,7 +94,7 @@ class ClickBaseModel(BaseModel):
 class DbtCloudCommand(ClickBaseModel):
     api_token: str = API_TOKEN_FIELD
     dbt_cloud_host: str = DBT_CLOUD_HOST_FIELD
-    _api_version: str = PrivateAttr("v2")
+    _api_version: str = PrivateAttr("v3")
 
     @property
     def request_headers(self) -> dict:
