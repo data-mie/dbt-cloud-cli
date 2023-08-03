@@ -41,17 +41,31 @@ def test_cli_environment_list(account_id):
 
 
 @pytest.mark.integration
-def test_cli_project_create(account_id):
+def test_cli_project_create_and_delete(account_id):
     project_name = "pytest project"
     runner = CliRunner()
+
+    # Project create
     result = runner.invoke(
         cli,
         ["project", "create", "--account-id", account_id, "--name", project_name],
     )
 
-    assert result.exit_code == 0
+    assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["name"] == project_name
+    assert response["data"]["account_id"] == account_id
+
+    # Project delete
+    project_id = response["data"]["id"]
+    result = runner.invoke(
+        cli,
+        ["project", "delete", "--account-id", account_id, "--project-id", project_id],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == project_id
     assert response["data"]["account_id"] == account_id
 
 

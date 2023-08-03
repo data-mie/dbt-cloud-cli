@@ -51,7 +51,7 @@ For more information on a command, run `dbt-cloud <command> --help`. For more in
 | Account      | [dbt-cloud account list](#dbt-cloud-account-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v2/accounts/`                                | 
 | Audit log    | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get)   | ✅           | GET `https://{dbt_cloud_host}/api/v3/audit-logs/`                              | 
 | Project      | [dbt-cloud project create](#dbt-cloud-project-create) | ✅           | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/`         | 
-| Project      | [dbt-cloud project delete](#dbt-cloud-project-delete) | ❌           | DELETE `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/{id}/`  |
+| Project      | [dbt-cloud project delete](#dbt-cloud-project-delete) | ✅           | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`  |
 | Project      | [dbt-cloud project get](#dbt-cloud-project-get)       | ✅           | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/{id}/`     | 
 | Project      | [dbt-cloud project list](#dbt-cloud-project-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/`          |  
 | Project      | [dbt-cloud project update](#dbt-cloud-project-update) | ❌           | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/{id}/`     | 
@@ -129,10 +129,20 @@ This command creates a new dbt Cloud project in a given account.
 
 ### Usage
 ```bash
->> dbt-cloud project create --name "My project"
+dbt-cloud project create --name "My project"
 ```
 
 [Click to view sample response](tests/data/project_create_response.json)
+
+## dbt-cloud project delete
+This command deletes a dbt Cloud project in a given account.
+
+### Usage
+```bash
+dbt-cloud project delete --project-id 273731
+```
+
+[Click to view sample response](tests/data/project_delete_response.json)
 
 ## dbt-cloud project get
 This command retrieves dbt Cloud project information.

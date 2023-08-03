@@ -11,6 +11,7 @@ from dbt_cloud.command import (
     DbtCloudProjectGetCommand,
     DbtCloudProjectListCommand,
     DbtCloudProjectCreateCommand,
+    DbtCloudProjectDeleteCommand,
     DbtCloudRunCancelCommand,
     DbtCloudRunGetArtifactCommand,
     DbtCloudRunGetCommand,
@@ -176,6 +177,15 @@ COMMAND_TEST_CASES = [
         ),
         load_response("project_get_response"),
         "post",
+        marks=pytest.mark.project,
+    ),
+    pytest.param(
+        "project_delete",
+        DbtCloudProjectDeleteCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, project_id=273731
+        ),
+        load_response("project_delete_response"),
+        "delete",
         marks=pytest.mark.project,
     ),
     pytest.param(
