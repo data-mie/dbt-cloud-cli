@@ -59,20 +59,9 @@ jobs:
             cat job.json | dbt-cloud job import | tee job_imported.json
 
       - run:
-          name: Test 'dbt-cloud job delete'
-          command: |
-            dbt-cloud job delete --job-id $(cat job_imported.json | jq .data.id)
-
-      - run:
           name: Test 'dbt-cloud job delete-all'
           command: |
             dbt-cloud job delete-all --keep-jobs "[43167, 49663]" -y
-
-      - run:
-          name: Test 'dbt-cloud run cancel'
-          command: |
-            run_id=$(cat run.json | jq .data.id -r)
-            dbt-cloud run cancel --run-id $run_id
 
       - run:
           name: Test 'dbt-cloud run cancel-all'

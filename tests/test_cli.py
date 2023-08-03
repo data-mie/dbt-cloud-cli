@@ -213,13 +213,42 @@ def test_cli_job_create_and_delete(runner, account_id, project_id, environment_i
 
 @pytest.mark.job
 @pytest.mark.integration
-def test_cli_job_run(runner, account_id, job_id):
+def test_cli_job_run_wait(runner, account_id, job_id):
     result = runner.invoke(
         cli,
         ["job", "run", "--account-id", account_id, "--job-id", job_id, "--wait"],
     )
 
     assert result.exit_code == 0, result.output
+
+
+@pytest.mark.job
+@pytest.mark.integration
+def test_cli_job_run_no_wait_and_cancel(runner, account_id, job_id):
+    result = runner.invoke(
+        cli,
+        ["job", "run", "--account-id", account_id, "--job-id", job_id],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    run_id = response["data"]["id"]
+
+    result = runner.invoke(
+        cli,
+        [
+            "run",
+            "cancel",
+            "--account-id",
+            account_id,
+            "--run-id",
+            run_id,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == run_id
 
 
 @pytest.mark.run
@@ -265,4 +294,3 @@ def test_cli_run_list_and_get(runner, account_id, job_id):
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == run_id
-
