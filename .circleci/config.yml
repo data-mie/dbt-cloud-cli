@@ -64,26 +64,6 @@ jobs:
             dbt-cloud job delete-all --keep-jobs "[43167, 49663]" -y
 
       - run:
-          name: Test 'dbt-cloud run cancel-all'
-          command: |
-            job_id=$(cat job_created.json | jq .data.id -r)
-            dbt-cloud job run --job-id $job_id
-            dbt-cloud run cancel-all -y --status Queued
-            dbt-cloud run cancel-all -y --status Running
-
-      - run:
-          name: Test 'dbt-cloud run list-artifacts'
-          command: |
-            run_id=$(cat run.json | jq .data.id -r)
-            dbt-cloud run list-artifacts --run-id $run_id
-
-      - run:
-          name: Test 'dbt-cloud run get-artifact'
-          command: |
-            run_id=$(cat run.json | jq .data.id -r)
-            dbt-cloud run get-artifact --run-id $run_id --path manifest.json
-
-      - run:
           name: Test 'dbt-cloud account get'
           command: |
             dbt-cloud account get

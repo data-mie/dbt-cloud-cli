@@ -319,3 +319,106 @@ def test_cli_run_list_and_get(runner, account_id, job_id):
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == run_id
+
+
+@pytest.mark.run
+@pytest.mark.integration
+def test_cli_run_cancel_all(runner, account_id, job_id):
+    # Run cancel all queued
+    result = runner.invoke(
+        cli,
+        [
+            "run",
+            "cancel-all",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
+            "--status",
+            "Queued",
+            "-y",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+
+    # Run cancel all running
+    result = runner.invoke(
+        cli,
+        [
+            "run",
+            "cancel-all",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
+            "--status",
+            "Running",
+            "-y",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+
+
+@pytest.mark.run
+@pytest.mark.integration
+def test_cli_run_list_and_get_artifacts(runner, account_id, job_id):
+    # Run list
+    result = runner.invoke(
+        cli,
+        [
+            "run",
+            "list",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
+            "--status",
+            "Succeeded",
+            "--limit",
+            1,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    run_id = response["data"][0]["id"]
+
+    # Run list artifacts
+    result = runner.invoke(
+        cli,
+        [
+            "run",
+            "list-artifacts",
+            "--account-id",
+            account_id,
+            "--run-id",
+            run_id,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert len(response["data"]) > 0
+    for artifact_path in response["data"]:
+        assert isinstance(artifact_path, str)
+        assert artifact_path != ""
+
+    # Run get artifact
+    artifact_path = response["data"][0]
+    result = runner.invoke(
+        cli,
+        [
+            "run",
+            "get-artifact",
+            "--account-id",
+            account_id,
+            "--run-id",
+            run_id,
+            "--path",
+            artifact_path,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
