@@ -55,7 +55,7 @@ For more information on a command, run `dbt-cloud <command> --help`. For more in
 | Project      | [dbt-cloud project get](#dbt-cloud-project-get)       | ✅           | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`     | 
 | Project      | [dbt-cloud project list](#dbt-cloud-project-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/`          |  
 | Project      | [dbt-cloud project update](#dbt-cloud-project-update) | ❌           | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`     | 
-| Environment  | [dbt-cloud environment create](#dbt-cloud-environment-create) | ❌          | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/` | 
+| Environment  | [dbt-cloud environment create](#dbt-cloud-environment-create) | ✅          | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/` | 
 | Environment  | [dbt-cloud environment delete](#dbt-cloud-environment-delete) | ✅ | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
 | Environment  | [dbt-cloud environment get](#dbt-cloud-environment-get) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
 | Environment  | [dbt-cloud environment list](#dbt-cloud-environment-list) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/` |  
@@ -165,33 +165,43 @@ dbt-cloud project list
 
 [Click to view sample response](tests/data/project_list_response.json)
 
-## dbt-cloud environment delete
-This command deletes a dbt Cloud environment in a given account.
+## dbt-cloud environment create
+This command a new dbt Cloud environment in a given project.
 
 ### Usage
 ```bash
-dbt-cloud environment delete --environment-id 222062
+dbt-cloud environment create --account-id 123456 --project-id 123457 --name "My environment" --dbt-version "1.5.0-latest"
+```
+
+[Click to view sample response](tests/data/environment_create_response.json)
+
+## dbt-cloud environment delete
+This command deletes a dbt Cloud environment in a given project.
+
+### Usage
+```bash
+dbt-cloud environment delete --account-id 123456 --project-id 123457 --environment-id 40480
 ```
 
 [Click to view sample response](tests/data/environment_delete_response.json)
 
 
 ## dbt-cloud environment list
-This command retrieves environments in a given account.
+This command retrieves environments in a given project.
 
 ### Usage
 ```bash
-dbt-cloud environment list --account-id 16182 --limit 1
+dbt-cloud environment list --account-id 123456 --project-id 123457 --limit 1
 ```
 
 [Click to view sample response](tests/data/environment_list_response.json)
 
 ## dbt-cloud environment get
-This command retrieves information about an environment in a given account.
+This command retrieves information about an environment in a given project.
 
 ### Usage
 ```bash
-dbt-cloud environment get --account-id 54321 --environment-id 67890
+dbt-cloud environment get --account-id 123456 --project-id 123457 --environment-id 67890
 ```
 
 [Click to view sample response](tests/data/environment_get_response.json)

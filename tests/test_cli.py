@@ -97,6 +97,8 @@ def test_cli_environment_create_and_delete(runner, account_id, project_id):
             project_id,
             "--name",
             environment_name,
+            "--dbt-version",
+            "1.5.0-latest",
         ],
     )
 
