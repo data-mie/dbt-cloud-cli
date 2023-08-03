@@ -53,3 +53,37 @@ def test_cli_project_create(account_id):
     response = json.loads(result.output)
     assert response["data"]["name"] == project_name
     assert response["data"]["account_id"] == account_id
+
+
+@pytest.mark.integration
+def test_cli_connection_list_and_get(account_id):
+    # Connection list
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        ["connection", "list", "--account-id", account_id, "--limit", 2],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert len(response["data"]) > 0
+    for connection in response["data"]:
+        assert connection["account_id"] == account_id
+
+    # Connection get
+    connection_id = response["data"][0]["id"]
+    result = runner.invoke(
+        cli,
+        [
+            "connection",
+            "get",
+            "--account-id",
+            account_id,
+            "--connection-id",
+            connection_id,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == connection_id

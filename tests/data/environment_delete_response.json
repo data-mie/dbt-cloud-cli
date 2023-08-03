@@ -1,0 +1,42 @@
+{ 
+    "status": { 
+        "code": 200, 
+        "is_success": true, 
+        "user_message": "Success!", 
+        "developer_message": "" 
+    }, 
+    "data": { 
+        "dbt_project_subdirectory": null, 
+        "project_id": 247181, 
+        "id": 222062, 
+        "account_id": 16182, 
+        "connection_id": 135120, 
+        "repository_id": null, 
+        "credentials_id": 283962, 
+        "created_by_id": null, 
+        "name": "Test environment", 
+        "use_custom_branch": false, 
+        "custom_branch": null, 
+        "dbt_version": "1.5.0-latest", 
+        "raw_dbt_version": "1.5.0-latest", 
+        "supports_docs": false, 
+        "state": 2, 
+        "updated_at": "2023-08-02T08:58:10.319249+00:00", 
+        "repository": null, 
+        "connection": { 
+            "created_by_id": 64855, 
+            "created_by_service_token_id": null, 
+            "id": 135120, 
+            "state": 1, 
+            "account_id": 16182, 
+            "dbt_project_id": 247181, 
+            "name": "Snowflake", 
+            "type": "snowflake", 
+            "account": "ANONYMIZED", 
+            "database": "analytics", 
+            "warehouse": "compute_wh", 
+            "role": "transformer", 
+            "allow_sso": false 
+        } 
+    } 
+} 

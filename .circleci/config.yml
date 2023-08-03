@@ -6,11 +6,6 @@ jobs:
       - image: cimg/python:3.9.9
 
     resource_class: small
-
-    environment:
-      DBT_CLOUD_PROJECT_ID: 26597
-      DBT_CLOUD_ENVIRONMENT_ID: 49819
-      DBT_CLOUD_JOB_ID: 43167
     
     steps:
       - checkout
@@ -27,10 +22,7 @@ jobs:
 
       - run:
           name: Run unit tests
-          command: pytest --cov=dbt_cloud --cov-report html:cov_html
-
-      - store_artifacts:
-          path: ./cov_html
+          command: pytest -m "not integration"
 
   integration-tests:
     docker:
@@ -48,9 +40,13 @@ jobs:
       - run:
           name: Install Python packages
           command: |
-            pip install -e .
+            pip install -e .[test]
             sudo apt-get update -yqq
             sudo apt-get install jq -yqq
+
+      - run:
+          name: Run integration tests
+          command: pytest -m integration
 
       - run:
           name: Test 'dbt-cloud job get'
@@ -192,9 +188,9 @@ workflows:
   version: 2
   continuous-integration:
     jobs:
-      - unit-tests
       - approve:
           type: approval
+      - unit-tests
       - integration-tests:
           requires:
             - approve
