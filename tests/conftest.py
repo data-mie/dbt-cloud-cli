@@ -51,6 +51,11 @@ def environment_id():
     return int(os.environ.get("DBT_CLOUD_ENVIRONMENT_ID", ENVIRONMENT_ID))
 
 
+@pytest.fixture
+def job_id():
+    return int(os.environ.get("DBT_CLOUD_JOB_ID", JOB_ID))
+
+
 def load_response(response_name):
     shared_datadir = Path(__file__).parent / "data"
     response_file = shared_datadir / f"{response_name}.json"

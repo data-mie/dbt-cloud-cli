@@ -4,6 +4,7 @@ from click.testing import CliRunner
 from dbt_cloud.cli import dbt_cloud as cli
 
 
+@pytest.mark.environment
 @pytest.mark.integration
 def test_cli_environment_get(account_id, environment_id):
     runner = CliRunner()
@@ -25,6 +26,7 @@ def test_cli_environment_get(account_id, environment_id):
     assert response["data"]["account_id"] == account_id
 
 
+@pytest.mark.environment
 @pytest.mark.integration
 def test_cli_environment_list(account_id):
     runner = CliRunner()
@@ -40,6 +42,7 @@ def test_cli_environment_list(account_id):
         assert environment["account_id"] == account_id
 
 
+@pytest.mark.project
 @pytest.mark.integration
 def test_cli_project_create_and_delete(account_id):
     project_name = "pytest project"
@@ -69,6 +72,7 @@ def test_cli_project_create_and_delete(account_id):
     assert response["data"]["account_id"] == account_id
 
 
+@pytest.mark.connection
 @pytest.mark.integration
 def test_cli_connection_list_and_get(account_id, project_id):
     # Connection list
@@ -112,6 +116,7 @@ def test_cli_connection_list_and_get(account_id, project_id):
     assert response["data"]["id"] == connection_id
 
 
+@pytest.mark.job
 @pytest.mark.integration
 def test_cli_job_list_and_get(account_id, project_id):
     runner = CliRunner()
@@ -156,4 +161,68 @@ def test_cli_job_list_and_get(account_id, project_id):
     response = json.loads(result.output)
     assert response["data"]["id"] == job_id
 
+
+@pytest.mark.job
+@pytest.mark.integration
+def test_cli_job_create_and_delete(account_id, project_id, environment_id):
+    runner = CliRunner()
+
+    # Job create
+    result = runner.invoke(
+        cli,
+        [
+            "job",
+            "create",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--environment-id",
+            environment_id,
+            "--name",
+            "pytest job",
+            "--settings-threads",
+            4,
+            "--execute-steps",
+            '["dbt seed"]',
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    job_id = response["data"]["id"]
+    assert response["data"]["account_id"] == account_id
+    assert response["data"]["project_id"] == project_id
+    assert response["data"]["environment_id"] == environment_id
+    assert response["data"]["settings"]["threads"] == 4
+
+    # Job delete
+    result = runner.invoke(
+        cli,
+        [
+            "job",
+            "delete",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == job_id
+
+
+@pytest.mark.job
+@pytest.mark.integration
+def test_cli_job_run(account_id, job_id):
+    runner = CliRunner()
+
+    result = runner.invoke(
+        cli,
+        ["job", "run", "--account-id", account_id, "--job-id", job_id, "--wait"],
+    )
+
+    assert result.exit_code == 0, result.output
 
