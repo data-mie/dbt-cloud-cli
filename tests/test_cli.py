@@ -186,6 +186,44 @@ def test_cli_project_create_and_delete(runner, account_id):
 
 @pytest.mark.connection
 @pytest.mark.integration
+def test_cli_connection_create(runner, account_id, project_id):
+    connection_name = "pytest connection"
+    result = runner.invoke(
+        cli,
+        [
+            "connection",
+            "create",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--name",
+            connection_name,
+            "--type",
+            "snowflake",
+            "--state",
+            1,
+            "--account",
+            "snowflake_account",
+            "--database",
+            "snowflake_database",
+            "--warehouse",
+            "snowflake_warehouse",
+            "--allow-sso",
+            "False",
+            "--created-by-id",
+            1,
+        ],
+    )
+    assert result.exit_code == 0, result.output
+
+    response = json.loads(result.output)
+    assert response["data"]["name"] == connection_name
+    assert response["data"]["account_id"] == account_id
+
+
+@pytest.mark.connection
+@pytest.mark.integration
 def test_cli_connection_list_and_get(runner, account_id, project_id):
     # Connection list
     result = runner.invoke(

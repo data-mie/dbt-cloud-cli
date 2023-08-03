@@ -422,13 +422,13 @@ def delete(**kwargs):
 def create(ctx, **kwargs):
     keys = ctx.args[::2]  # Every even element is a key
     values = ctx.args[1::2]  # Every odd element is a value
-    kwargs["connection_parameters"] = {
+    kwargs["details"] = {
         key.lstrip("-").replace("-", "_"): value for key, value in zip(keys, values)
     }
-    kwargs["connection_parameters"]["type"] = kwargs["type"]
     command = DbtCloudConnectionCreateCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
-    
+
+
 @connection.command(help=DbtCloudConnectionGetCommand.get_description())
 @DbtCloudConnectionGetCommand.click_options
 def get(**kwargs):
