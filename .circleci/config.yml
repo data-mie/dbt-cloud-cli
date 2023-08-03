@@ -49,11 +49,6 @@ jobs:
           command: pytest -m integration
 
       - run:
-          name: Test 'dbt-cloud job delete-all'
-          command: |
-            dbt-cloud job delete-all --keep-jobs "[43167, 49663]" -y
-
-      - run:
           name: Test 'dbt-cloud audit-log get'
           command: |
             dbt-cloud audit-log get > audit_logs.json

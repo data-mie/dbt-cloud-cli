@@ -316,6 +316,62 @@ def test_cli_job_export_and_import(runner, account_id, job_id):
 
 @pytest.mark.job
 @pytest.mark.integration
+def test_cli_job_delete_all(runner, account_id, project_id, environment_id):
+    # Job list
+    result = runner.invoke(
+        cli,
+        ["job", "list", "--account-id", account_id, "--project-id", project_id],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    job_ids_to_keep = [job["id"] for job in response["data"]]
+
+    # Job create
+    result = runner.invoke(
+        cli,
+        [
+            "job",
+            "create",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--environment-id",
+            environment_id,
+            "--name",
+            "pytest job",
+            "--execute-steps",
+            '["dbt seed"]',
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    job_id = response["data"]["id"]
+
+    # Job delete all
+    result = runner.invoke(
+        cli,
+        [
+            "job",
+            "delete-all",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--keep-jobs",
+            str(job_ids_to_keep),
+            "--yes",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert f"Jobs to delete: [{job_id}]" in result.output
+    assert f"Job {job_id} was deleted" in result.output
+
+
+@pytest.mark.job
+@pytest.mark.integration
 def test_cli_job_run_wait(runner, account_id, job_id):
     result = runner.invoke(
         cli,
