@@ -9,6 +9,32 @@ def runner():
     return CliRunner()
 
 
+@pytest.mark.account
+@pytest.mark.integration
+def test_cli_account_list_and_get(runner):
+    # Account list
+    result = runner.invoke(
+        cli,
+        ["account", "list"],
+    )
+
+    assert result.exit_code == 0
+    response = json.loads(result.output)
+    assert len(response["data"]) > 0
+
+    # Account get
+    account_id = response["data"][0]["id"]
+    print(account_id)
+    result = runner.invoke(
+        cli,
+        ["account", "get", "--account-id", account_id],
+    )
+
+    assert result.exit_code == 0
+    response = json.loads(result.output)
+    assert response["data"]["id"] == account_id
+
+
 @pytest.mark.environment
 @pytest.mark.integration
 def test_cli_environment_list_and_get(runner, account_id):
