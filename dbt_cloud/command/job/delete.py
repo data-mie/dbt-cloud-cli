@@ -1,6 +1,5 @@
-import os
 import requests
-from pydantic import Field
+from pydantic import PrivateAttr
 from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import JOB_ID_FIELD
 
@@ -8,6 +7,7 @@ from dbt_cloud.field import JOB_ID_FIELD
 class DbtCloudJobDeleteCommand(DbtCloudAccountCommand):
     """Deletes a job from a dbt Cloud project."""
 
+    _api_version: str = PrivateAttr("v2")
     job_id: int = JOB_ID_FIELD
 
     @property

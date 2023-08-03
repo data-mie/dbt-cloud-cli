@@ -19,13 +19,17 @@ from dbt_cloud.command import (
     DbtCloudProjectGetCommand,
     DbtCloudProjectListCommand,
     DbtCloudProjectCreateCommand,
+    DbtCloudProjectDeleteCommand,
     DbtCloudEnvironmentListCommand,
     DbtCloudEnvironmentGetCommand,
+    DbtCloudEnvironmentCreateCommand,
     DbtCloudEnvironmentDeleteCommand,
     DbtCloudAccountListCommand,
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
     DbtCloudConnectionCreateCommand,
+    DbtCloudConnectionGetCommand,
+    DbtCloudConnectionListCommand,
 )
 from dbt_cloud.demo import data_catalog
 from dbt_cloud.serde import json_to_dict, dict_to_json
@@ -374,6 +378,13 @@ def create(**kwargs):
     response = execute_and_print(command)
 
 
+@project.command(help=DbtCloudProjectDeleteCommand.get_description())
+@DbtCloudProjectDeleteCommand.click_options
+def delete(**kwargs):
+    command = DbtCloudProjectDeleteCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
 @environment.command(help=DbtCloudEnvironmentListCommand.get_description())
 @DbtCloudEnvironmentListCommand.click_options
 def list(**kwargs):
@@ -385,6 +396,13 @@ def list(**kwargs):
 @DbtCloudEnvironmentGetCommand.click_options
 def get(**kwargs):
     command = DbtCloudEnvironmentGetCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@environment.command(help=DbtCloudEnvironmentCreateCommand.get_description())
+@DbtCloudEnvironmentCreateCommand.click_options
+def create(**kwargs):
+    command = DbtCloudEnvironmentCreateCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 
@@ -409,6 +427,19 @@ def create(ctx, **kwargs):
     }
     kwargs["connection_parameters"]["type"] = kwargs["type"]
     command = DbtCloudConnectionCreateCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+    
+@connection.command(help=DbtCloudConnectionGetCommand.get_description())
+@DbtCloudConnectionGetCommand.click_options
+def get(**kwargs):
+    command = DbtCloudConnectionGetCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@connection.command(help=DbtCloudConnectionListCommand.get_description())
+@DbtCloudConnectionListCommand.click_options
+def list(**kwargs):
+    command = DbtCloudConnectionListCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 

@@ -1,12 +1,12 @@
 import requests
 from typing import Optional
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudAccountCommand
+from dbt_cloud.command.command import DbtCloudProjectCommand
 from dbt_cloud.field import LIMIT_FIELD, OFFSET_FIELD, DBT_VERSION_FIELD
 
 
-class DbtCloudEnvironmentListCommand(DbtCloudAccountCommand):
-    """Retrieves environments in a given account."""
+class DbtCloudEnvironmentListCommand(DbtCloudProjectCommand):
+    """Retrieves environments in a given project."""
 
     limit: Optional[int] = LIMIT_FIELD
     dbt_version: Optional[str] = DBT_VERSION_FIELD

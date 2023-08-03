@@ -17,14 +17,16 @@ from .project import (
     DbtCloudProjectListCommand,
     DbtCloudProjectGetCommand,
     DbtCloudProjectCreateCommand,
+    DbtCloudProjectDeleteCommand,
 )
 from .environment import (
     DbtCloudEnvironmentListCommand,
     DbtCloudEnvironmentGetCommand,
     DbtCloudEnvironmentDeleteCommand,
+    DbtCloudEnvironmentCreateCommand,
 )
 from .account import DbtCloudAccountListCommand, DbtCloudAccountGetCommand
 from .audit_log import DbtCloudAuditLogGetCommand
 from .metadata import DbtCloudMetadataQueryCommand
 from .command import DbtCloudAccountCommand
-from .connection import DbtCloudConnectionCreateCommand
+from .connection import DbtCloudConnectionGetCommand, DbtCloudConnectionListCommand, DbtCloudConnectionCreateCommand
