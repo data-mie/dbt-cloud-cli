@@ -34,13 +34,10 @@ class ClickBaseModel(BaseModel):
                 is_nested_object = False
 
             if is_nested_object:
-                try:
-                    # If the field is a ClickBaseModel, recursively call click_options
-                    function = field.type_.click_options(
-                        function, key_prefix=f"{key_prefix}__{key}".strip("_")
-                    )
-                except AttributeError:
-                    pass
+                # If the field is a ClickBaseModel, recursively call click_options
+                function = field.type_.click_options(
+                    function, key_prefix=f"{key_prefix}__{key}".strip("_")
+                )
             else:
                 if (
                     field.field_info.extra.get("exclude_from_click_options", False)
