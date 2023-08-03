@@ -6,7 +6,7 @@ from dbt_cloud.field import LIMIT_FIELD, OFFSET_FIELD, DBT_VERSION_FIELD
 
 
 class DbtCloudEnvironmentListCommand(DbtCloudProjectCommand):
-    """Retrieves environments in a given account."""
+    """Retrieves environments in a given project."""
 
     limit: Optional[int] = LIMIT_FIELD
     dbt_version: Optional[str] = DBT_VERSION_FIELD

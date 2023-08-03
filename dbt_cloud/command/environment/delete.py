@@ -4,7 +4,7 @@ from dbt_cloud.command.command import DbtCloudProjectCommand
 
 
 class DbtCloudEnvironmentDeleteCommand(DbtCloudProjectCommand):
-    """Deletes a dbt Cloud environment in a given account."""
+    """Deletes a dbt Cloud environment in a given project."""
 
     environment_id: int = Field(
         description="ID of the dbt Cloud environment to delete.",

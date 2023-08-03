@@ -6,7 +6,7 @@ from dbt_cloud.field import DBT_VERSION_FIELD
 
 
 class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
-    """Creates a new dbt Cloud environment in a given account."""
+    """Creates a new dbt Cloud environment in a given project."""
 
     name: str = Field(
         description="Name of the environment.",
