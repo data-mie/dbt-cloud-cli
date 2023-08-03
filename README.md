@@ -250,7 +250,7 @@ This command returns a list of jobs in the account.
 
 ### Usage
 ```bash
-dbt-cloud job list --account-id 123456 --project-id 123457
+dbt-cloud job list --account-id 123456 --project-id 123457 --limit 2
 ```
 
 [Click to view sample response](tests/data/job_list_response.json)

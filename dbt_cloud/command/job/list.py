@@ -2,6 +2,7 @@ import requests
 from typing import Optional
 from pydantic import Field, PrivateAttr
 from dbt_cloud.command.command import DbtCloudAccountCommand
+from dbt_cloud.field import LIMIT_FIELD
 
 
 class DbtCloudJobListCommand(DbtCloudAccountCommand):
@@ -11,6 +12,7 @@ class DbtCloudJobListCommand(DbtCloudAccountCommand):
     order_by: Optional[str] = Field(
         description="Field to order the result by. Use - to indicate reverse order."
     )
+    limit: Optional[int] = LIMIT_FIELD
     project_id: Optional[str] = Field(description="Filter jobs by project ID.")
 
     @property

@@ -110,3 +110,50 @@ def test_cli_connection_list_and_get(account_id, project_id):
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == connection_id
+
+
+@pytest.mark.integration
+def test_cli_job_list_and_get(account_id, project_id):
+    runner = CliRunner()
+
+    # Job list
+    result = runner.invoke(
+        cli,
+        [
+            "job",
+            "list",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--limit",
+            2,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert len(response["data"]) > 0
+    for job in response["data"]:
+        assert job["account_id"] == account_id
+        assert job["project_id"] == project_id
+
+    # Job get
+    job_id = response["data"][0]["id"]
+    result = runner.invoke(
+        cli,
+        [
+            "job",
+            "get",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == job_id
+
+
