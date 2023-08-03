@@ -48,18 +48,18 @@ For more information on a command, run `dbt-cloud <command> --help`. For more in
 | Group        | Command                                               | Implemented | API endpoint                                        |
 | ------------ | ----------------------------------------------------- | -------------------------------------------------- | ----------- | 
 | Account      | [dbt-cloud account get](#dbt-cloud-account-get)       | ✅           | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/`                   | 
-| Account      | [dbt-cloud account list](#dbt-cloud-account-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v2/accounts/`                                | 
+| Account      | [dbt-cloud account list](#dbt-cloud-account-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v3/accounts/`                                | 
 | Audit log    | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get)   | ✅           | GET `https://{dbt_cloud_host}/api/v3/audit-logs/`                              | 
-| Project      | [dbt-cloud project create](#dbt-cloud-project-create) | ✅           | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/`         | 
+| Project      | [dbt-cloud project create](#dbt-cloud-project-create) | ✅           | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/`         | 
 | Project      | [dbt-cloud project delete](#dbt-cloud-project-delete) | ✅           | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`  |
-| Project      | [dbt-cloud project get](#dbt-cloud-project-get)       | ✅           | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/{id}/`     | 
-| Project      | [dbt-cloud project list](#dbt-cloud-project-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/`          |  
-| Project      | [dbt-cloud project update](#dbt-cloud-project-update) | ❌           | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/{id}/`     | 
-| Environment  | [dbt-cloud environment create](#dbt-cloud-environment-create) | ❌          | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/environments/` | 
-| Environment  | [dbt-cloud environment delete](#dbt-cloud-environment-delete) | ✅ | DELETE `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/environments/{id}/` |  
-| Environment  | [dbt-cloud environment get](#dbt-cloud-environment-get) | ✅ | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/environments/{id}/` |  
-| Environment  | [dbt-cloud environment list](#dbt-cloud-environment-list) | ✅ | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/environments/` |  
-| Environment  | [dbt-cloud environment update](#dbt-cloud-environment-update) | ❌ | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/environments/{id}/` |  
+| Project      | [dbt-cloud project get](#dbt-cloud-project-get)       | ✅           | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`     | 
+| Project      | [dbt-cloud project list](#dbt-cloud-project-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/`          |  
+| Project      | [dbt-cloud project update](#dbt-cloud-project-update) | ❌           | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`     | 
+| Environment  | [dbt-cloud environment create](#dbt-cloud-environment-create) | ❌          | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/` | 
+| Environment  | [dbt-cloud environment delete](#dbt-cloud-environment-delete) | ✅ | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
+| Environment  | [dbt-cloud environment get](#dbt-cloud-environment-get) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
+| Environment  | [dbt-cloud environment list](#dbt-cloud-environment-list) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/` |  
+| Environment  | [dbt-cloud environment update](#dbt-cloud-environment-update) | ❌ | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
 | Connection  | [dbt-cloud connection create](#dbt-cloud-connection-create) | ❌ | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/` | 
 | Connection  | [dbt-cloud connection delete](#dbt-cloud-connection-delete) | ❌ | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/{id}/` | 
 | Connection  | [dbt-cloud connection get](#dbt-cloud-connection-get) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/{id}/` | 
