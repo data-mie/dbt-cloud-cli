@@ -9,7 +9,6 @@ class DbtCloudEnvironmentGetCommand(DbtCloudAccountCommand):
 
     environment_id: int = ENVIRONMENT_ID_FIELD
     account_id: int = ACCOUNT_ID_FIELD
-    _api_version: str = PrivateAttr("v2")
 
     @property
     def api_url(self) -> str:

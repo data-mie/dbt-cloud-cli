@@ -42,29 +42,29 @@ The following environment variables are used as argument defaults:
 
 # Commands
 
-For more information on a command, run `dbt-cloud <command> --help`. For more information on the API endpoints, see [dbt Cloud API V2 docs](https://docs.getdbt.com/dbt-cloud/api-v2#/) and [dbt Cloud Metadata API docs](https://docs.getdbt.com/docs/dbt-cloud/dbt-cloud-api/metadata/metadata-overview).
+For more information on a command, run `dbt-cloud <command> --help`. For more information on the API endpoints, see [dbt Cloud API V3 docs](https://docs.getdbt.com/dbt-cloud/api-v3) and [dbt Cloud Metadata API docs](https://docs.getdbt.com/docs/dbt-cloud/dbt-cloud-api/metadata/metadata-overview).
 
 
 | Group        | Command                                               | Implemented | API endpoint                                        |
 | ------------ | ----------------------------------------------------- | -------------------------------------------------- | ----------- | 
 | Account      | [dbt-cloud account get](#dbt-cloud-account-get)       | ✅           | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/`                   | 
-| Account      | [dbt-cloud account list](#dbt-cloud-account-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v2/accounts/`                                | 
+| Account      | [dbt-cloud account list](#dbt-cloud-account-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v3/accounts/`                                | 
 | Audit log    | [dbt-cloud audit-log get](#dbt-cloud-audit-log-get)   | ✅           | GET `https://{dbt_cloud_host}/api/v3/audit-logs/`                              | 
-| Project      | [dbt-cloud project create](#dbt-cloud-project-create) | ✅           | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/`         | 
+| Project      | [dbt-cloud project create](#dbt-cloud-project-create) | ✅           | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/`         | 
 | Project      | [dbt-cloud project delete](#dbt-cloud-project-delete) | ✅           | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`  |
-| Project      | [dbt-cloud project get](#dbt-cloud-project-get)       | ✅           | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/{id}/`     | 
-| Project      | [dbt-cloud project list](#dbt-cloud-project-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/`          |  
-| Project      | [dbt-cloud project update](#dbt-cloud-project-update) | ❌           | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/projects/{id}/`     | 
-| Environment  | [dbt-cloud environment create](#dbt-cloud-environment-create) | ❌          | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/environments/` | 
-| Environment  | [dbt-cloud environment delete](#dbt-cloud-environment-delete) | ✅ | DELETE `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/environments/{id}/` |  
-| Environment  | [dbt-cloud environment get](#dbt-cloud-environment-get) | ✅ | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/environments/{id}/` |  
-| Environment  | [dbt-cloud environment list](#dbt-cloud-environment-list) | ✅ | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/environments/` |  
-| Environment  | [dbt-cloud environment update](#dbt-cloud-environment-update) | ❌ | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/environments/{id}/` |  
-| Connection  | [dbt-cloud connection create](#dbt-cloud-connection-create) | ❌ | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/connections/` | 
-| Connection  | [dbt-cloud connection delete](#dbt-cloud-connection-delete) | ❌ | DELETE `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/connections/{id}/` | 
-| Connection  | [dbt-cloud connection get](#dbt-cloud-connection-get) | ✅ | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/connections/{id}/` | 
-| Connection  | [dbt-cloud connection list](#dbt-cloud-connection-list) | ✅ | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/connections/` | 
-| Connection  | [dbt-cloud connection update](#dbt-cloud-connection-update) | ❌ | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/connections/{id}/` | 
+| Project      | [dbt-cloud project get](#dbt-cloud-project-get)       | ✅           | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`     | 
+| Project      | [dbt-cloud project list](#dbt-cloud-project-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/`          |  
+| Project      | [dbt-cloud project update](#dbt-cloud-project-update) | ❌           | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`     | 
+| Environment  | [dbt-cloud environment create](#dbt-cloud-environment-create) | ❌          | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/` | 
+| Environment  | [dbt-cloud environment delete](#dbt-cloud-environment-delete) | ✅ | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
+| Environment  | [dbt-cloud environment get](#dbt-cloud-environment-get) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
+| Environment  | [dbt-cloud environment list](#dbt-cloud-environment-list) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/` |  
+| Environment  | [dbt-cloud environment update](#dbt-cloud-environment-update) | ❌ | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
+| Connection  | [dbt-cloud connection create](#dbt-cloud-connection-create) | ❌ | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/` | 
+| Connection  | [dbt-cloud connection delete](#dbt-cloud-connection-delete) | ❌ | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/{id}/` | 
+| Connection  | [dbt-cloud connection get](#dbt-cloud-connection-get) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/{id}/` | 
+| Connection  | [dbt-cloud connection list](#dbt-cloud-connection-list) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/` | 
+| Connection  | [dbt-cloud connection update](#dbt-cloud-connection-update) | ❌ | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/{id}/` | 
 | Repository  | [dbt-cloud repository create](#dbt-cloud-repository-create) | ❌ | POST `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/repositories/` | 
 | Repository  | [dbt-cloud repository delete](#dbt-cloud-repository-delete) | ❌ | DELETE `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/repositories/{id}/` | 
 | Repository  | [dbt-cloud repository get](#dbt-cloud-repository-get) | ❌ | GET `https://{dbt_cloud_host}/api/v2/accounts/{account_id}/repositories/{id}/` | 
@@ -198,11 +198,11 @@ dbt-cloud environment get --account-id 54321 --environment-id 67890
 
 
 ## dbt-cloud connection list
-This command retrievies details of dbt Cloud database connections in a given account.
+This command retrievies details of dbt Cloud database connections in a given project.
 
 ### Usage
 ```bash
-dbt-cloud connection list --account-id 54321 --limit 1
+dbt-cloud connection list --account-id 54321 --project-id 123467 --limit 1
 ```
 
 [Click to view sample response](tests/data/connection_list_response.json)
@@ -212,7 +212,7 @@ This command retrievies the details of a dbt Cloud database connection.
 
 ### Usage
 ```bash
-dbt-cloud connection get --account-id 54321 --connection-id 56901
+dbt-cloud connection get --account-id 54321 --project-id 123467 --connection-id 56901
 ```
 
 [Click to view sample response](tests/data/connection_get_response.json)
@@ -250,7 +250,7 @@ This command returns a list of jobs in the account.
 
 ### Usage
 ```bash
-dbt-cloud job list --account-id 123456 --project-id 123457
+dbt-cloud job list --account-id 123456 --project-id 123457 --limit 2
 ```
 
 [Click to view sample response](tests/data/job_list_response.json)

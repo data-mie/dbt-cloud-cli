@@ -1,7 +1,7 @@
 import requests
 from enum import IntEnum
 from typing import Optional, List
-from pydantic import Field
+from pydantic import Field, PrivateAttr
 from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import RUN_ID_FIELD
 
@@ -18,6 +18,7 @@ class DbtCloudRunStatus(IntEnum):
 class DbtCloudRunGetCommand(DbtCloudAccountCommand):
     """Returns the details of a dbt Cloud run."""
 
+    _api_version: str = PrivateAttr("v2")
     run_id: int = RUN_ID_FIELD
     include_related: Optional[List[str]] = Field(
         description="List of related fields to pull with the run. Valid values are 'trigger', 'job', and 'debug_logs'. If 'debug_logs' is not provided in a request, then the included debug logs will be truncated to the last 1,000 lines of the debug log output file.",

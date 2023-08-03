@@ -28,6 +28,7 @@ class DbtCloudRunStatus(Enum):
 class DbtCloudRunListCommand(DbtCloudAccountCommand):
     """Returns a list of runs in the account. The runs are returned sorted by creation date, with the most recent run appearing first."""
 
+    _api_version: str = PrivateAttr("v2")
     job_id: Optional[str] = Field(description="Filter runs by job ID.")
     project_id: Optional[str] = Field(description="Filter runs by project ID.")
     status: Optional[DbtCloudRunStatus] = Field(description="Filter by run status.")
@@ -45,7 +46,6 @@ class DbtCloudRunListCommand(DbtCloudAccountCommand):
         le=100,
         description="A limit on the number of objects to be returned, between 1 and 100.",
     )
-    _api_version: str = PrivateAttr("v2")
 
     @property
     def api_url(self) -> str:

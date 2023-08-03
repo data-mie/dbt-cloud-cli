@@ -42,8 +42,18 @@ def account_id():
 
 
 @pytest.fixture
+def project_id():
+    return int(os.environ.get("DBT_CLOUD_PROJECT_ID", PROJECT_ID))
+
+
+@pytest.fixture
 def environment_id():
     return int(os.environ.get("DBT_CLOUD_ENVIRONMENT_ID", ENVIRONMENT_ID))
+
+
+@pytest.fixture
+def job_id():
+    return int(os.environ.get("DBT_CLOUD_JOB_ID", JOB_ID))
 
 
 def load_response(response_name):
@@ -231,14 +241,21 @@ COMMAND_TEST_CASES = [
     ),
     pytest.param(
         "connection_get",
-        DbtCloudConnectionGetCommand(api_token=API_TOKEN, connection_id=123),
+        DbtCloudConnectionGetCommand(
+            api_token=API_TOKEN,
+            account_id=ACCOUNT_ID,
+            project_id=PROJECT_ID,
+            connection_id=123,
+        ),
         load_response("connection_get_response"),
         "get",
         marks=pytest.mark.connection,
     ),
     pytest.param(
         "connection_list",
-        DbtCloudConnectionListCommand(api_token=API_TOKEN),
+        DbtCloudConnectionListCommand(
+            api_token=API_TOKEN, account_id=ACCOUNT_ID, project_id=PROJECT_ID
+        ),
         load_response("connection_list_response"),
         "get",
         marks=pytest.mark.connection,
