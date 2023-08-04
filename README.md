@@ -60,8 +60,8 @@ For more information on a command, run `dbt-cloud <command> --help`. For more in
 | Environment  | [dbt-cloud environment get](#dbt-cloud-environment-get) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
 | Environment  | [dbt-cloud environment list](#dbt-cloud-environment-list) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/` |  
 | Environment  | [dbt-cloud environment update](#dbt-cloud-environment-update) | ❌ | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
-| Connection  | [dbt-cloud connection create](#dbt-cloud-connection-create) | ❌ | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/` | 
-| Connection  | [dbt-cloud connection delete](#dbt-cloud-connection-delete) | ❌ | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/{id}/` | 
+| Connection  | [dbt-cloud connection create](#dbt-cloud-connection-create) | ✅ | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/` | 
+| Connection  | [dbt-cloud connection delete](#dbt-cloud-connection-delete) | ✅ | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/{id}/` | 
 | Connection  | [dbt-cloud connection get](#dbt-cloud-connection-get) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/{id}/` | 
 | Connection  | [dbt-cloud connection list](#dbt-cloud-connection-list) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/` | 
 | Connection  | [dbt-cloud connection update](#dbt-cloud-connection-update) | ❌ | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{project_id}/connections/{id}/` | 
@@ -206,6 +206,34 @@ dbt-cloud environment get --account-id 123456 --project-id 123457 --environment-
 
 [Click to view sample response](tests/data/environment_get_response.json)
 
+
+## dbt-cloud connection create
+This command creates a new database connection in a given project. Supported connection types:
+
+* `snowflake`: Connection to a Snowflake database. Has inout validation for connection parameters.
+* `bigquery`: Connection to a Google BigQuery database. No input validation.
+* `postgres`: Connection to a PostgreSQL database. No input validation.
+* `redshift`: Connection to an Amazon Redshift database. No input validation.
+* `adapter`: Connection to a database using a custom dbt Cloud adapter. No input validation.
+
+
+### Usage
+```bash
+dbt-cloud connection create --account-id 54321 --project-id 123467 --name Snowflake --type snowflake --account snowflake_account --database analytics --warehouse transforming --role transformer --allow-sso False --client-session-keep-alive False
+```
+
+[Click to view sample response](tests/data/connection_create_response.json)
+
+
+## dbt-cloud connection delete
+This command deletes a database connection in a given project.
+
+### Usage
+```bash
+dbt-cloud connection delete --account-id 54321 --project-id 123467 --connection-id 56901
+```
+
+[Click to view sample response](tests/data/connection_delete_response.json)
 
 ## dbt-cloud connection list
 This command retrievies details of dbt Cloud database connections in a given project.

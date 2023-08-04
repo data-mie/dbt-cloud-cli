@@ -9,8 +9,10 @@ class DbtCloudSnowflakeConnection(BaseModel):
     database: str = Field(description="Snowflake database name.")
     warehouse: str = Field(description="Snowflake warehouse name.")
     role: str = Field(description="Snowflake role name.")
-    allow_sso: bool = Field(description="Allow SSO.")
-    client_session_keep_alive: bool = Field(description="Keep client session alive.")
+    allow_sso: bool = Field(False, description="Allow SSO.")
+    client_session_keep_alive: bool = Field(
+        False, description="Keep client session alive."
+    )
 
 
 class DbtCloudConnectionCreateCommand(DbtCloudProjectCommand):

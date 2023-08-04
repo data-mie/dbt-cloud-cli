@@ -4,7 +4,7 @@ from dbt_cloud.command.command import DbtCloudProjectCommand
 
 
 class DbtCloudConnectionDeleteCommand(DbtCloudProjectCommand):
-    """Deletes a dbt Cloud database connection in a given project."""
+    """Deletes a database connection in a given project."""
 
     connection_id: int = Field(
         description="ID of the dbt Cloud database connection to delete.",
