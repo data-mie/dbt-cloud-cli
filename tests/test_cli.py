@@ -243,7 +243,34 @@ def test_cli_project_list_and_get(runner, account_id):
 
 @pytest.mark.connection
 @pytest.mark.integration
-def test_cli_connection_create(runner, account_id, project_id):
+@pytest.mark.parametrize(
+    "connection_type,args",
+    [
+        (
+            "snowflake",
+            [
+                "--account",
+                "snowflake_account",
+                "--database",
+                "snowflake_database",
+                "--warehouse",
+                "snowflake_warehouse",
+                "--role",
+                "snowflake_role",
+                "--allow-sso",
+                "False",
+                "--client-session-keep-alive",
+                "False",
+            ],
+        ),
+    ],
+)
+def test_cli_connection_create(
+    runner, account_id, dbt_cloud_project, connection_type, args
+):
+    project_id = dbt_cloud_project["id"]
+
+    # Connection create
     connection_name = "pytest connection"
     result = runner.invoke(
         cli,
@@ -257,20 +284,9 @@ def test_cli_connection_create(runner, account_id, project_id):
             "--name",
             connection_name,
             "--type",
-            "snowflake",
-            "--account",
-            "snowflake_account",
-            "--database",
-            "snowflake_database",
-            "--warehouse",
-            "snowflake_warehouse",
-            "--role",
-            "snowflake_role",
-            "--allow-sso",
-            "False",
-            "--client-session-keep-alive",
-            "False",
-        ],
+            connection_type,
+        ]
+        + args,
     )
     assert result.exit_code == 0, result.output
 
