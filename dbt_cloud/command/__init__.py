@@ -33,4 +33,5 @@ from .connection import (
     DbtCloudConnectionGetCommand,
     DbtCloudConnectionListCommand,
     DbtCloudConnectionCreateCommand,
+    DbtCloudConnectionDeleteCommand,
 )

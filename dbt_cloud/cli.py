@@ -28,6 +28,7 @@ from dbt_cloud.command import (
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
     DbtCloudConnectionCreateCommand,
+    DbtCloudConnectionDeleteCommand,
     DbtCloudConnectionGetCommand,
     DbtCloudConnectionListCommand,
 )
@@ -426,6 +427,13 @@ def create(ctx, **kwargs):
         key.lstrip("-").replace("-", "_"): value for key, value in zip(keys, values)
     }
     command = DbtCloudConnectionCreateCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@connection.command(help=DbtCloudConnectionDeleteCommand.get_description())
+@DbtCloudConnectionDeleteCommand.click_options
+def delete(**kwargs):
+    command = DbtCloudConnectionDeleteCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 
