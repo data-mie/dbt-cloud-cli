@@ -37,7 +37,7 @@ JOB_ID = 43167
 RUN_ID = 36053848
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def account_id():
     return int(os.environ.get("DBT_CLOUD_ACCOUNT_ID", ACCOUNT_ID))
 

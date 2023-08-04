@@ -4,9 +4,88 @@ from click.testing import CliRunner
 from dbt_cloud.cli import dbt_cloud as cli
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def runner():
     return CliRunner()
+
+
+@pytest.fixture(scope="module")
+def dbt_cloud_project(runner, account_id):
+    project_name = "pytest project"
+
+    # Project create
+    result = runner.invoke(
+        cli,
+        ["project", "create", "--account-id", account_id, "--name", project_name],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["name"] == project_name
+    assert response["data"]["account_id"] == account_id
+
+    yield response["data"]
+
+    # Project delete
+    project_id = response["data"]["id"]
+    result = runner.invoke(
+        cli,
+        ["project", "delete", "--account-id", account_id, "--project-id", project_id],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == project_id
+    assert response["data"]["account_id"] == account_id
+
+@pytest.fixture(scope="module")
+def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
+    environment_name = "pytest environment"
+    project_id = dbt_cloud_project["id"]
+
+    # Environment create
+    result = runner.invoke(
+        cli,
+        [
+            "environment",
+            "create",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--name",
+            environment_name,
+            "--dbt-version",
+            "1.5.0-latest",
+        ],
+    )
+
+    assert result.exit_code == 0
+    response = json.loads(result.output)
+
+    assert response["data"]["name"] == environment_name
+    assert response["data"]["account_id"] == account_id
+
+    yield response["data"]
+
+    # Environment delete
+    environment_id = response["data"]["id"]
+    result = runner.invoke(
+        cli,
+        [
+            "environment",
+            "delete",
+            "--account-id",
+            account_id,
+            "--environment-id",
+            environment_id,
+        ],
+    )
+
+    assert result.exit_code == 0
+    response = json.loads(result.output)
+    assert response["data"]["id"] == environment_id
+    assert response["data"]["account_id"] == account_id
 
 
 @pytest.mark.account
