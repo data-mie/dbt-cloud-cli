@@ -37,7 +37,7 @@ JOB_ID = 43167
 RUN_ID = 36053848
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def account_id():
     return int(os.environ.get("DBT_CLOUD_ACCOUNT_ID", ACCOUNT_ID))
 
@@ -211,7 +211,10 @@ COMMAND_TEST_CASES = [
     pytest.param(
         "environment_get",
         DbtCloudEnvironmentGetCommand(
-            api_token=API_TOKEN, account_id=ACCOUNT_ID, environment_id=ENVIRONMENT_ID
+            api_token=API_TOKEN,
+            account_id=ACCOUNT_ID,
+            project_id=PROJECT_ID,
+            environment_id=ENVIRONMENT_ID,
         ),
         load_response("environment_get_response"),
         "get",
