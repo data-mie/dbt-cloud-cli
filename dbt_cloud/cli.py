@@ -20,6 +20,7 @@ from dbt_cloud.command import (
     DbtCloudProjectListCommand,
     DbtCloudProjectCreateCommand,
     DbtCloudProjectDeleteCommand,
+    DbtCloudProjectUpdateCommand,
     DbtCloudEnvironmentListCommand,
     DbtCloudEnvironmentGetCommand,
     DbtCloudEnvironmentCreateCommand,
@@ -383,6 +384,13 @@ def create(**kwargs):
 @DbtCloudProjectDeleteCommand.click_options
 def delete(**kwargs):
     command = DbtCloudProjectDeleteCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@project.command(help=DbtCloudProjectUpdateCommand.get_description())
+@DbtCloudProjectUpdateCommand.click_options
+def update(**kwargs):
+    command = DbtCloudProjectUpdateCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 
