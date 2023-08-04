@@ -265,7 +265,7 @@ def test_cli_project_list_and_get(runner, account_id):
         ),
     ],
 )
-def test_cli_connection_create(
+def test_cli_connection_create_and_delete(
     runner, account_id, dbt_cloud_project, connection_type, args
 ):
     project_id = dbt_cloud_project["id"]
@@ -293,6 +293,26 @@ def test_cli_connection_create(
     response = json.loads(result.output)
     assert response["data"]["name"] == connection_name
     assert response["data"]["account_id"] == account_id
+
+    # Connection delete
+    connection_id = response["data"]["id"]
+    result = runner.invoke(
+        cli,
+        [
+            "connection",
+            "delete",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--connection-id",
+            connection_id,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == connection_id
 
 
 @pytest.mark.connection
