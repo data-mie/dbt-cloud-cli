@@ -241,6 +241,32 @@ def test_cli_project_list_and_get(runner, account_id):
     assert response["data"]["id"] == project_id
 
 
+@pytest.mark.project
+@pytest.mark.integration
+def test_cli_project_update(runner, account_id, dbt_cloud_project):
+    project_id = dbt_cloud_project["id"]
+
+    # Project update
+    result = runner.invoke(
+        cli,
+        [
+            "project",
+            "update",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--name",
+            "pytest project updated",
+        ],
+    )
+    print(result.output)
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == project_id
+    assert response["data"]["name"] == "pytest project updated"
+
+
 @pytest.mark.connection
 @pytest.mark.integration
 @pytest.mark.parametrize(
