@@ -2,8 +2,8 @@ import os
 import logging
 import time
 import click
-from dbt_cloud import DbtCloudRunStatus
 from dbt_cloud.command import (
+    DbtCloudRunStatus,
     DbtCloudJobGetCommand,
     DbtCloudJobCreateCommand,
     DbtCloudJobDeleteCommand,
@@ -27,6 +27,8 @@ from dbt_cloud.command import (
     DbtCloudAccountListCommand,
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
+    DbtCloudConnectionCreateCommand,
+    DbtCloudConnectionDeleteCommand,
     DbtCloudConnectionGetCommand,
     DbtCloudConnectionListCommand,
 )
@@ -409,6 +411,29 @@ def create(**kwargs):
 @DbtCloudEnvironmentDeleteCommand.click_options
 def delete(**kwargs):
     command = DbtCloudEnvironmentDeleteCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@connection.command(
+    help=DbtCloudConnectionCreateCommand.get_description(),
+    context_settings={"ignore_unknown_options": True, "allow_extra_args": True},
+)
+@click.pass_context
+@DbtCloudConnectionCreateCommand.click_options
+def create(ctx, **kwargs):
+    keys = ctx.args[::2]  # Every even element is a key
+    values = ctx.args[1::2]  # Every odd element is a value
+    kwargs["details"] = {
+        key.lstrip("-").replace("-", "_"): value for key, value in zip(keys, values)
+    }
+    command = DbtCloudConnectionCreateCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@connection.command(help=DbtCloudConnectionDeleteCommand.get_description())
+@DbtCloudConnectionDeleteCommand.click_options
+def delete(**kwargs):
+    command = DbtCloudConnectionDeleteCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 

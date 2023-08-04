@@ -84,7 +84,7 @@ def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
         ],
     )
 
-    assert result.exit_code == 0
+    assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == environment_id
     assert response["data"]["account_id"] == account_id
@@ -239,6 +239,80 @@ def test_cli_project_list_and_get(runner, account_id):
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == project_id
+
+
+@pytest.mark.connection
+@pytest.mark.integration
+@pytest.mark.parametrize(
+    "connection_type,args",
+    [
+        (
+            "snowflake",
+            [
+                "--account",
+                "snowflake_account",
+                "--database",
+                "snowflake_database",
+                "--warehouse",
+                "snowflake_warehouse",
+                "--role",
+                "snowflake_role",
+                "--allow-sso",
+                "False",
+                "--client-session-keep-alive",
+                "False",
+            ],
+        ),
+    ],
+)
+def test_cli_connection_create_and_delete(
+    runner, account_id, dbt_cloud_project, connection_type, args
+):
+    project_id = dbt_cloud_project["id"]
+
+    # Connection create
+    connection_name = "pytest connection"
+    result = runner.invoke(
+        cli,
+        [
+            "connection",
+            "create",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--name",
+            connection_name,
+            "--type",
+            connection_type,
+        ]
+        + args,
+    )
+    assert result.exit_code == 0, result.output
+
+    response = json.loads(result.output)
+    assert response["data"]["name"] == connection_name
+    assert response["data"]["account_id"] == account_id
+
+    # Connection delete
+    connection_id = response["data"]["id"]
+    result = runner.invoke(
+        cli,
+        [
+            "connection",
+            "delete",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--connection-id",
+            connection_id,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == connection_id
 
 
 @pytest.mark.connection

@@ -26,6 +26,8 @@ from dbt_cloud.command import (
     DbtCloudAuditLogGetCommand,
     DbtCloudConnectionListCommand,
     DbtCloudConnectionGetCommand,
+    DbtCloudConnectionCreateCommand,
+    DbtCloudConnectionDeleteCommand,
 )
 
 
@@ -277,6 +279,39 @@ COMMAND_TEST_CASES = [
         ),
         load_response("connection_list_response"),
         "get",
+        marks=pytest.mark.connection,
+    ),
+    pytest.param(
+        "connection_create",
+        DbtCloudConnectionCreateCommand(
+            api_token=API_TOKEN,
+            account_id=ACCOUNT_ID,
+            project_id=PROJECT_ID,
+            name="pytest connection",
+            type="snowflake",
+            details={
+                "account": "foo",
+                "database": "bar",
+                "warehouse": "baz",
+                "role": "qux",
+                "allow_sso": True,
+                "client_session_keep_alive": True,
+            },
+        ),
+        load_response("connection_create_response"),
+        "post",
+        marks=pytest.mark.connection,
+    ),
+    pytest.param(
+        "connection_delete",
+        DbtCloudConnectionDeleteCommand(
+            api_token=API_TOKEN,
+            account_id=ACCOUNT_ID,
+            project_id=PROJECT_ID,
+            connection_id=123,
+        ),
+        load_response("connection_delete_response"),
+        "delete",
         marks=pytest.mark.connection,
     ),
     pytest.param(
