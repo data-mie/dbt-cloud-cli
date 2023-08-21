@@ -25,6 +25,7 @@ from dbt_cloud.command import (
     DbtCloudEnvironmentGetCommand,
     DbtCloudEnvironmentCreateCommand,
     DbtCloudEnvironmentDeleteCommand,
+    DbtCloudEnvironmentUpdateCommand,
     DbtCloudAccountListCommand,
     DbtCloudAccountGetCommand,
     DbtCloudAuditLogGetCommand,
@@ -419,6 +420,13 @@ def create(**kwargs):
 @DbtCloudEnvironmentDeleteCommand.click_options
 def delete(**kwargs):
     command = DbtCloudEnvironmentDeleteCommand.from_click_options(**kwargs)
+    response = execute_and_print(command)
+
+
+@environment.command(help=DbtCloudEnvironmentUpdateCommand.get_description())
+@DbtCloudEnvironmentUpdateCommand.click_options
+def update(**kwargs):
+    command = DbtCloudEnvironmentUpdateCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
 
