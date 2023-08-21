@@ -1,7 +1,5 @@
 import requests
-from typing import Optional
 from pydantic import Field
-from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.command.project.create import DbtCloudProjectCreateCommand
 
 
