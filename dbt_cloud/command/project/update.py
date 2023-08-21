@@ -15,9 +15,10 @@ class DbtCloudProjectUpdateCommand(DbtCloudProjectCreateCommand):
         return f"{super().api_url}/{self.project_id}"
 
     def execute(self) -> requests.Response:
+        payload = self.get_payload(exclude_empty=True)
+        # Rename project_id to id
+        payload["id"] = payload.pop("project_id")
         response = requests.post(
-            url=self.api_url,
-            headers=self.request_headers,
-            json=self.get_payload(exclude_empty=True),
+            url=self.api_url, headers=self.request_headers, json=payload
         )
         return response
