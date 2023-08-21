@@ -18,6 +18,7 @@ from .project import (
     DbtCloudProjectGetCommand,
     DbtCloudProjectCreateCommand,
     DbtCloudProjectDeleteCommand,
+    DbtCloudProjectUpdateCommand,
 )
 from .environment import (
     DbtCloudEnvironmentListCommand,

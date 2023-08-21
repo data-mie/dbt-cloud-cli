@@ -54,7 +54,7 @@ For more information on a command, run `dbt-cloud <command> --help`. For more in
 | Project      | [dbt-cloud project delete](#dbt-cloud-project-delete) | ✅           | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`  |
 | Project      | [dbt-cloud project get](#dbt-cloud-project-get)       | ✅           | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`     | 
 | Project      | [dbt-cloud project list](#dbt-cloud-project-list)     | ✅           | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/`          |  
-| Project      | [dbt-cloud project update](#dbt-cloud-project-update) | ❌           | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`     | 
+| Project      | [dbt-cloud project update](#dbt-cloud-project-update) | ✅           | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/projects/{id}/`     | 
 | Environment  | [dbt-cloud environment create](#dbt-cloud-environment-create) | ✅          | POST `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/` | 
 | Environment  | [dbt-cloud environment delete](#dbt-cloud-environment-delete) | ✅ | DELETE `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
 | Environment  | [dbt-cloud environment get](#dbt-cloud-environment-get) | ✅ | GET `https://{dbt_cloud_host}/api/v3/accounts/{account_id}/environments/{id}/` |  
@@ -164,6 +164,17 @@ dbt-cloud project list
 ```
 
 [Click to view sample response](tests/data/project_list_response.json)
+
+
+## dbt-cloud project update
+This command updates a project in a given account.
+
+### Usage
+```bash
+dbt-cloud project update --project-id 273745 --name "My project renamed"
+```
+
+[Click to view sample response](tests/data/project_update_response.json)
 
 ## dbt-cloud environment create
 This command a new dbt Cloud environment in a given project.
