@@ -1,0 +1,28 @@
+{
+    "status": {
+        "code": 200,
+        "is_success": true,
+        "user_message": "Success!",
+        "developer_message": ""
+    },
+    "data": {
+        "name": "My project renamed",
+        "account_id": 123456,
+        "connection_id": null,
+        "repository_id": null,
+        "semantic_layer_config_id": null,
+        "id": 273745,
+        "created_at": "2023-08-02 08:09:57.922958+00:00",
+        "updated_at": "2023-08-21 08:31:36.941327+00:00",
+        "skipped_setup": false,
+        "state": 1,
+        "dbt_project_subdirectory": null,
+        "connection": null,
+        "repository": null,
+        "group_permissions": [],
+        "docs_job_id": null,
+        "freshness_job_id": null,
+        "docs_job": null,
+        "freshness_job": null
+    }
+}
