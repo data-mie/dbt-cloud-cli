@@ -20,6 +20,15 @@ class DbtCloudJobRunCommand(DbtCloudAccountCommand):
     git_branch: Optional[str] = Field(
         description="The git branch to check out before running this job"
     )
+    azure_pull_request_id: Optional[int] = Field(
+        description="Include this for the run to be treated as CI and not cancel the previous run"
+    )
+    github_pull_request_id: Optional[int] = Field(
+        description="Include this for the run to be treated as CI and not cancel the previous run"
+    )
+    gitlab_merge_request_id: Optional[int] = Field(
+        description="Include this for the run to be treated as CI and not cancel the previous run"
+    )
     schema_override: Optional[str] = Field(
         description="Override the destination schema in the configured target for this job"
     )
