@@ -11,7 +11,7 @@ class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
     name: str = Field(
         description="Name of the environment.",
     )
-    id: Optional[int]
+    id: Optional[int] = Field(exclude_from_click_options=True)
     connection_id: Optional[int] = Field(
         description="Connection ID to use for this environment.",
     )
