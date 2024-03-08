@@ -1,5 +1,8 @@
 [![CircleCI](https://circleci.com/gh/data-mie/dbt-cloud-cli/tree/main.svg?style=svg)](https://circleci.com/gh/data-mie/dbt-cloud-cli/tree/main)
 
+> [!NOTE]
+>  `dbt-cloud-cli` is a command line interface for interacting with the [dbt Cloud API](https://docs.getdbt.com/dbt-cloud/api-v2). This is different from the [dbt Cloud CLI](https://docs.getdbt.com/docs/cloud/cloud-cli-installation), a tool that allows you to run dbt commands against your dbt Cloud development environment from your local command line.
+
 # dbt-cloud-cli
 
 `dbt-cloud-cli` is a command line interface for [dbt Cloud API](https://docs.getdbt.com/dbt-cloud/api-v2). It abstracts the REST API calls in an easy-to-use interface that can be incorporated into automated and manual (ad-hoc) workloads. Here are some example use cases for `dbt-cloud-cli`:
