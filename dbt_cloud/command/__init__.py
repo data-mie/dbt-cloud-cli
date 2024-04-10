@@ -25,6 +25,7 @@ from .environment import (
     DbtCloudEnvironmentGetCommand,
     DbtCloudEnvironmentDeleteCommand,
     DbtCloudEnvironmentCreateCommand,
+    DbtCloudEnvironmentUpdateCommand,
 )
 from .account import DbtCloudAccountListCommand, DbtCloudAccountGetCommand
 from .audit_log import DbtCloudAuditLogGetCommand

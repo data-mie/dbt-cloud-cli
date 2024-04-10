@@ -214,6 +214,35 @@ def test_cli_environment_list_and_get(runner, account_id, project_id):
     assert response["data"]["account_id"] == account_id
 
 
+@pytest.mark.environment
+@pytest.mark.integration
+def test_cli_environment_update(runner, account_id, dbt_cloud_environment):
+    environment_id = dbt_cloud_environment["id"]
+    project_id = dbt_cloud_environment["project_id"]
+
+    # Environment update
+    result = runner.invoke(
+        cli,
+        [
+            "environment",
+            "update",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--environment-id",
+            environment_id,
+            "--name",
+            "pytest environment updated",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == environment_id
+    assert response["data"]["name"] == "pytest environment updated"
+
+
 @pytest.mark.project
 @pytest.mark.integration
 def test_cli_project_list_and_get(runner, account_id):
