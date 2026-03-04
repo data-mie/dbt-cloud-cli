@@ -35,11 +35,11 @@ class DbtCloudJobSettings(ClickBaseModel):
 
 
 class DbtCloudJobScheduleDate(ClickBaseModel):
-    type: DateTypeEnum = Field(default="every_day", description=None)
+    type: DateTypeEnum = Field(default=DateTypeEnum.EVERY_DAY, description=None)
 
 
 class DbtCloudJobScheduleTime(ClickBaseModel):
-    type: TimeTypeEnum = Field(default="every_hour", description=None)
+    type: TimeTypeEnum = Field(default=TimeTypeEnum.EVERY_HOUR, description=None)
     interval: int = Field(default=1)
 
 
@@ -58,14 +58,16 @@ class DbtCloudJobCreateCommand(DbtCloudAccountCommand):
 
     id: Optional[int] = Field(
         default=None,
-        exclude_from_click_options=True,
+        json_schema_extra={"exclude_from_click_options": True},
         description="Assigned by the dbt Cloud API. Cannot be overridden.",
     )
     project_id: int = PROJECT_ID_FIELD
     environment_id: int = ENVIRONMENT_ID_FIELD
     name: str = Field(..., description="A name for the job.")
     execute_steps: List[str] = Field(
-        ..., click_cls=PythonLiteralOption, description="Job execution steps."
+        ...,
+        json_schema_extra={"click_cls": PythonLiteralOption},
+        description="Job execution steps.",
     )
     dbt_version: Optional[str] = Field(
         default=None,

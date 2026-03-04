@@ -1,4 +1,5 @@
 import requests
+from typing import Optional
 from pydantic import Field, PrivateAttr
 from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import RUN_ID_FIELD
@@ -9,7 +10,7 @@ class DbtCloudRunGetArtifactCommand(DbtCloudAccountCommand):
 
     _api_version: str = PrivateAttr("v2")
     run_id: int = RUN_ID_FIELD
-    step: int = Field(
+    step: Optional[int] = Field(
         None,
         description="The index of the Step in the Run to query for artifacts. The first step in the run has the index 1. If the step parameter is omitted, then this endpoint will return the artifacts compiled for the last step in the run.",
     )

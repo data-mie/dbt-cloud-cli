@@ -1,6 +1,6 @@
 import requests
 from typing import Optional, List
-from pydantic import Field, validator, PrivateAttr
+from pydantic import Field, field_validator, PrivateAttr
 from dbt_cloud.command.command import DbtCloudAccountCommand
 from dbt_cloud.field import JOB_ID_FIELD, PythonLiteralOption
 
@@ -15,44 +15,57 @@ class DbtCloudJobRunCommand(DbtCloudAccountCommand):
         description="A text description of the reason for running this job",
     )
     git_sha: Optional[str] = Field(
-        description="The git sha to check out before running this job"
+        default=None,
+        description="The git sha to check out before running this job",
     )
     git_branch: Optional[str] = Field(
-        description="The git branch to check out before running this job"
+        default=None,
+        description="The git branch to check out before running this job",
     )
     azure_pull_request_id: Optional[int] = Field(
-        description="Include this for the run to be treated as CI and not cancel the previous run"
+        default=None,
+        description="Include this for the run to be treated as CI and not cancel the previous run",
     )
     github_pull_request_id: Optional[int] = Field(
-        description="Include this for the run to be treated as CI and not cancel the previous run"
+        default=None,
+        description="Include this for the run to be treated as CI and not cancel the previous run",
     )
     gitlab_merge_request_id: Optional[int] = Field(
-        description="Include this for the run to be treated as CI and not cancel the previous run"
+        default=None,
+        description="Include this for the run to be treated as CI and not cancel the previous run",
     )
     schema_override: Optional[str] = Field(
-        description="Override the destination schema in the configured target for this job"
+        default=None,
+        description="Override the destination schema in the configured target for this job",
     )
     dbt_version_override: Optional[str] = Field(
-        description="Override the version of dbt used to run this job"
+        default=None,
+        description="Override the version of dbt used to run this job",
     )
     threads_override: Optional[int] = Field(
-        description="Override the number of threads used to run this job"
+        default=None,
+        description="Override the number of threads used to run this job",
     )
     target_name_override: Optional[str] = Field(
-        description="Override the target.name context variable used when running this job"
+        default=None,
+        description="Override the target.name context variable used when running this job",
     )
     generate_docs_override: Optional[bool] = Field(
-        description="Override whether or not this job generates docs (true=yes, false=no)"
+        default=None,
+        description="Override whether or not this job generates docs (true=yes, false=no)",
     )
     timeout_seconds_override: Optional[int] = Field(
-        description="Override the timeout in seconds for this job"
+        default=None,
+        description="Override the timeout in seconds for this job",
     )
     steps_override: Optional[List[str]] = Field(
-        click_cls=PythonLiteralOption,
+        default=None,
+        json_schema_extra={"click_cls": PythonLiteralOption},
         description="Override the list of steps for this job",
     )
 
-    @validator("steps_override")
+    @field_validator("steps_override")
+    @classmethod
     def check_steps_override_is_none_if_empty(cls, value):
         return value or None
 

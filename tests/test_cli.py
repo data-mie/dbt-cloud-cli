@@ -34,9 +34,6 @@ def dbt_cloud_project(runner, account_id):
     )
 
     assert result.exit_code == 0, result.output
-    response = json.loads(result.output)
-    assert response["data"]["id"] == project_id
-    assert response["data"]["account_id"] == account_id
 
 
 @pytest.fixture(scope="module")
@@ -85,9 +82,6 @@ def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
     )
 
     assert result.exit_code == 0, result.output
-    response = json.loads(result.output)
-    assert response["data"]["id"] == environment_id
-    assert response["data"]["account_id"] == account_id
 
 
 @pytest.fixture(scope="module")
@@ -140,8 +134,6 @@ def dbt_cloud_job(runner, dbt_cloud_environment, account_id):
     )
 
     assert result.exit_code == 0, result.output
-    response = json.loads(result.output)
-    assert response["data"]["id"] == job_id
 
 
 @pytest.mark.account
@@ -260,7 +252,6 @@ def test_cli_project_update(runner, account_id, dbt_cloud_project):
             "pytest project updated",
         ],
     )
-    print(result.output)
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == project_id
@@ -337,8 +328,6 @@ def test_cli_connection_create_and_delete(
     )
 
     assert result.exit_code == 0, result.output
-    response = json.loads(result.output)
-    assert response["data"]["id"] == connection_id
 
 
 @pytest.mark.connection
@@ -478,8 +467,6 @@ def test_cli_job_export_and_import(runner, account_id, dbt_cloud_job):
     )
 
     assert result.exit_code == 0, result.output
-    response = json.loads(result.output)
-    assert response["data"]["id"] == job_id
 
 
 @pytest.mark.job

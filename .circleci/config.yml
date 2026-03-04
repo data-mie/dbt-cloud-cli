@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   unit-tests:
     docker:
-      - image: cimg/python:3.9.9
+      - image: cimg/python:3.12
 
     resource_class: small
     
@@ -12,6 +12,7 @@ jobs:
       - run:
           name: Install Python packages
           command: |
+            pip install --upgrade pip setuptools
             pip install -e .[test,lint]
             sudo apt-get update -yqq
             sudo apt-get install jq -yqq
@@ -26,7 +27,7 @@ jobs:
 
   integration-tests:
     docker:
-      - image: cimg/python:3.9.9
+      - image: cimg/python:3.12
 
     resource_class: small
 
@@ -40,6 +41,7 @@ jobs:
       - run:
           name: Install Python packages
           command: |
+            pip install --upgrade pip setuptools
             pip install -e .[test]
             sudo apt-get update -yqq
             sudo apt-get install jq -yqq

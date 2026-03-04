@@ -29,11 +29,16 @@ class DbtCloudRunListCommand(DbtCloudAccountCommand):
     """Returns a list of runs in the account. The runs are returned sorted by creation date, with the most recent run appearing first."""
 
     _api_version: str = PrivateAttr("v2")
-    job_id: Optional[str] = Field(description="Filter runs by job ID.")
-    project_id: Optional[str] = Field(description="Filter runs by project ID.")
-    status: Optional[DbtCloudRunStatus] = Field(description="Filter by run status.")
+    job_id: Optional[str] = Field(default=None, description="Filter runs by job ID.")
+    project_id: Optional[str] = Field(
+        default=None, description="Filter runs by project ID."
+    )
+    status: Optional[DbtCloudRunStatus] = Field(
+        default=None, description="Filter by run status."
+    )
     order_by: Optional[str] = Field(
-        description="Field to order the result by. Use '-' to indicate reverse order."
+        default=None,
+        description="Field to order the result by. Use '-' to indicate reverse order.",
     )
     offset: Optional[int] = Field(
         0,

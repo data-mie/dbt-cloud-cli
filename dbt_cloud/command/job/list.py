@@ -10,10 +10,13 @@ class DbtCloudJobListCommand(DbtCloudAccountCommand):
 
     _api_version: str = PrivateAttr("v2")
     order_by: Optional[str] = Field(
-        description="Field to order the result by. Use - to indicate reverse order."
+        default=None,
+        description="Field to order the result by. Use - to indicate reverse order.",
     )
     limit: Optional[int] = LIMIT_FIELD
-    project_id: Optional[str] = Field(description="Filter jobs by project ID.")
+    project_id: Optional[str] = Field(
+        default=None, description="Filter jobs by project ID."
+    )
 
     @property
     def api_url(self) -> str:

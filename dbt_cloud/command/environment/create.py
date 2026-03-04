@@ -11,17 +11,21 @@ class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
     name: str = Field(
         description="Name of the environment.",
     )
-    id: Optional[int]
+    id: Optional[int] = None
     connection_id: Optional[int] = Field(
+        default=None,
         description="Connection ID to use for this environment.",
     )
     credentials_id: Optional[int] = Field(
+        default=None,
         description="Credentials ID to use for this environment.",
     )
     created_by_id: Optional[int] = Field(
+        default=None,
         description="User ID of the user who created this environment.",
     )
     dbt_project_subdirectory: Optional[str] = Field(
+        default=None,
         description="Subdirectory of the dbt project to use for this environment.",
     )
     use_custom_branch: bool = Field(
@@ -29,10 +33,12 @@ class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
         description="Whether to use a custom branch for this environment.",
     )
     custom_branch: Optional[str] = Field(
+        default=None,
         description="Custom branch to use for this environment.",
     )
     dbt_version: Optional[str] = DBT_VERSION_FIELD
     raw_dbt_version: Optional[str] = Field(
+        default=None,
         description="Raw dbt version to use for this environment.",
     )
     supports_docs: bool = Field(
@@ -40,6 +46,7 @@ class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
         description="Whether this environment supports docs.",
     )
     repository_id: Optional[int] = Field(
+        default=None,
         description="Repository ID to use for this environment.",
     )
     state: int = Field(
@@ -47,6 +54,7 @@ class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
         description="State of the environment. 1 = Active.",
     )
     custom_environment_variables: Optional[dict] = Field(
+        default=None,
         description="Custom environment variables to use for this environment.",
     )
 

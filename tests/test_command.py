@@ -32,7 +32,7 @@ def test_translate_nested_click_options():
 
 
 class PayloadCommand(DbtCloudCommand):
-    id: Optional[int]
+    id: Optional[int] = None
 
 
 @pytest.mark.parametrize(

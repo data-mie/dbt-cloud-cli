@@ -12,6 +12,7 @@ class DbtCloudEnvironmentListCommand(DbtCloudProjectCommand):
     dbt_version: Optional[str] = DBT_VERSION_FIELD
     offset: Optional[int] = OFFSET_FIELD
     state: Optional[int] = Field(
+        default=None,
         description="State of the environment. 1 = Active.",
     )
 

@@ -1,7 +1,6 @@
 from pathlib import Path
 from setuptools import setup, find_packages
 
-
 README = (Path(__file__).parent / "README.md").read_text()
 
 setup(
@@ -17,11 +16,11 @@ setup(
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.8",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.8",
     packages=find_packages(exclude=("tests",)),
-    install_requires=["requests", "click", "pydantic==1.10.10", "mergedeep"],
+    install_requires=["requests", "click", "pydantic>=2.0", "mergedeep"],
     extras_require={
         "test": ["pytest", "pytest-cov", "pytest-datadir", "requests-mock"],
         "lint": ["black"],

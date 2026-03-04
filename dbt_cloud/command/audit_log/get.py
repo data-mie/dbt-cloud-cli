@@ -8,10 +8,12 @@ class DbtCloudAuditLogGetCommand(DbtCloudAccountCommand):
     """Retrieves audit logs for the dbt Cloud account."""
 
     logged_at_start: Optional[str] = Field(
-        description="Start date (YYYY-MM-DD) for the returned logs."
+        default=None,
+        description="Start date (YYYY-MM-DD) for the returned logs.",
     )
     logged_at_end: Optional[str] = Field(
-        description="End date (YYYY-MM-DD) for the returned logs."
+        default=None,
+        description="End date (YYYY-MM-DD) for the returned logs.",
     )
     offset: Optional[int] = Field(
         0,

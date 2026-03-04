@@ -25,7 +25,7 @@ class Column(BaseModel):
     type: str
     index: int
     name: str
-    comment: Optional[str]
+    comment: Optional[str] = None
 
     def __str__(self):
         return f"{self.name} (type: {self.type}, index: {self.index}, comment: {self.comment})"
@@ -71,7 +71,7 @@ class Catalog(BaseModel):
     metadata: Dict
     nodes: Dict[str, Node]
     sources: Dict[str, Node]
-    errors: Optional[Dict]
+    errors: Optional[Dict] = None
 
 
 class NodeType(Enum):
@@ -92,7 +92,7 @@ class CatalogExploreCommand(ClickBaseModel):
     )
 
     def get_catalog(self) -> Catalog:
-        return Catalog.parse_file(self.file)
+        return Catalog.model_validate_json(Path(self.file).read_text())
 
     def print_title(self):
         from art import tprint

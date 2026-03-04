@@ -21,6 +21,7 @@ class DbtCloudRunGetCommand(DbtCloudAccountCommand):
     _api_version: str = PrivateAttr("v2")
     run_id: int = RUN_ID_FIELD
     include_related: Optional[List[str]] = Field(
+        default=None,
         description="List of related fields to pull with the run. Valid values are 'trigger', 'job', and 'debug_logs'. If 'debug_logs' is not provided in a request, then the included debug logs will be truncated to the last 1,000 lines of the debug log output file.",
     )
 
