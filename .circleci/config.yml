@@ -48,7 +48,7 @@ jobs:
 
       - run:
           name: Run integration tests
-          command: pytest -m integration -s
+          command: pytest -m integration
 
       - run:
           name: Test 'dbt-cloud audit-log get'

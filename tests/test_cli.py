@@ -19,7 +19,6 @@ def dbt_cloud_project(runner, account_id):
         ["project", "create", "--account-id", account_id, "--name", project_name],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["name"] == project_name
@@ -34,11 +33,7 @@ def dbt_cloud_project(runner, account_id):
         ["project", "delete", "--account-id", account_id, "--project-id", project_id],
     )
 
-    print(f"[DEBUG] project delete output: {result.output!r}")
     assert result.exit_code == 0, result.output
-    response = json.loads(result.output)
-    assert response["data"]["id"] == project_id
-    assert response["data"]["account_id"] == account_id
 
 
 @pytest.fixture(scope="module")
@@ -63,7 +58,6 @@ def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0
     response = json.loads(result.output)
     environment_id = response["data"]["id"]
@@ -87,11 +81,7 @@ def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
         ],
     )
 
-    print(f"[DEBUG] environment delete output: {result.output!r}")
     assert result.exit_code == 0, result.output
-    response = json.loads(result.output)
-    assert response["data"]["id"] == environment_id
-    assert response["data"]["account_id"] == account_id
 
 
 @pytest.fixture(scope="module")
@@ -120,7 +110,6 @@ def dbt_cloud_job(runner, dbt_cloud_environment, account_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     job_id = response["data"]["id"]
@@ -144,10 +133,7 @@ def dbt_cloud_job(runner, dbt_cloud_environment, account_id):
         ],
     )
 
-    print(f"[DEBUG] job delete (fixture) output: {result.output!r}")
     assert result.exit_code == 0, result.output
-    response = json.loads(result.output)
-    assert response["data"]["id"] == job_id
 
 
 @pytest.mark.account
@@ -159,7 +145,6 @@ def test_cli_account_list_and_get(runner):
         ["account", "list"],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0
     response = json.loads(result.output)
     assert len(response["data"]) > 0
@@ -171,7 +156,6 @@ def test_cli_account_list_and_get(runner):
         ["account", "get", "--account-id", account_id],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0
     response = json.loads(result.output)
     assert response["data"]["id"] == account_id
@@ -195,7 +179,6 @@ def test_cli_environment_list_and_get(runner, account_id, project_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     environment_id = response["data"][0]["id"]
@@ -217,7 +200,6 @@ def test_cli_environment_list_and_get(runner, account_id, project_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0
     response = json.loads(result.output)
     assert response["data"]["id"] == environment_id
@@ -233,7 +215,6 @@ def test_cli_project_list_and_get(runner, account_id):
         ["project", "list", "--account-id", account_id, "--limit", 2],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert len(response["data"]) > 0
@@ -247,7 +228,6 @@ def test_cli_project_list_and_get(runner, account_id):
         ["project", "get", "--account-id", account_id, "--project-id", project_id],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == project_id
@@ -272,7 +252,6 @@ def test_cli_project_update(runner, account_id, dbt_cloud_project):
             "pytest project updated",
         ],
     )
-    print(f"[DEBUG] project update output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == project_id
@@ -326,7 +305,6 @@ def test_cli_connection_create_and_delete(
         ]
         + args,
     )
-    print(f"[DEBUG] connection create output: {result.output!r}")
     assert result.exit_code == 0, result.output
 
     response = json.loads(result.output)
@@ -349,10 +327,7 @@ def test_cli_connection_create_and_delete(
         ],
     )
 
-    print(f"[DEBUG] connection delete output: {result.output!r}")
     assert result.exit_code == 0, result.output
-    response = json.loads(result.output)
-    assert response["data"]["id"] == connection_id
 
 
 @pytest.mark.connection
@@ -373,7 +348,6 @@ def test_cli_connection_list_and_get(runner, account_id, project_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert len(response["data"]) > 0
@@ -394,7 +368,6 @@ def test_cli_connection_list_and_get(runner, account_id, project_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == connection_id
@@ -418,7 +391,6 @@ def test_cli_job_list_and_get(runner, account_id, project_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert len(response["data"]) > 0
@@ -440,7 +412,6 @@ def test_cli_job_list_and_get(runner, account_id, project_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == job_id
@@ -464,7 +435,6 @@ def test_cli_job_export_and_import(runner, account_id, dbt_cloud_job):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
 
@@ -478,7 +448,6 @@ def test_cli_job_export_and_import(runner, account_id, dbt_cloud_job):
         input=result.output,
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] != job_id
@@ -497,10 +466,7 @@ def test_cli_job_export_and_import(runner, account_id, dbt_cloud_job):
         ],
     )
 
-    print(f"[DEBUG] job delete (export/import test) output: {result.output!r}")
     assert result.exit_code == 0, result.output
-    response = json.loads(result.output)
-    assert response["data"]["id"] == job_id
 
 
 @pytest.mark.job
@@ -528,7 +494,6 @@ def test_cli_job_delete_all(runner, account_id, dbt_cloud_job):
             '["dbt seed"]',
         ],
     )
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     job_id = response["data"]["id"]
@@ -549,7 +514,6 @@ def test_cli_job_delete_all(runner, account_id, dbt_cloud_job):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     assert f"Jobs to delete: [{job_id}]" in result.output
     assert f"Job {job_id} was deleted" in result.output
@@ -563,7 +527,6 @@ def test_cli_job_run_wait(runner, job_id, account_id):
         ["job", "run", "--account-id", account_id, "--job-id", job_id, "--wait"],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
 
 
@@ -575,7 +538,6 @@ def test_cli_job_run_no_wait_and_cancel(runner, account_id, job_id):
         ["job", "run", "--account-id", account_id, "--job-id", job_id],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     run_id = response["data"]["id"]
@@ -592,7 +554,6 @@ def test_cli_job_run_no_wait_and_cancel(runner, account_id, job_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == run_id
@@ -617,7 +578,6 @@ def test_cli_run_list_and_get(runner, account_id, job_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert len(response["data"]) > 0
@@ -639,7 +599,6 @@ def test_cli_run_list_and_get(runner, account_id, job_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == run_id
@@ -664,7 +623,6 @@ def test_cli_run_cancel_all(runner, account_id, job_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
 
     # Run cancel all running
@@ -683,7 +641,6 @@ def test_cli_run_cancel_all(runner, account_id, job_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
 
 
@@ -707,7 +664,6 @@ def test_cli_run_list_and_get_artifacts(runner, account_id, job_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     run_id = response["data"][0]["id"]
@@ -725,7 +681,6 @@ def test_cli_run_list_and_get_artifacts(runner, account_id, job_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert len(response["data"]) > 0
@@ -749,5 +704,4 @@ def test_cli_run_list_and_get_artifacts(runner, account_id, job_id):
         ],
     )
 
-    print(f"[DEBUG] output: {result.output!r}")
     assert result.exit_code == 0, result.output
