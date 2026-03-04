@@ -33,6 +33,7 @@ def dbt_cloud_project(runner, account_id):
         ["project", "delete", "--account-id", account_id, "--project-id", project_id],
     )
 
+    print(f"[DEBUG] project delete output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == project_id
@@ -84,6 +85,7 @@ def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
         ],
     )
 
+    print(f"[DEBUG] environment delete output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == environment_id
@@ -139,6 +141,7 @@ def dbt_cloud_job(runner, dbt_cloud_environment, account_id):
         ],
     )
 
+    print(f"[DEBUG] job delete (fixture) output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == job_id
@@ -336,6 +339,7 @@ def test_cli_connection_create_and_delete(
         ],
     )
 
+    print(f"[DEBUG] connection delete output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == connection_id
@@ -477,6 +481,7 @@ def test_cli_job_export_and_import(runner, account_id, dbt_cloud_job):
         ],
     )
 
+    print(f"[DEBUG] job delete (export/import test) output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == job_id
