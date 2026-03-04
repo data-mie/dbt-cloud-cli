@@ -31,7 +31,6 @@ from dbt_cloud.command import (
     DbtCloudConnectionDeleteCommand,
 )
 
-
 API_TOKEN = "foo"
 ACCOUNT_ID = 123456
 PROJECT_ID = 123457

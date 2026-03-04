@@ -68,9 +68,7 @@ class ClickBaseModel(BaseModel):
                 except Exception:
                     is_list_arg = False
 
-                default = (
-                    None if field.default is PydanticUndefined else field.default
-                )
+                default = None if field.default is PydanticUndefined else field.default
 
                 option_kwargs = {
                     "required": field.is_required(),

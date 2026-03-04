@@ -30,8 +30,12 @@ class DbtCloudRunListCommand(DbtCloudAccountCommand):
 
     _api_version: str = PrivateAttr("v2")
     job_id: Optional[str] = Field(default=None, description="Filter runs by job ID.")
-    project_id: Optional[str] = Field(default=None, description="Filter runs by project ID.")
-    status: Optional[DbtCloudRunStatus] = Field(default=None, description="Filter by run status.")
+    project_id: Optional[str] = Field(
+        default=None, description="Filter runs by project ID."
+    )
+    status: Optional[DbtCloudRunStatus] = Field(
+        default=None, description="Filter by run status."
+    )
     order_by: Optional[str] = Field(
         default=None,
         description="Field to order the result by. Use '-' to indicate reverse order.",
