@@ -244,7 +244,7 @@ def export(file, **kwargs):
 )
 def import_job(file, **kwargs):
     base_command = DbtCloudAccountCommand.from_click_options(**kwargs)
-    job_create_kwargs = {**json_to_dict(file.read()), **base_command.dict()}
+    job_create_kwargs = {**json_to_dict(file.read()), **base_command.model_dump()}
     command = DbtCloudJobCreateCommand(**job_create_kwargs)
     response = command.execute()
     click.echo(dict_to_json(response.json()))
@@ -431,8 +431,25 @@ def delete(**kwargs):
 def create(ctx, **kwargs):
     keys = ctx.args[::2]  # Every even element is a key
     values = ctx.args[1::2]  # Every odd element is a value
+
+    def _coerce(v):
+        if v.lower() == "true":
+            return True
+        if v.lower() == "false":
+            return False
+        try:
+            return int(v)
+        except ValueError:
+            pass
+        try:
+            return float(v)
+        except ValueError:
+            pass
+        return v
+
     kwargs["details"] = {
-        key.lstrip("-").replace("-", "_"): value for key, value in zip(keys, values)
+        key.lstrip("-").replace("-", "_"): _coerce(value)
+        for key, value in zip(keys, values)
     }
     command = DbtCloudConnectionCreateCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
