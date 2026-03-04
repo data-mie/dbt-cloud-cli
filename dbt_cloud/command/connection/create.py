@@ -1,6 +1,6 @@
 import requests
 from typing import Optional, Union
-from pydantic import Field, validator, BaseModel
+from pydantic import Field, field_validator, BaseModel
 from dbt_cloud.command.command import DbtCloudProjectCommand
 
 
@@ -22,21 +22,24 @@ class DbtCloudConnectionCreateCommand(DbtCloudProjectCommand):
     type: str = Field(
         description="Type of the connection (e.g., 'snowflake'). Connection parameters go to the details field.",
     )
-    id: Optional[int] = Field(description="ID of the connection.")
+    id: Optional[int] = Field(default=None, description="ID of the connection.")
     created_by_id: Optional[int] = Field(
-        description="ID of the user who created the connection."
+        default=None,
+        description="ID of the user who created the connection.",
     )
     created_by_service_token_id: Optional[int] = Field(
-        description="ID of the service token that created the connection."
+        default=None,
+        description="ID of the service token that created the connection.",
     )
     state: int = Field(1, description="State of the connection. 1 = Active.")
 
     details: Union[DbtCloudSnowflakeConnection, dict] = Field(
         description="Connection details specific to the connection type.",
-        exclude_from_click_options=True,
+        json_schema_extra={"exclude_from_click_options": True},
     )
 
-    @validator("type")
+    @field_validator("type")
+    @classmethod
     def is_valid_type(cls, value):
         if value not in ["snowflake", "bigquery", "redshift", "postgres", "adapter"]:
             raise ValueError("Invalid connection type.")

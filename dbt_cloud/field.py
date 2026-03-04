@@ -52,13 +52,16 @@ RUN_ID_FIELD = Field(
 )
 
 LIMIT_FIELD = Field(
+    default=None,
     ge=0,
     description="A limit on the number of rows to be returned. Must be a positive integer.",
 )
 OFFSET_FIELD = Field(
+    default=None,
     ge=0,
     description="Offset for the returned rows. Must be a positive integer.",
 )
 DBT_VERSION_FIELD = Field(
+    default=None,
     description="dbt version (e.g., '1.4.0-latest')",
 )

@@ -11,7 +11,8 @@ class DbtCloudJobGetCommand(DbtCloudAccountCommand):
     _api_version: str = PrivateAttr("v2")
     job_id: int = JOB_ID_FIELD
     order_by: Optional[str] = Field(
-        description="Field to order the result by. Use '-' to indicate reverse order."
+        default=None,
+        description="Field to order the result by. Use '-' to indicate reverse order.",
     )
 
     @property

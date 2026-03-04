@@ -6,7 +6,7 @@ from dbt_cloud.command.command import DbtCloudAccountCommand
 class DbtCloudMetadataQueryCommand(DbtCloudAccountCommand):
     """Queries the dbt Cloud Metadata API using GraphQL."""
 
-    query: str = Field(exclude_from_click_options=True)
+    query: str = Field(json_schema_extra={"exclude_from_click_options": True})
 
     @property
     def request_headers(self):
