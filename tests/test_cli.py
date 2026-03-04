@@ -263,7 +263,7 @@ def test_cli_project_update(runner, account_id, dbt_cloud_project):
             "pytest project updated",
         ],
     )
-    print(result.output)
+    print(f"[DEBUG] project update output: {result.output!r}")
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     assert response["data"]["id"] == project_id
@@ -317,8 +317,9 @@ def test_cli_connection_create_and_delete(
         ]
         + args,
     )
+    print(f"[DEBUG] connection create output: {result.output!r}")
     assert result.exit_code == 0, result.output
-
+    
     response = json.loads(result.output)
     assert response["data"]["name"] == connection_name
     assert response["data"]["account_id"] == account_id
