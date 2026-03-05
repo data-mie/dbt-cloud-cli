@@ -603,6 +603,29 @@ def test_cli_run_list_and_get(runner, account_id, job_id):
     response = json.loads(result.output)
     assert response["data"]["id"] == run_id
 
+    # Run get with include_related
+    result = runner.invoke(
+        cli,
+        [
+            "run",
+            "get",
+            "--account-id",
+            account_id,
+            "--run-id",
+            run_id,
+            "--include-related",
+            "run_steps",
+            "--include-related",
+            "job",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == run_id
+    assert isinstance(response["data"]["run_steps"], list)
+    assert response["data"]["job"] is not None
+
 
 @pytest.mark.run
 @pytest.mark.integration
