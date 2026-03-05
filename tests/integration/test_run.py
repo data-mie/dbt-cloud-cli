@@ -6,11 +6,15 @@ def test_cli_run_list_and_get(runner, account_id, job_id):
     result = runner.invoke(
         cli,
         [
-            "run", "list",
-            "--account-id", account_id,
-            "--job-id", job_id,
+            "run",
+            "list",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
             "--paginate",
-            "--status", "Succeeded",
+            "--status",
+            "Succeeded",
         ],
     )
 
@@ -34,11 +38,16 @@ def test_cli_run_list_and_get(runner, account_id, job_id):
     result = runner.invoke(
         cli,
         [
-            "run", "get",
-            "--account-id", account_id,
-            "--run-id", run_id,
-            "--include-related", "run_steps",
-            "--include-related", "job",
+            "run",
+            "get",
+            "--account-id",
+            account_id,
+            "--run-id",
+            run_id,
+            "--include-related",
+            "run_steps",
+            "--include-related",
+            "job",
         ],
     )
 
@@ -54,10 +63,14 @@ def test_cli_run_cancel_all(runner, account_id, job_id):
         result = runner.invoke(
             cli,
             [
-                "run", "cancel-all",
-                "--account-id", account_id,
-                "--job-id", job_id,
-                "--status", status,
+                "run",
+                "cancel-all",
+                "--account-id",
+                account_id,
+                "--job-id",
+                job_id,
+                "--status",
+                status,
                 "-y",
             ],
         )
@@ -68,11 +81,16 @@ def test_cli_run_list_and_get_artifacts(runner, account_id, job_id):
     result = runner.invoke(
         cli,
         [
-            "run", "list",
-            "--account-id", account_id,
-            "--job-id", job_id,
-            "--status", "Succeeded",
-            "--limit", 1,
+            "run",
+            "list",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
+            "--status",
+            "Succeeded",
+            "--limit",
+            1,
         ],
     )
 
@@ -96,10 +114,14 @@ def test_cli_run_list_and_get_artifacts(runner, account_id, job_id):
     result = runner.invoke(
         cli,
         [
-            "run", "get-artifact",
-            "--account-id", account_id,
-            "--run-id", run_id,
-            "--path", artifact_path,
+            "run",
+            "get-artifact",
+            "--account-id",
+            account_id,
+            "--run-id",
+            run_id,
+            "--path",
+            artifact_path,
         ],
     )
 

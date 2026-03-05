@@ -7,10 +7,14 @@ def test_cli_job_list_and_get(runner, account_id, project_id):
     result = runner.invoke(
         cli,
         [
-            "job", "list",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--limit", 2,
+            "job",
+            "list",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--limit",
+            2,
         ],
     )
 
@@ -34,10 +38,14 @@ def test_cli_job_list_and_get(runner, account_id, project_id):
     result = runner.invoke(
         cli,
         [
-            "job", "get",
-            "--account-id", account_id,
-            "--job-id", job_id,
-            "--include-related", "environment",
+            "job",
+            "get",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
+            "--include-related",
+            "environment",
         ],
     )
 
@@ -78,12 +86,18 @@ def test_cli_job_delete_all(runner, account_id, dbt_cloud_job):
     result = runner.invoke(
         cli,
         [
-            "job", "create",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--environment-id", environment_id,
-            "--name", "pytest job",
-            "--execute-steps", '["dbt seed"]',
+            "job",
+            "create",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--environment-id",
+            environment_id,
+            "--name",
+            "pytest job",
+            "--execute-steps",
+            '["dbt seed"]',
         ],
     )
 
@@ -94,10 +108,14 @@ def test_cli_job_delete_all(runner, account_id, dbt_cloud_job):
     result = runner.invoke(
         cli,
         [
-            "job", "delete-all",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--keep-jobs", str(job_ids_to_keep),
+            "job",
+            "delete-all",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--keep-jobs",
+            str(job_ids_to_keep),
             "--yes",
         ],
     )

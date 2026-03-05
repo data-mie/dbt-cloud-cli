@@ -6,10 +6,14 @@ def test_cli_environment_list_and_get(runner, account_id, project_id):
     result = runner.invoke(
         cli,
         [
-            "environment", "list",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--limit", 2,
+            "environment",
+            "list",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--limit",
+            2,
         ],
     )
 
@@ -23,10 +27,14 @@ def test_cli_environment_list_and_get(runner, account_id, project_id):
     result = runner.invoke(
         cli,
         [
-            "environment", "get",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--environment-id", environment_id,
+            "environment",
+            "get",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--environment-id",
+            environment_id,
         ],
     )
 

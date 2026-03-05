@@ -9,12 +9,18 @@ from dbt_cloud.cli import dbt_cloud as cli
         (
             "snowflake",
             [
-                "--account", "snowflake_account",
-                "--database", "snowflake_database",
-                "--warehouse", "snowflake_warehouse",
-                "--role", "snowflake_role",
-                "--allow-sso", "False",
-                "--client-session-keep-alive", "False",
+                "--account",
+                "snowflake_account",
+                "--database",
+                "snowflake_database",
+                "--warehouse",
+                "snowflake_warehouse",
+                "--role",
+                "snowflake_role",
+                "--allow-sso",
+                "False",
+                "--client-session-keep-alive",
+                "False",
             ],
         ),
     ],
@@ -28,12 +34,18 @@ def test_cli_connection_create_and_delete(
     result = runner.invoke(
         cli,
         [
-            "connection", "create",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--name", connection_name,
-            "--type", connection_type,
-        ] + args,
+            "connection",
+            "create",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--name",
+            connection_name,
+            "--type",
+            connection_type,
+        ]
+        + args,
     )
 
     assert result.exit_code == 0, result.output
@@ -45,10 +57,14 @@ def test_cli_connection_create_and_delete(
     result = runner.invoke(
         cli,
         [
-            "connection", "delete",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--connection-id", connection_id,
+            "connection",
+            "delete",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--connection-id",
+            connection_id,
         ],
     )
 
@@ -59,10 +75,14 @@ def test_cli_connection_list_and_get(runner, account_id, project_id):
     result = runner.invoke(
         cli,
         [
-            "connection", "list",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--limit", 2,
+            "connection",
+            "list",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--limit",
+            2,
         ],
     )
 
@@ -76,9 +96,12 @@ def test_cli_connection_list_and_get(runner, account_id, project_id):
     result = runner.invoke(
         cli,
         [
-            "connection", "get",
-            "--account-id", account_id,
-            "--connection-id", connection_id,
+            "connection",
+            "get",
+            "--account-id",
+            account_id,
+            "--connection-id",
+            connection_id,
         ],
     )
 

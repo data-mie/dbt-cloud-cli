@@ -14,7 +14,16 @@ def dbt_cloud_project(runner, account_id):
     project_name = "pytest project"
     result = runner.invoke(
         cli,
-        ["project", "create", "--account-id", account_id, "--name", project_name, "--type", 0],
+        [
+            "project",
+            "create",
+            "--account-id",
+            account_id,
+            "--name",
+            project_name,
+            "--type",
+            0,
+        ],
     )
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
@@ -38,12 +47,18 @@ def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
     result = runner.invoke(
         cli,
         [
-            "environment", "create",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--name", environment_name,
-            "--type", "deployment",
-            "--dbt-version", "1.5.0-latest",
+            "environment",
+            "create",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--name",
+            environment_name,
+            "--type",
+            "deployment",
+            "--dbt-version",
+            "1.5.0-latest",
         ],
     )
     assert result.exit_code == 0, result.output
@@ -58,10 +73,14 @@ def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
     result = runner.invoke(
         cli,
         [
-            "environment", "delete",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--environment-id", environment_id,
+            "environment",
+            "delete",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--environment-id",
+            environment_id,
         ],
     )
     assert result.exit_code == 0, result.output
@@ -74,13 +93,20 @@ def dbt_cloud_job(runner, dbt_cloud_environment, account_id):
     result = runner.invoke(
         cli,
         [
-            "job", "create",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--environment-id", environment_id,
-            "--name", "pytest job",
-            "--settings-threads", 4,
-            "--execute-steps", '["dbt compile"]',
+            "job",
+            "create",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--environment-id",
+            environment_id,
+            "--name",
+            "pytest job",
+            "--settings-threads",
+            4,
+            "--execute-steps",
+            '["dbt compile"]',
         ],
     )
     assert result.exit_code == 0, result.output

@@ -30,11 +30,16 @@ def test_cli_project_update(runner, account_id, dbt_cloud_project):
     result = runner.invoke(
         cli,
         [
-            "project", "update",
-            "--account-id", account_id,
-            "--project-id", project_id,
-            "--name", "pytest project updated",
-            "--type", dbt_cloud_project["type"],
+            "project",
+            "update",
+            "--account-id",
+            account_id,
+            "--project-id",
+            project_id,
+            "--name",
+            "pytest project updated",
+            "--type",
+            dbt_cloud_project["type"],
         ],
     )
 
