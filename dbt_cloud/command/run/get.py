@@ -1,4 +1,3 @@
-import json
 import requests
 from enum import IntEnum
 from typing import Optional, List
@@ -31,13 +30,5 @@ class DbtCloudRunGetCommand(DbtCloudAccountCommand):
         return f"{super().api_url}/runs/{self.run_id}"
 
     def execute(self) -> requests.Response:
-        response = requests.get(
-            url=self.api_url,
-            headers=self.request_headers,
-            params={
-                "include_related": json.dumps(list(self.include_related))
-                if self.include_related
-                else None
-            },
-        )
+        response = requests.get(url=self.api_url, headers=self.request_headers)
         return response
