@@ -8,6 +8,11 @@ class DbtCloudProjectCreateCommand(DbtCloudAccountCommand):
     """Creates a new dbt Cloud project in a given account."""
 
     name: str = Field(description="Name of the project.")
+    type: int = Field(description="Type of the project. 0 = DEFAULT, 1 = HYBRID.")
+    state: int = Field(1, description="State of the project. 1 = Active.")
+    description: Optional[str] = Field(
+        default=None, description="Description of the project."
+    )
     connection_id: Optional[int] = Field(
         default=None, description="ID of the connection to use."
     )
@@ -18,10 +23,6 @@ class DbtCloudProjectCreateCommand(DbtCloudAccountCommand):
         default=None,
         description="ID of the semantic layer config to use.",
     )
-    skipped_setup: Optional[bool] = Field(
-        default=None, description="Whether to skip setup."
-    )
-    state: int = Field(1, description="State of the project. 1 = Active.")
     dbt_project_subdirectory: Optional[str] = Field(
         default=None,
         description="Subdirectory of the dbt project to use.",

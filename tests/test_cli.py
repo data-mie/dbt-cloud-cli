@@ -16,7 +16,16 @@ def dbt_cloud_project(runner, account_id):
     # Project create
     result = runner.invoke(
         cli,
-        ["project", "create", "--account-id", account_id, "--name", project_name],
+        [
+            "project",
+            "create",
+            "--account-id",
+            account_id,
+            "--name",
+            project_name,
+            "--type",
+            0,
+        ],
     )
 
     assert result.exit_code == 0, result.output
@@ -253,6 +262,8 @@ def test_cli_project_update(runner, account_id, dbt_cloud_project):
             project_id,
             "--name",
             "pytest project updated",
+            "--type",
+            dbt_cloud_project["type"],
         ],
     )
     assert result.exit_code == 0, result.output
