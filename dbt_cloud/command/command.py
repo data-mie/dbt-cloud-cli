@@ -132,7 +132,9 @@ class DbtCloudCommand(ClickBaseModel):
         return f"https://{self.dbt_cloud_host}/api/{self._api_version}"
 
     def get_payload(
-        self, exclude=["api_token", "dbt_cloud_host", "timeout"], exclude_empty: bool = False
+        self,
+        exclude=["api_token", "dbt_cloud_host", "timeout"],
+        exclude_empty: bool = False,
     ) -> dict:
         payload_dict = self.model_dump(mode="json", exclude=set(exclude))
         if exclude_empty:
