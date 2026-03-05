@@ -10,9 +10,9 @@ class DbtCloudRunListArtifactsCommand(DbtCloudAccountCommand):
 
     _api_version: str = PrivateAttr("v2")
     run_id: int = RUN_ID_FIELD
-    step: Optional[int] = Field(
-        None,
-        description="The index of the Step in the Run to query for artifacts. The first step in the run has the index 1. If the step parameter is omitted, then this endpoint will return the artifacts compiled for the last step in the run.",
+    include_related: Optional[str] = Field(
+        default=None,
+        description="Comma-separated list of related objects to include in the response.",
     )
 
     @property
@@ -20,5 +20,9 @@ class DbtCloudRunListArtifactsCommand(DbtCloudAccountCommand):
         return f"{super().api_url}/runs/{self.run_id}/artifacts"
 
     def execute(self) -> requests.Response:
-        response = requests.get(url=self.api_url, headers=self.request_headers)
+        response = requests.get(
+            url=self.api_url,
+            headers=self.request_headers,
+            params={"include_related": self.include_related},
+        )
         return response

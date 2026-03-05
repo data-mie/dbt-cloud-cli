@@ -18,6 +18,10 @@ class DbtCloudRunGetArtifactCommand(DbtCloudAccountCommand):
         ...,
         description="Paths are rooted at the target/ directory. Use manifest.json, catalog.json, or run_results.json to download dbt-generated artifacts for the run.",
     )
+    include_related: Optional[str] = Field(
+        default=None,
+        description="Comma-separated list of related objects to include in the response.",
+    )
 
     @property
     def api_url(self) -> str:
@@ -25,6 +29,8 @@ class DbtCloudRunGetArtifactCommand(DbtCloudAccountCommand):
 
     def execute(self) -> requests.Response:
         response = requests.get(
-            url=self.api_url, headers=self.request_headers, params={"step": self.step}
+            url=self.api_url,
+            headers=self.request_headers,
+            params={"step": self.step, "include_related": self.include_related},
         )
         return response
