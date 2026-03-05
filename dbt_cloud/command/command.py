@@ -79,6 +79,8 @@ class ClickBaseModel(BaseModel):
                 }
                 if override_cls:
                     option_kwargs["cls"] = click_cls
+                elif is_list_arg:
+                    option_kwargs["type"] = get_args(inner_type)[0]
                 else:
                     option_kwargs["type"] = inner_type
 
