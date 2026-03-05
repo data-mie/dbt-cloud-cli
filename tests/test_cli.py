@@ -728,3 +728,22 @@ def test_cli_run_list_and_get_artifacts(runner, account_id, job_id):
     )
 
     assert result.exit_code == 0, result.output
+
+    # Run get artifact with --step
+    result = runner.invoke(
+        cli,
+        [
+            "run",
+            "get-artifact",
+            "--account-id",
+            account_id,
+            "--run-id",
+            run_id,
+            "--path",
+            artifact_path,
+            "--step",
+            1,
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
