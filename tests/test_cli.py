@@ -416,6 +416,26 @@ def test_cli_job_list_and_get(runner, account_id, project_id):
     response = json.loads(result.output)
     assert response["data"]["id"] == job_id
 
+    # Job get with include_related
+    result = runner.invoke(
+        cli,
+        [
+            "job",
+            "get",
+            "--account-id",
+            account_id,
+            "--job-id",
+            job_id,
+            "--include-related",
+            "environment",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    response = json.loads(result.output)
+    assert response["data"]["id"] == job_id
+    assert response["data"]["environment"] is not None
+
 
 @pytest.mark.job
 @pytest.mark.integration

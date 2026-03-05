@@ -10,9 +10,9 @@ class DbtCloudJobGetCommand(DbtCloudAccountCommand):
 
     _api_version: str = PrivateAttr("v2")
     job_id: int = JOB_ID_FIELD
-    order_by: Optional[str] = Field(
+    include_related: Optional[str] = Field(
         default=None,
-        description="Field to order the result by. Use '-' to indicate reverse order.",
+        description="Comma-separated list of related objects to include in the response. Valid values are environment, custom_environment_variables, most_recent_run, most_recent_completed_run.",
     )
 
     @property
@@ -23,6 +23,6 @@ class DbtCloudJobGetCommand(DbtCloudAccountCommand):
         response = requests.get(
             url=self.api_url,
             headers=self.request_headers,
-            params={"order_by": self.order_by},
+            params={"include_related": self.include_related},
         )
         return response
