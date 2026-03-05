@@ -116,6 +116,7 @@ def metadata():
 def run(wait, file, **kwargs):
     command = DbtCloudJobRunCommand.from_click_options(**kwargs)
     response = command.execute()
+    response.raise_for_status()
 
     if wait:
         run_id = response.json()["data"]["id"]
@@ -127,6 +128,7 @@ def run(wait, file, **kwargs):
                 run_id=run_id,
             )
             response = run_get_command.execute()
+            response.raise_for_status()
             status = DbtCloudRunStatus(response.json()["data"]["status"])
             click.echo(f"Job {command.job_id} run {run_id}: {status.name} ...")
             if status == DbtCloudRunStatus.SUCCESS:
