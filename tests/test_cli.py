@@ -53,6 +53,8 @@ def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
             project_id,
             "--name",
             environment_name,
+            "--type",
+            "deployment",
             "--dbt-version",
             "1.5.0-latest",
         ],
@@ -63,6 +65,7 @@ def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
     environment_id = response["data"]["id"]
     assert response["data"]["name"] == environment_name
     assert response["data"]["account_id"] == account_id
+    assert response["data"]["type"] == "deployment"
 
     yield response["data"]
 
