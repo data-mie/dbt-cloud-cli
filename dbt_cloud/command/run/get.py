@@ -41,5 +41,6 @@ class DbtCloudRunGetCommand(DbtCloudAccountCommand):
                     else None
                 )
             },
+            timeout=self.timeout,
         )
         return response

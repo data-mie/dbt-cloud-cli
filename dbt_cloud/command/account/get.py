@@ -9,5 +9,7 @@ class DbtCloudAccountGetCommand(DbtCloudAccountCommand):
     _api_version: str = PrivateAttr("v2")
 
     def execute(self) -> requests.Response:
-        response = requests.get(url=self.api_url, headers=self.request_headers)
+        response = requests.get(
+            url=self.api_url, headers=self.request_headers, timeout=self.timeout
+        )
         return response

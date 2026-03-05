@@ -24,5 +24,6 @@ class DbtCloudJobGetCommand(DbtCloudAccountCommand):
             url=self.api_url,
             headers=self.request_headers,
             params={"include_related": self.include_related},
+            timeout=self.timeout,
         )
         return response

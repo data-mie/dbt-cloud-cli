@@ -31,5 +31,6 @@ class DbtCloudJobListCommand(DbtCloudAccountCommand):
                 "project_id": self.project_id,
                 "limit": self.limit,
             },
+            timeout=self.timeout,
         )
         return response

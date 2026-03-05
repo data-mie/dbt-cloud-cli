@@ -93,5 +93,6 @@ class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
             url=self.api_url,
             headers=self.request_headers,
             json=self.get_payload(exclude_empty=True),
+            timeout=self.timeout,
         )
         return response

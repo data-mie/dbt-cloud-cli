@@ -17,6 +17,9 @@ class DbtCloudProjectUpdateCommand(DbtCloudProjectCreateCommand):
         # Rename project_id to id
         payload["id"] = payload.pop("project_id")
         response = requests.post(
-            url=self.api_url, headers=self.request_headers, json=payload
+            url=self.api_url,
+            headers=self.request_headers,
+            json=payload,
+            timeout=self.timeout,
         )
         return response

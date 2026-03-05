@@ -75,5 +75,6 @@ class DbtCloudRunListCommand(DbtCloudAccountCommand):
                 "order_by": self.order_by,
                 "offset": self.offset,
             },
+            timeout=self.timeout,
         )
         return response

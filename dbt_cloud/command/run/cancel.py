@@ -25,5 +25,7 @@ class DbtCloudRunCancelCommand(DbtCloudAccountCommand):
         return f"{super().api_url}/runs/{self.run_id}/cancel/"
 
     def execute(self) -> requests.Response:
-        response = requests.post(url=self.api_url, headers=self.request_headers)
+        response = requests.post(
+            url=self.api_url, headers=self.request_headers, timeout=self.timeout
+        )
         return response

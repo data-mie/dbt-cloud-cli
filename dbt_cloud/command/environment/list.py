@@ -30,5 +30,6 @@ class DbtCloudEnvironmentListCommand(DbtCloudProjectCommand):
                 "dbt_version": self.dbt_version,
                 "state": self.state,
             },
+            timeout=self.timeout,
         )
         return response
