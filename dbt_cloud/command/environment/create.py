@@ -1,8 +1,19 @@
 import requests
+from enum import Enum
 from typing import Optional
 from pydantic import Field
 from dbt_cloud.command.command import DbtCloudProjectCommand
 from dbt_cloud.field import DBT_VERSION_FIELD
+
+
+class EnvironmentTypeEnum(str, Enum):
+    DEVELOPMENT = "development"
+    DEPLOYMENT = "deployment"
+
+
+class DeploymentTypeEnum(str, Enum):
+    PRODUCTION = "production"
+    STAGING = "staging"
 
 
 class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
@@ -10,6 +21,9 @@ class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
 
     name: str = Field(
         description="Name of the environment.",
+    )
+    type: EnvironmentTypeEnum = Field(
+        description="Type of the environment. Either 'development' or 'deployment'.",
     )
     id: Optional[int] = None
     connection_id: Optional[int] = Field(
@@ -45,6 +59,10 @@ class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
         False,
         description="Whether this environment supports docs.",
     )
+    deployment_type: Optional[DeploymentTypeEnum] = Field(
+        default=None,
+        description="Deployment type of the environment. Either 'production' or 'staging'. Only applicable for deployment environments.",
+    )
     repository_id: Optional[int] = Field(
         default=None,
         description="Repository ID to use for this environment.",
@@ -56,6 +74,14 @@ class DbtCloudEnvironmentCreateCommand(DbtCloudProjectCommand):
     custom_environment_variables: Optional[dict] = Field(
         default=None,
         description="Custom environment variables to use for this environment.",
+    )
+    enable_model_query_history: Optional[bool] = Field(
+        default=None,
+        description="Whether to enable model query history for this environment.",
+    )
+    primary_profile_id: Optional[int] = Field(
+        default=None,
+        description="Primary profile ID to use for this environment.",
     )
 
     @property

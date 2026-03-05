@@ -254,6 +254,7 @@ COMMAND_TEST_CASES = [
             account_id=ACCOUNT_ID,
             project_id=PROJECT_ID,
             name="pytest environment",
+            type="deployment",
         ),
         load_response("environment_create_response"),
         "post",
