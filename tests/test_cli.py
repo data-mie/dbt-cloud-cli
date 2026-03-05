@@ -262,6 +262,8 @@ def test_cli_project_update(runner, account_id, dbt_cloud_project):
             project_id,
             "--name",
             "pytest project updated",
+            "--type",
+            dbt_cloud_project["type"],
         ],
     )
     assert result.exit_code == 0, result.output
