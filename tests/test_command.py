@@ -47,6 +47,7 @@ class PayloadCommand(DbtCloudCommand):
             {
                 "api_token": "123",
                 "dbt_cloud_host": "https://cloud.getdbt.com",
+                "timeout": 30,
                 "id": 12345,
             },
         ),
@@ -59,6 +60,7 @@ class PayloadCommand(DbtCloudCommand):
             {
                 "api_token": "123",
                 "dbt_cloud_host": "https://cloud.getdbt.com",
+                "timeout": 30,
             },
         ),
     ],

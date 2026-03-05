@@ -37,7 +37,7 @@ class DbtCloudAuditLogGetCommand(DbtCloudAccountCommand):
             headers=self.request_headers,
             params=self.get_payload(
                 exclude=["api_token", "dbt_cloud_host", "account_id"],
-                timeout=self.timeout,
             ),
+            timeout=self.timeout,
         )
         return response
