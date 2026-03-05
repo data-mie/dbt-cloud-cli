@@ -9,7 +9,7 @@ def runner():
     return CliRunner()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def dbt_cloud_project(runner, account_id):
     project_name = "pytest project"
     result = runner.invoke(
@@ -31,7 +31,7 @@ def dbt_cloud_project(runner, account_id):
     assert result.exit_code == 0, result.output
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
     environment_name = "pytest environment"
     project_id = dbt_cloud_project["id"]
@@ -67,7 +67,7 @@ def dbt_cloud_environment(dbt_cloud_project, runner, account_id):
     assert result.exit_code == 0, result.output
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def dbt_cloud_job(runner, dbt_cloud_environment, account_id):
     project_id = dbt_cloud_environment["project_id"]
     environment_id = dbt_cloud_environment["id"]
