@@ -39,22 +39,22 @@ JOB_ID = 43167
 RUN_ID = 36053848
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def account_id():
     return int(os.environ.get("DBT_CLOUD_ACCOUNT_ID", ACCOUNT_ID))
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def project_id():
     return int(os.environ.get("DBT_CLOUD_PROJECT_ID", PROJECT_ID))
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def environment_id():
     return int(os.environ.get("DBT_CLOUD_ENVIRONMENT_ID", ENVIRONMENT_ID))
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def job_id():
     return int(os.environ.get("DBT_CLOUD_JOB_ID", JOB_ID))
 
