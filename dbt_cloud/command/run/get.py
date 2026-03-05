@@ -35,9 +35,11 @@ class DbtCloudRunGetCommand(DbtCloudAccountCommand):
             url=self.api_url,
             headers=self.request_headers,
             params={
-                "include_related": json.dumps(list(self.include_related))
-                if self.include_related
-                else None
+                "include_related": (
+                    json.dumps(list(self.include_related))
+                    if self.include_related
+                    else None
+                )
             },
         )
         return response
