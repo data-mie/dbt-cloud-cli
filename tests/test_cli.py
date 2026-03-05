@@ -16,7 +16,7 @@ def dbt_cloud_project(runner, account_id):
     # Project create
     result = runner.invoke(
         cli,
-        ["project", "create", "--account-id", account_id, "--name", project_name],
+        ["project", "create", "--account-id", account_id, "--name", project_name, "--type", 0],
     )
 
     assert result.exit_code == 0, result.output
