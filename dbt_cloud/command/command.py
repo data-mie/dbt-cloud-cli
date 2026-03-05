@@ -2,7 +2,7 @@ import click
 from collections import OrderedDict
 from typing import Union, get_args, get_origin
 from mergedeep import merge
-from pydantic import model_validator, BaseModel, PrivateAttr
+from pydantic import model_validator, BaseModel, Field, PrivateAttr
 from pydantic_core import PydanticUndefined
 from dbt_cloud.serde import json_to_dict
 from dbt_cloud.field import (
@@ -117,6 +117,10 @@ class ClickBaseModel(BaseModel):
 class DbtCloudCommand(ClickBaseModel):
     api_token: str = API_TOKEN_FIELD
     dbt_cloud_host: str = DBT_CLOUD_HOST_FIELD
+    timeout: int = Field(
+        default=30,
+        description="HTTP request timeout in seconds.",
+    )
     _api_version: str = PrivateAttr("v3")
 
     @property

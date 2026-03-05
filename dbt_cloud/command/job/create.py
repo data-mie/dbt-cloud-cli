@@ -88,6 +88,9 @@ class DbtCloudJobCreateCommand(DbtCloudAccountCommand):
 
     def execute(self) -> requests.Response:
         response = requests.post(
-            url=self.api_url, headers=self.request_headers, json=self.get_payload()
+            url=self.api_url,
+            headers=self.request_headers,
+            json=self.get_payload(),
+            timeout=self.timeout,
         )
         return response

@@ -13,5 +13,7 @@ class DbtCloudConnectionGetCommand(DbtCloudProjectCommand):
         return f"{super().api_url}/connections/{self.connection_id}/"
 
     def execute(self) -> requests.Response:
-        response = requests.get(url=self.api_url, headers=self.request_headers)
+        response = requests.get(
+            url=self.api_url, headers=self.request_headers, timeout=self.timeout
+        )
         return response

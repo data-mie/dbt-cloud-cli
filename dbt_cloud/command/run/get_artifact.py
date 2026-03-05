@@ -32,5 +32,6 @@ class DbtCloudRunGetArtifactCommand(DbtCloudAccountCommand):
             url=self.api_url,
             headers=self.request_headers,
             params={"step": self.step, "include_related": self.include_related},
+            timeout=self.timeout,
         )
         return response

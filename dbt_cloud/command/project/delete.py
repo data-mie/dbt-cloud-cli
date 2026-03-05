@@ -16,5 +16,7 @@ class DbtCloudProjectDeleteCommand(DbtCloudAccountCommand):
         return f"{super().api_url}/projects/{self.project_id}/"
 
     def execute(self) -> requests.Response:
-        response = requests.delete(url=self.api_url, headers=self.request_headers)
+        response = requests.delete(
+            url=self.api_url, headers=self.request_headers, timeout=self.timeout
+        )
         return response

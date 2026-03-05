@@ -19,5 +19,6 @@ class DbtCloudConnectionListCommand(DbtCloudProjectCommand):
             url=self.api_url,
             headers=self.request_headers,
             params={"limit": self.limit, "offset": self.offset},
+            timeout=self.timeout,
         )
         return response

@@ -78,5 +78,6 @@ class DbtCloudJobRunCommand(DbtCloudAccountCommand):
             url=self.api_url,
             headers=self.request_headers,
             json=self.get_payload(),
+            timeout=self.timeout,
         )
         return response
