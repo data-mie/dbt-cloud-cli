@@ -23,7 +23,7 @@ jobs:
 
       - run:
           name: Run unit tests
-          command: pytest -m "not integration"
+          command: pytest tests/test_command.py tests/test_job.py
 
   integration-tests:
     docker:
@@ -48,7 +48,7 @@ jobs:
 
       - run:
           name: Run integration tests
-          command: pytest -m integration
+          command: pytest tests/integration/
 
       - run:
           name: Test 'dbt-cloud audit-log get'

@@ -3,8 +3,6 @@ import pytest
 from dbt_cloud.cli import dbt_cloud as cli
 
 
-@pytest.mark.connection
-@pytest.mark.integration
 @pytest.mark.parametrize(
     "connection_type,args",
     [
@@ -57,8 +55,6 @@ def test_cli_connection_create_and_delete(
     assert result.exit_code == 0, result.output
 
 
-@pytest.mark.connection
-@pytest.mark.integration
 def test_cli_connection_list_and_get(runner, account_id, project_id):
     result = runner.invoke(
         cli,

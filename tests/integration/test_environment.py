@@ -1,10 +1,7 @@
 import json
-import pytest
 from dbt_cloud.cli import dbt_cloud as cli
 
 
-@pytest.mark.environment
-@pytest.mark.integration
 def test_cli_environment_list_and_get(runner, account_id, project_id):
     result = runner.invoke(
         cli,

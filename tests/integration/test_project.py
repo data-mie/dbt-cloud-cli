@@ -3,8 +3,6 @@ import pytest
 from dbt_cloud.cli import dbt_cloud as cli
 
 
-@pytest.mark.project
-@pytest.mark.integration
 def test_cli_project_list_and_get(runner, account_id):
     result = runner.invoke(
         cli, ["project", "list", "--account-id", account_id, "--limit", 2]
@@ -26,8 +24,6 @@ def test_cli_project_list_and_get(runner, account_id):
     assert response["data"]["id"] == project_id
 
 
-@pytest.mark.project
-@pytest.mark.integration
 def test_cli_project_update(runner, account_id, dbt_cloud_project):
     project_id = dbt_cloud_project["id"]
 

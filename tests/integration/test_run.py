@@ -1,10 +1,7 @@
 import json
-import pytest
 from dbt_cloud.cli import dbt_cloud as cli
 
 
-@pytest.mark.run
-@pytest.mark.integration
 def test_cli_run_list_and_get(runner, account_id, job_id):
     result = runner.invoke(
         cli,
@@ -52,8 +49,6 @@ def test_cli_run_list_and_get(runner, account_id, job_id):
     assert response["data"]["job"] is not None
 
 
-@pytest.mark.run
-@pytest.mark.integration
 def test_cli_run_cancel_all(runner, account_id, job_id):
     for status in ("Queued", "Running"):
         result = runner.invoke(
@@ -69,8 +64,6 @@ def test_cli_run_cancel_all(runner, account_id, job_id):
         assert result.exit_code == 0, result.output
 
 
-@pytest.mark.run
-@pytest.mark.integration
 def test_cli_run_list_and_get_artifacts(runner, account_id, job_id):
     result = runner.invoke(
         cli,

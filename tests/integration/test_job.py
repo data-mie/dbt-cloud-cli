@@ -3,8 +3,6 @@ import pytest
 from dbt_cloud.cli import dbt_cloud as cli
 
 
-@pytest.mark.job
-@pytest.mark.integration
 def test_cli_job_list_and_get(runner, account_id, project_id):
     result = runner.invoke(
         cli,
@@ -49,8 +47,6 @@ def test_cli_job_list_and_get(runner, account_id, project_id):
     assert response["data"]["environment"] is not None
 
 
-@pytest.mark.job
-@pytest.mark.integration
 def test_cli_job_export_and_import(runner, account_id, dbt_cloud_job):
     job_id = dbt_cloud_job["id"]
 
@@ -74,8 +70,6 @@ def test_cli_job_export_and_import(runner, account_id, dbt_cloud_job):
     assert result.exit_code == 0, result.output
 
 
-@pytest.mark.job
-@pytest.mark.integration
 def test_cli_job_delete_all(runner, account_id, dbt_cloud_job):
     project_id = dbt_cloud_job["project_id"]
     environment_id = dbt_cloud_job["environment_id"]
@@ -113,8 +107,6 @@ def test_cli_job_delete_all(runner, account_id, dbt_cloud_job):
     assert f"Job {job_id} was deleted" in result.output
 
 
-@pytest.mark.job
-@pytest.mark.integration
 def test_cli_job_run_wait(runner, job_id, account_id):
     result = runner.invoke(
         cli,
@@ -124,8 +116,6 @@ def test_cli_job_run_wait(runner, job_id, account_id):
     assert result.exit_code == 0, result.output
 
 
-@pytest.mark.job
-@pytest.mark.integration
 def test_cli_job_run_no_wait_and_cancel(runner, account_id, job_id):
     result = runner.invoke(
         cli, ["job", "run", "--account-id", account_id, "--job-id", job_id]
