@@ -95,7 +95,6 @@ COMMAND_TEST_CASES = [
             environment_id=ENVIRONMENT_ID,
             name="pytest job",
             execute_steps=["dbt seed", "dbt run", "dbt test"],
-            description="A pytest job",
             execution={"timeout_seconds": 0},
             run_generate_sources=False,
             lifecycle_webhooks=False,

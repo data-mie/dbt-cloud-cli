@@ -91,8 +91,8 @@ class DbtCloudJobCreateCommand(DbtCloudAccountCommand):
         default=None,
         description="Overrides the dbt_version specified on the attached Environment if provided.",
     )
-    description: Optional[str] = Field(
-        default=None,
+    description: str = Field(
+        default="",
         description="A description for the job.",
     )
     job_type: Optional[JobTypeEnum] = Field(
