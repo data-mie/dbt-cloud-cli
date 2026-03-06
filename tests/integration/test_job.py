@@ -98,12 +98,24 @@ def test_cli_job_delete_all(runner, account_id, dbt_cloud_job):
             "pytest job",
             "--execute-steps",
             '["dbt seed"]',
+            "--description",
+            "created by pytest",
+            "--execution-timeout-seconds",
+            60,
+            "--run-generate-sources",
+            True,
+            "--job-type",
+            "scheduled",
         ],
     )
 
     assert result.exit_code == 0, result.output
     response = json.loads(result.output)
     job_id = response["data"]["id"]
+    assert response["data"]["description"] == "created by pytest"
+    assert response["data"]["execution"]["timeout_seconds"] == 60
+    assert response["data"]["run_generate_sources"] == True
+    assert response["data"]["job_type"] == "scheduled"
 
     result = runner.invoke(
         cli,
