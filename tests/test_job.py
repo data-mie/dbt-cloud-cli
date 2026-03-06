@@ -56,7 +56,13 @@ def test_job_create_command_new_fields_in_payload():
         lifecycle_webhooks=True,
         triggers_on_draft_pr=True,
         deferring_environment_id=99,
-        triggers={"github_webhook": False, "schedule": False, "custom_branch_only": False, "git_provider_webhook": True, "on_merge": True},
+        triggers={
+            "github_webhook": False,
+            "schedule": False,
+            "custom_branch_only": False,
+            "git_provider_webhook": True,
+            "on_merge": True,
+        },
     )
     payload = command.get_payload()
     assert payload["description"] == "Runs on every PR"
