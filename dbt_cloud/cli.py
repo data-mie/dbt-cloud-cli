@@ -1,7 +1,9 @@
 import os
+import sys
 import logging
 import time
 import click
+import requests
 from dbt_cloud.command import (
     DbtCloudRunStatus,
     DbtCloudJobGetCommand,
@@ -35,14 +37,17 @@ from dbt_cloud.command import (
 )
 from dbt_cloud.demo import data_catalog
 from dbt_cloud.serde import json_to_dict, dict_to_json
-from dbt_cloud.exc import DbtCloudException
 from dbt_cloud.field import PythonLiteralOption
 
 
 def execute_and_print(command, **kwargs):
     response = command.execute(**kwargs)
     click.echo(dict_to_json(response.json()))
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as e:
+        click.echo(str(e), err=True)
+        sys.exit(1)
     return response
 
 
@@ -116,7 +121,12 @@ def metadata():
 def run(wait, file, **kwargs):
     command = DbtCloudJobRunCommand.from_click_options(**kwargs)
     response = command.execute()
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as e:
+        file.write(dict_to_json(response.json()))
+        click.echo(str(e), err=True)
+        sys.exit(1)
 
     if wait:
         run_id = response.json()["data"]["id"]
@@ -128,20 +138,29 @@ def run(wait, file, **kwargs):
                 run_id=run_id,
             )
             response = run_get_command.execute()
-            response.raise_for_status()
+            try:
+                response.raise_for_status()
+            except requests.HTTPError as e:
+                file.write(dict_to_json(response.json()))
+                click.echo(str(e), err=True)
+                sys.exit(1)
             status = DbtCloudRunStatus(response.json()["data"]["status"])
-            click.echo(f"Job {command.job_id} run {run_id}: {status.name} ...")
+            click.echo(
+                f"Job {command.job_id} run {run_id}: {status.name} ...", err=True
+            )
             if status == DbtCloudRunStatus.SUCCESS:
                 break
             elif status in (DbtCloudRunStatus.ERROR, DbtCloudRunStatus.CANCELLED):
                 href = response.json()["data"]["href"]
-                raise DbtCloudException(
-                    f"Job run failed with {status.name} status. For more information, see {href}."
+                click.echo(
+                    f"Job run failed with {status.name} status. For more information, see {href}.",
+                    err=True,
                 )
+                file.write(dict_to_json(response.json()))
+                sys.exit(1)
             time.sleep(5)
 
     file.write(dict_to_json(response.json()))
-    response.raise_for_status()
 
 
 @job.command(help=DbtCloudJobListCommand.get_description())
@@ -194,13 +213,17 @@ def delete(**kwargs):
 def delete_all(keep_jobs, dry_run, file, assume_yes, **kwargs):
     list_command = DbtCloudJobListCommand.from_click_options(**kwargs)
     response = list_command.execute()
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as e:
+        click.echo(str(e), err=True)
+        sys.exit(1)
     job_ids_to_delete = [
         job_dict["id"]
         for job_dict in response.json()["data"]
         if job_dict["id"] not in keep_jobs
     ]
-    click.echo(f"Jobs to delete: {job_ids_to_delete}")
+    click.echo(f"Jobs to delete: {job_ids_to_delete}", err=True)
     deleted_job_responses = []
     if not dry_run:
         for job_id in job_ids_to_delete:
@@ -211,9 +234,13 @@ def delete_all(keep_jobs, dry_run, file, assume_yes, **kwargs):
                 is_confirmed = click.confirm(f"Delete job {job_id}?")
             if is_confirmed:
                 response = delete_command.execute()
-                response.raise_for_status()
+                try:
+                    response.raise_for_status()
+                except requests.HTTPError as e:
+                    click.echo(str(e), err=True)
+                    sys.exit(1)
                 deleted_job_responses.append(response.json())
-                click.echo(f"Job {job_id} was deleted.")
+                click.echo(f"Job {job_id} was deleted.", err=True)
     file.write(dict_to_json(deleted_job_responses))
 
 
@@ -248,9 +275,7 @@ def import_job(file, **kwargs):
     base_command = DbtCloudAccountCommand.from_click_options(**kwargs)
     job_create_kwargs = {**json_to_dict(file.read()), **base_command.model_dump()}
     command = DbtCloudJobCreateCommand(**job_create_kwargs)
-    response = command.execute()
-    click.echo(dict_to_json(response.json()))
-    response.raise_for_status()
+    execute_and_print(command)
 
 
 @job_run.command(help=DbtCloudRunCancelCommand.get_description())
@@ -276,9 +301,13 @@ def cancel(**kwargs):
 def cancel_all(dry_run, file, assume_yes, **kwargs):
     list_command = DbtCloudRunListCommand.from_click_options(**kwargs)
     response = list_command.execute()
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as e:
+        click.echo(str(e), err=True)
+        sys.exit(1)
     run_ids_to_cancel = [run_dict["id"] for run_dict in response.json()["data"]]
-    click.echo(f"Runs to cancel: {run_ids_to_cancel}")
+    click.echo(f"Runs to cancel: {run_ids_to_cancel}", err=True)
     cancelled_job_responses = []
     if not dry_run:
         for run_id in run_ids_to_cancel:
@@ -289,9 +318,13 @@ def cancel_all(dry_run, file, assume_yes, **kwargs):
                 is_confirmed = click.confirm(f"Cancel run {run_id}?")
             if is_confirmed:
                 response = cancel_command.execute()
-                response.raise_for_status()
+                try:
+                    response.raise_for_status()
+                except requests.HTTPError as e:
+                    click.echo(str(e), err=True)
+                    sys.exit(1)
                 cancelled_job_responses.append(response.json())
-                click.echo(f"Run {run_id} has been cancelled.")
+                click.echo(f"Run {run_id} has been cancelled.", err=True)
     file.write(dict_to_json(cancelled_job_responses))
 
 
