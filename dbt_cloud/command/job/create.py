@@ -136,8 +136,8 @@ class DbtCloudJobCreateCommand(DbtCloudAccountCommand):
         default=False,
         description="When true, send lifecycle webhooks for runs triggered from this job.",
     )
-    triggers_on_draft_pr: Optional[bool] = Field(
-        default=None,
+    triggers_on_draft_pr: bool = Field(
+        default=False,
         description="When true, CI jobs are also triggered by draft pull requests.",
     )
 
