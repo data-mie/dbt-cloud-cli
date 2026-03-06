@@ -1,4 +1,6 @@
-[![CircleCI](https://circleci.com/gh/data-mie/dbt-cloud-cli/tree/main.svg?style=svg)](https://circleci.com/gh/data-mie/dbt-cloud-cli/tree/main)
+[![PyPI version](https://img.shields.io/pypi/v/dbt-cloud-cli.svg)](https://pypi.org/project/dbt-cloud-cli/)
+[![Python versions](https://img.shields.io/pypi/pyversions/dbt-cloud-cli.svg)](https://pypi.org/project/dbt-cloud-cli/)
+[![Monthly downloads](https://img.shields.io/pypi/dm/dbt-cloud-cli.svg)](https://pypi.org/project/dbt-cloud-cli/)
 
 > [!NOTE]
 > `dbt-cloud-cli` wraps the [dbt Cloud REST API](https://docs.getdbt.com/dbt-cloud/api-v2). It is **not** the same as the [dbt Cloud CLI](https://docs.getdbt.com/docs/cloud/cloud-cli-installation), which runs dbt commands against a Cloud development environment.
