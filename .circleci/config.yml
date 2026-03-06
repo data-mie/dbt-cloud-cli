@@ -1,12 +1,19 @@
 version: 2.1
 
+# Pipeline parameters let us trigger the integration workflow on demand
+# via the CircleCI API without affecting normal CI runs.
+parameters:
+  run-integration-tests:
+    type: boolean
+    default: false
+
 jobs:
   unit-tests:
     docker:
       - image: cimg/python:3.12
 
     resource_class: small
-    
+
     steps:
       - checkout
       - run:
@@ -23,7 +30,7 @@ jobs:
 
       - run:
           name: Run unit tests
-          command: pytest tests/test_command.py tests/test_job.py
+          command: pytest tests/test_command.py tests/test_job.py tests/test_cli.py tests/test_tools.py
 
   integration-tests:
     docker:
@@ -64,12 +71,19 @@ jobs:
             dbt-cloud metadata query -f tests/data/metadata_query.graphql
 
 workflows:
-  version: 2
-  continuous-integration:
+  # Runs on every push. Drives the README badge — never goes on hold.
+  ci:
+    jobs:
+      - unit-tests
+
+  # Only runs when triggered via the CircleCI API with
+  # {"parameters": {"run-integration-tests": true}}.
+  # Kept separate so it never blocks the ci workflow or the badge.
+  integration:
+    when: << pipeline.parameters.run-integration-tests >>
     jobs:
       - approve:
           type: approval
-      - unit-tests
       - integration-tests:
           requires:
             - approve
