@@ -5,7 +5,7 @@
 
 # dbt-cloud-cli
 
-A command-line interface and Python library for the [dbt Cloud API](https://docs.getdbt.com/dbt-cloud/api-v2). Use it to trigger jobs, manage resources, and download run artifacts — from a terminal, a CI/CD pipeline, or an AI agent.
+A command-line interface and Python library for the [dbt Cloud API](https://docs.getdbt.com/dbt-cloud/api-v2). Use it to trigger jobs, manage resources, and download run artifacts from a terminal, a CI/CD pipeline, or an AI agent.
 
 ## Quick start
 
@@ -52,14 +52,14 @@ Set these environment variables to avoid repeating flags on every command:
 | `DBT_CLOUD_ACCOUNT_ID` | `--account-id` | Numeric account ID |
 | `DBT_CLOUD_HOST` | `--dbt-cloud-host` | API host (default: `cloud.getdbt.com`) |
 | `DBT_CLOUD_JOB_ID` | `--job-id` | Numeric job ID |
-| `DBT_CLOUD_READONLY` | — | Set to `true` to block all write commands (safe for read-only agent contexts) |
+| `DBT_CLOUD_READONLY` | (none) | Set to `true` to block all write commands (safe for read-only agent contexts) |
 
 ## Use cases
 
-- **CI/CD pipelines** — Trigger a job on every PR merge and fail the pipeline if it errors
-- **Job management** — Create, copy, and delete jobs across dbt Cloud projects with `job export` / `job import`
-- **Artifact downloads** — Pull `manifest.json`, `run_results.json`, or `catalog.json` after a run
-- **AI agents** — Use the Python library interface to give an LLM agent access to dbt Cloud operations
+- **CI/CD pipelines**: Trigger a job on every PR merge and fail the pipeline if it errors
+- **Job management**: Create, copy, and delete jobs across dbt Cloud projects with `job export` / `job import`
+- **Artifact downloads**: Pull `manifest.json`, `run_results.json`, or `catalog.json` after a run
+- **AI agents**: Use the Python library interface to give an LLM agent access to dbt Cloud operations
 
 ---
 
@@ -541,7 +541,7 @@ dbt-cloud run cancel --run-id 36053848
 
 > Composite command.
 
-Cancels runs with confirmation prompts. Use `--status` to filter by run state — typically `Running` or `Queued`.
+Cancels runs with confirmation prompts. Use `--status` to filter by run state (typically `Running` or `Queued`).
 
 ```bash
 dbt-cloud run cancel-all --status Running
