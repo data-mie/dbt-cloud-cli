@@ -40,6 +40,17 @@ from dbt_cloud.serde import json_to_dict, dict_to_json
 from dbt_cloud.field import PythonLiteralOption
 
 
+def _assert_write_access():
+    """Exit with a clear error if DBT_CLOUD_READONLY is set to a truthy value."""
+    if os.environ.get("DBT_CLOUD_READONLY", "").lower() in ("1", "true", "yes"):
+        click.echo(
+            "Error: readonly mode is enabled (DBT_CLOUD_READONLY=true). "
+            "Unset DBT_CLOUD_READONLY to allow mutating commands.",
+            err=True,
+        )
+        sys.exit(1)
+
+
 def execute_and_print(command, **kwargs):
     response = command.execute(**kwargs)
     click.echo(dict_to_json(response.json()))
@@ -119,6 +130,7 @@ def metadata():
     help="Response export file path.",
 )
 def run(wait, file, **kwargs):
+    _assert_write_access()
     command = DbtCloudJobRunCommand.from_click_options(**kwargs)
     response = command.execute()
     try:
@@ -180,6 +192,7 @@ def get(**kwargs):
 @job.command(help=DbtCloudJobCreateCommand.get_description())
 @DbtCloudJobCreateCommand.click_options
 def create(**kwargs):
+    _assert_write_access()
     command = DbtCloudJobCreateCommand.from_click_options(**kwargs)
     execute_and_print(command)
 
@@ -187,6 +200,7 @@ def create(**kwargs):
 @job.command(help=DbtCloudJobDeleteCommand.get_description())
 @DbtCloudJobDeleteCommand.click_options
 def delete(**kwargs):
+    _assert_write_access()
     command = DbtCloudJobDeleteCommand.from_click_options(**kwargs)
     execute_and_print(command)
 
@@ -211,6 +225,7 @@ def delete(**kwargs):
     help="Response export file path.",
 )
 def delete_all(keep_jobs, dry_run, file, assume_yes, **kwargs):
+    _assert_write_access()
     list_command = DbtCloudJobListCommand.from_click_options(**kwargs)
     response = list_command.execute()
     try:
@@ -272,6 +287,7 @@ def export(file, **kwargs):
     help="Import file path.",
 )
 def import_job(file, **kwargs):
+    _assert_write_access()
     base_command = DbtCloudAccountCommand.from_click_options(**kwargs)
     job_create_kwargs = {**json_to_dict(file.read()), **base_command.model_dump()}
     command = DbtCloudJobCreateCommand(**job_create_kwargs)
@@ -281,6 +297,7 @@ def import_job(file, **kwargs):
 @job_run.command(help=DbtCloudRunCancelCommand.get_description())
 @DbtCloudRunCancelCommand.click_options
 def cancel(**kwargs):
+    _assert_write_access()
     command = DbtCloudRunCancelCommand.from_click_options(**kwargs)
     execute_and_print(command)
 
@@ -299,6 +316,7 @@ def cancel(**kwargs):
     help="Response export file path.",
 )
 def cancel_all(dry_run, file, assume_yes, **kwargs):
+    _assert_write_access()
     list_command = DbtCloudRunListCommand.from_click_options(**kwargs)
     response = list_command.execute()
     try:
@@ -411,6 +429,7 @@ def list(**kwargs):
 @project.command(help=DbtCloudProjectCreateCommand.get_description())
 @DbtCloudProjectCreateCommand.click_options
 def create(**kwargs):
+    _assert_write_access()
     command = DbtCloudProjectCreateCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
@@ -418,6 +437,7 @@ def create(**kwargs):
 @project.command(help=DbtCloudProjectDeleteCommand.get_description())
 @DbtCloudProjectDeleteCommand.click_options
 def delete(**kwargs):
+    _assert_write_access()
     command = DbtCloudProjectDeleteCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
@@ -425,6 +445,7 @@ def delete(**kwargs):
 @project.command(help=DbtCloudProjectUpdateCommand.get_description())
 @DbtCloudProjectUpdateCommand.click_options
 def update(**kwargs):
+    _assert_write_access()
     command = DbtCloudProjectUpdateCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
@@ -446,6 +467,7 @@ def get(**kwargs):
 @environment.command(help=DbtCloudEnvironmentCreateCommand.get_description())
 @DbtCloudEnvironmentCreateCommand.click_options
 def create(**kwargs):
+    _assert_write_access()
     command = DbtCloudEnvironmentCreateCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
@@ -453,6 +475,7 @@ def create(**kwargs):
 @environment.command(help=DbtCloudEnvironmentDeleteCommand.get_description())
 @DbtCloudEnvironmentDeleteCommand.click_options
 def delete(**kwargs):
+    _assert_write_access()
     command = DbtCloudEnvironmentDeleteCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 
@@ -464,6 +487,7 @@ def delete(**kwargs):
 @click.pass_context
 @DbtCloudConnectionCreateCommand.click_options
 def create(ctx, **kwargs):
+    _assert_write_access()
     keys = ctx.args[::2]  # Every even element is a key
     values = ctx.args[1::2]  # Every odd element is a value
 
@@ -493,6 +517,7 @@ def create(ctx, **kwargs):
 @connection.command(help=DbtCloudConnectionDeleteCommand.get_description())
 @DbtCloudConnectionDeleteCommand.click_options
 def delete(**kwargs):
+    _assert_write_access()
     command = DbtCloudConnectionDeleteCommand.from_click_options(**kwargs)
     response = execute_and_print(command)
 

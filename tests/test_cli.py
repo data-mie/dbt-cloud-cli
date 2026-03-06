@@ -217,3 +217,148 @@ class TestStatusMessagesRouteToStderr:
         err_calls = [c for c in mock_echo.call_args_list if c.kwargs.get("err")]
         err_messages = [str(c.args[0]) for c in err_calls]
         assert any("SUCCESS" in m or "RUNNING" in m for m in err_messages)
+
+
+class TestReadonlyMode:
+    """DBT_CLOUD_READONLY=true must block all mutating commands."""
+
+    READONLY_ENV = {"DBT_CLOUD_READONLY": "true"}
+
+    def _invoke_readonly(self, runner, args):
+        return runner.invoke(cli, args, env=self.READONLY_ENV)
+
+    def test_readonly_blocks_job_run(self, runner):
+        result = self._invoke_readonly(
+            runner,
+            ["job", "run", "--api-token", "tok", "--account-id", "1", "--job-id", "7"],
+        )
+        assert result.exit_code == 1
+        assert "readonly" in result.output.lower()
+
+    def test_readonly_blocks_job_create(self, runner):
+        result = self._invoke_readonly(
+            runner,
+            [
+                "job",
+                "create",
+                "--api-token",
+                "tok",
+                "--account-id",
+                "1",
+                "--project-id",
+                "2",
+                "--environment-id",
+                "3",
+                "--name",
+                "x",
+                "--execute-steps",
+                '["dbt run"]',
+            ],
+        )
+        assert result.exit_code == 1
+        assert "readonly" in result.output.lower()
+
+    def test_readonly_blocks_job_delete(self, runner):
+        result = self._invoke_readonly(
+            runner,
+            [
+                "job",
+                "delete",
+                "--api-token",
+                "tok",
+                "--account-id",
+                "1",
+                "--job-id",
+                "7",
+            ],
+        )
+        assert result.exit_code == 1
+        assert "readonly" in result.output.lower()
+
+    def test_readonly_blocks_project_create(self, runner):
+        result = self._invoke_readonly(
+            runner,
+            [
+                "project",
+                "create",
+                "--api-token",
+                "tok",
+                "--account-id",
+                "1",
+                "--name",
+                "x",
+                "--type",
+                "0",
+            ],
+        )
+        assert result.exit_code == 1
+        assert "readonly" in result.output.lower()
+
+    def test_readonly_blocks_environment_create(self, runner):
+        result = self._invoke_readonly(
+            runner,
+            [
+                "environment",
+                "create",
+                "--api-token",
+                "tok",
+                "--account-id",
+                "1",
+                "--project-id",
+                "2",
+                "--name",
+                "x",
+                "--type",
+                "deployment",
+            ],
+        )
+        assert result.exit_code == 1
+        assert "readonly" in result.output.lower()
+
+    def test_readonly_allows_job_get(self, runner):
+        mock_resp = _mock_response(200, SUCCESS_BODY)
+        with patch("dbt_cloud.command.job.get.requests.get", return_value=mock_resp):
+            result = self._invoke_readonly(
+                runner,
+                [
+                    "job",
+                    "get",
+                    "--api-token",
+                    "tok",
+                    "--account-id",
+                    "1",
+                    "--job-id",
+                    "42",
+                ],
+            )
+        assert result.exit_code == 0
+
+    def test_readonly_allows_job_list(self, runner):
+        list_body = {"status": {"code": 200}, "data": []}
+        mock_resp = _mock_response(200, list_body)
+        with patch("dbt_cloud.command.job.list.requests.get", return_value=mock_resp):
+            result = self._invoke_readonly(
+                runner,
+                ["job", "list", "--api-token", "tok", "--account-id", "1"],
+            )
+        assert result.exit_code == 0
+
+    def test_readonly_false_allows_mutating(self, runner):
+        """DBT_CLOUD_READONLY=false must not block commands."""
+        mock_resp = _mock_response(200, SUCCESS_BODY)
+        with patch("dbt_cloud.command.job.get.requests.get", return_value=mock_resp):
+            result = runner.invoke(
+                cli,
+                [
+                    "job",
+                    "get",
+                    "--api-token",
+                    "tok",
+                    "--account-id",
+                    "1",
+                    "--job-id",
+                    "42",
+                ],
+                env={"DBT_CLOUD_READONLY": "false"},
+            )
+        assert result.exit_code == 0
