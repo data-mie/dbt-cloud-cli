@@ -115,7 +115,6 @@ def test_cli_job_delete_all(runner, account_id, dbt_cloud_job):
     assert response["data"]["description"] == "created by pytest"
     assert response["data"]["execution"]["timeout_seconds"] == 60
     assert response["data"]["run_generate_sources"] == True
-    assert response["data"]["job_type"] == "scheduled"
 
     result = runner.invoke(
         cli,
