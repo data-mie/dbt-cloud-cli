@@ -51,9 +51,78 @@ def _assert_write_access():
         sys.exit(1)
 
 
+def _format_job(data):
+    steps = ", ".join(data.get("execute_steps") or [])
+    schedule = data.get("cron_humanized") or "N/A"
+    return (
+        f"Job {data['id']}: {data['name']}\n"
+        f"  Steps:    {steps}\n"
+        f"  Schedule: {schedule}"
+    )
+
+
+def _format_job_list(items):
+    if not items:
+        return "No jobs found."
+    lines = [f"{'ID':<10} {'NAME':<35} STEPS"]
+    lines.append("-" * 70)
+    for job in items:
+        steps = ", ".join(job.get("execute_steps") or [])
+        lines.append(f"{job['id']:<10} {job['name']:<35} {steps}")
+    return "\n".join(lines)
+
+
+def _format_run(data):
+    status = data.get("status_humanized") or str(data.get("status", "N/A"))
+    duration = data.get("duration_humanized") or data.get("duration") or "N/A"
+    job_id = data.get("job_definition_id") or data.get("job_id", "N/A")
+    branch = data.get("git_branch") or "N/A"
+    url = data.get("href") or "N/A"
+    return (
+        f"Run {data['id']}: {status} ({duration})\n"
+        f"  Job:    {job_id}\n"
+        f"  Branch: {branch}\n"
+        f"  URL:    {url}"
+    )
+
+
+def _format_run_list(items):
+    if not items:
+        return "No runs found."
+    lines = [f"{'ID':<12} {'STATUS':<14} {'JOB':<10} DURATION"]
+    lines.append("-" * 55)
+    for run in items:
+        status = run.get("status_humanized") or str(run.get("status", "N/A"))
+        job_id = str(run.get("job_definition_id") or run.get("job_id", "N/A"))
+        duration = run.get("duration_humanized") or run.get("duration") or "N/A"
+        lines.append(f"{str(run['id']):<12} {status:<14} {job_id:<10} {duration}")
+    return "\n".join(lines)
+
+
+_TEXT_FORMATTERS = {
+    DbtCloudJobGetCommand: lambda d: _format_job(d.get("data", d)),
+    DbtCloudJobListCommand: lambda d: _format_job_list(d.get("data", [])),
+    DbtCloudRunGetCommand: lambda d: _format_run(d.get("data", d)),
+    DbtCloudRunListCommand: lambda d: _format_run_list(d.get("data", [])),
+}
+
+
+def _output_format():
+    ctx = click.get_current_context(silent=True)
+    if ctx and ctx.obj:
+        return ctx.obj.get("output", "json")
+    return "json"
+
+
 def execute_and_print(command, **kwargs):
     response = command.execute(**kwargs)
-    click.echo(dict_to_json(response.json()))
+    data = response.json()
+    fmt = _output_format()
+    if fmt == "text":
+        formatter = _TEXT_FORMATTERS.get(type(command))
+        click.echo(formatter(data) if formatter else dict_to_json(data))
+    else:
+        click.echo(dict_to_json(data))
     try:
         response.raise_for_status()
     except requests.HTTPError as e:
@@ -63,7 +132,20 @@ def execute_and_print(command, **kwargs):
 
 
 @click.group(help="The dbt Cloud command line interface.")
-def dbt_cloud():
+@click.option(
+    "--output",
+    "-o",
+    type=click.Choice(["json", "text"]),
+    default=None,
+    envvar="DBT_CLOUD_OUTPUT",
+    help="Output format: json (default) or text for human-readable summaries.",
+    is_eager=True,
+)
+@click.pass_context
+def dbt_cloud(ctx, output):
+    ctx.ensure_object(dict)
+    ctx.obj["output"] = output or "json"
+
     import http.client as http_client
 
     level = os.environ.get("LOG_LEVEL", "INFO").upper()
